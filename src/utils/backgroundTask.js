@@ -4,7 +4,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { fetchPendingReports, syncReportsToServer } from "../utils/SyncUtils";
 
 // Task name for background sync
-const BACKGROUND_SYNC_TASK = "mapAction-background-sync-task";
+const BACKGROUND_SYNC_TASK = "mapaction-background-sync-task";
 
 // Register the background task
 TaskManager.defineTask(BACKGROUND_SYNC_TASK, async () => {
