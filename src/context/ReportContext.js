@@ -2,20 +2,13 @@ import React, { createContext, useState, useEffect } from "react";
 import NetInfo from "@react-native-community/netinfo";
 import { showToast } from "../utils/ToastUtils";
 import { syncReportsToServer } from "../utils/SyncUtils";
-import { initDB, saveReportLocally } from "../db/dbOperations";
+import { saveReportLocally } from "../db/dbOperations";
 
 export const ReportContext = createContext();
 
 export const ReportProvider = ({ children }) => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
-
-  //This is for testing purposes only
-  //TODO TO delete before going to prod
-  // Initialize the database table on mount
-  useEffect(() => {
-    initDB();
-  }, []);
 
   // Monitor network status
   useEffect(() => {

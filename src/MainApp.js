@@ -11,7 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import StackNavigation from "./components/StackNavigation";
 import rootReducer from "./redux/root";
 import { registerBackgroundTask } from "./utils/backgroundTask";
-import { ReportProvider } from "./context/reportContext";
+import { ReportProvider } from "./context/ReportContext";
 import { initDB } from "./db/dbOperations";
 
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));

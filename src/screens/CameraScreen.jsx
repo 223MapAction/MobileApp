@@ -13,7 +13,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
-import { ReportContext } from "../context/reportContext";
+import { ReportContext } from "../context/ReportContext";
 
 export default function App() {
   const { isSyncing, submitReport } = useContext(ReportContext);
