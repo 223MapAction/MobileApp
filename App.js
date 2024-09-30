@@ -1,33 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import StackNavigation from './src/components/StackNavigation';
-import { Provider } from 'react-redux';
-import rootReducer from "./src/redux/root";
-import {thunk} from 'redux-thunk'
-import logger from 'redux-logger'
-import { createStore, applyMiddleware } from "redux";
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import * as SplashScreen from "expo-splash-screen";
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import MainApp from "./src/MainApp";
+import migrations from "./drizzle/migrations";
+import { db } from "./src/db/client";
+import { Text, View } from "react-native";
+import { useCallback } from "react";
 
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 export default function App() {
+  const { success, error } = useMigrations(db, migrations);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (success) {
+      // This tells the splash screen to hide immediately! If we call this after
+      await SplashScreen.hideAsync();
+    }
+  }, [success]);
+
+  // The error and !success clauses can be removed or at least logged
+  // to the backedn for better trackeing before going to prod
+  if (error) {
+    console.log(error);
+
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Migration error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  if (!success) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Migration is in progress...</Text>
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#2D9CDB" />
-      <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1 }}>
-              <Provider store={store}>
-                <StackNavigation />
-              </Provider>
-          </SafeAreaView>
-      </SafeAreaProvider>
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <MainApp />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#2D9CDB',
-  },
-});
