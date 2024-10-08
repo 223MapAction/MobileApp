@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { DrawerActions } from "@react-navigation/native";
-import  Icon  from "react-native-vector-icons/FontAwesome";
+import  Icon  from "react-native-vector-icons/FontAwesome5";
 import { connect } from "react-redux";
 const image = require('../../assets/images/logo.webp')
 class DrawerContent extends Component {
@@ -49,12 +49,24 @@ class DrawerContent extends Component {
               />
             )} */}
             
-            {/* <DrawerRoute
+            <DrawerRoute
               {...props}
-              title="Nous contacter"
-              icon="public"
-              onPress={() => this.navigate("Contact")}
-            /> */}
+              title="Mes Incidents Signalés"
+              icon="clipboard-list"
+              onPress={() => this.navigate("ListeIncident")}
+            />
+            <DrawerRoute
+              {...props}
+              title="CGU"
+              icon="clipboard-list"
+              onPress={() => this.navigate("cgu")}
+            />
+            <DrawerRoute
+              {...props}
+              title="Politique de Confidentialité"
+              icon="clipboard-list"
+              onPress={() => this.navigate("politique")}
+            />
             {this.props.token === null && (
               <DrawerDeconnexion
                 {...props}
@@ -121,7 +133,7 @@ const DrawerRoute = ({ title, icon, onPress, focused, ...rest }) => {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons
+              <Icon
                 focused={true}
                 name={icon}
                 size={25}

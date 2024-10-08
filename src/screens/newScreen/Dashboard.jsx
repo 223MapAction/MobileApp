@@ -102,7 +102,7 @@ class Dashboard extends Component {
         >
           <View style={styles.text}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("ListIncidents")}
+              onPress={() => this.props.navigation.navigate("ListeIncident")}
               style={{
                 backgroundColor: "#38A3D0",
                 borderRadius: 15,

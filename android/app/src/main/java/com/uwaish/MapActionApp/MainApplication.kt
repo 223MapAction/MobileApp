@@ -1,4 +1,4 @@
-package com.mapactionapp
+package com.uwaish.MapActionApp
 
 import android.app.Application
 import android.content.res.Configuration

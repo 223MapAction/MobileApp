@@ -283,7 +283,31 @@ class Inscription extends Component {
           <Text style={{ fontSize: 18, marginVertical: 10 }}>
             Inscription réussie !
           </Text>
-          <Text>Bienvenue à notre application.</Text>
+          <TouchableOpacity
+          style={{
+            backgroundColor: "#2D9CDB",
+            borderRadius: 10,
+            width: 70,
+            height: 53,
+            marginTop: 20,
+            alignSelf: "center",
+          }}
+          onPress={() => {
+            this.setState({ isModalVisible: false });
+            this.state.onFinish();
+          }}
+        >
+          <Text
+            style={{
+              textAlign: "center",
+              color: "#fff",
+              fontSize: 20,
+              marginTop: 10,
+            }}
+          >
+            OK
+          </Text>
+        </TouchableOpacity>
         </View>
       </Popup>
     );
