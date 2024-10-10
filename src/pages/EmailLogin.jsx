@@ -120,11 +120,13 @@ export default function EmailLogin() {
                                     <Icon name="facebook" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.google}>
-                                <TouchableOpacity>
-                                    <Icon name="apple" size={18} color='#fff' />
-                                </TouchableOpacity>
-                            </View>
+                            {Platform.OS === "ios" && (
+                                <View style={styles.google}>
+                                    <TouchableOpacity>
+                                        <Icon name="apple" size={18} color='#fff' />
+                                    </TouchableOpacity>
+                                </View>
+                            )}
                         </View>
                         <View style={styles.connecte}>
                             <Text style={styles.deja}>Vous n'avez pas de compte? </Text>
@@ -242,8 +244,8 @@ const styles = StyleSheet.create({
     login:{
         color:'#2CDB40',
         fontSize:14,
-      },
-      connecte:{
+    },
+    connecte:{
         flexDirection:'row',
         justifyContent:'center',
       },

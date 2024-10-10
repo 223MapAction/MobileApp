@@ -81,7 +81,7 @@ export default function App() {
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
-    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA"; // Remplace par ton token Mapbox
+
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
   
     try {
