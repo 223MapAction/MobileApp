@@ -153,10 +153,10 @@ class Inscription extends Component {
           >
             <View style={styles.start}>
               <View style={styles.rectangle}></View>
-              <Image
+              {/* <Image
                 source={require('../../assets/images/logo.webp')}
                 style={styles.logo}
-              />
+              /> */}
             </View>
             <View style={styles.loginview}>
               <Text style={styles.title}>S'inscrire</Text>
@@ -253,6 +253,13 @@ class Inscription extends Component {
               <TouchableOpacity style={styles.submitButton} onPress={() => this.submit()}>
                 <Text style={styles.submitButtonText}>Créer un compte</Text>
               </TouchableOpacity>
+              <View style={styles.connecte}>
+                <Text style={styles.deja}>Vous avez déjà un compte? </Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")}>
+                  <Text style={styles.login}>Se connecter</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -274,6 +281,7 @@ class Inscription extends Component {
         >
           <MaterialIcons name="cancel" size={30} color="red" />
         </TouchableOpacity>
+
         <View style={{ alignItems: "center", padding: 20 }}>
           <MaterialIcons
             name="check-circle"
@@ -283,8 +291,33 @@ class Inscription extends Component {
           <Text style={{ fontSize: 18, marginVertical: 10 }}>
             Inscription réussie !
           </Text>
-          <Text>Bienvenue à notre application.</Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#2D9CDB",
+              borderRadius: 10,
+              width: 70,
+              height: 53,
+              marginTop: 20,
+              alignSelf: "center",
+            }}
+            onPress={() => {
+              this.setState({ isModalVisible: false });
+              this.state.onFinish();
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: "#fff",
+                fontSize: 20,
+                marginTop: 10,
+              }}
+            >
+              OK
+            </Text>
+          </TouchableOpacity>
         </View>
+
       </Popup>
     );
   }
@@ -305,7 +338,8 @@ const styles = StyleSheet.create({
     width: 360.75,
     height: 290.36,
     backgroundColor: "#38A0DB",
-    transform: [{ rotate: '54deg' }]
+    transform: [{ rotate: '54deg' }],
+    zIndex: 1,
   },
   logo: {
     position: 'absolute',
@@ -315,9 +349,11 @@ const styles = StyleSheet.create({
     height: 45,
   },
   loginview: {
-    marginTop: 150,
-    marginBottom: 40,
-    marginLeft: 200
+    position: 'absolute',
+    top: 150,  
+    left: 180,  
+    zIndex: 2, 
+    // marginBottom: 20,
   },
   title: {
     fontSize: 40,
@@ -333,6 +369,7 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 30,
     paddingVertical: 20,
+    marginTop: 250,
   },
   inputContainer: {
     marginVertical: 10,
@@ -363,6 +400,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  login:{
+    color:'#2CDB40',
+    fontSize:14,
+  },
+  connecte:{
+    flexDirection:'row',
+    justifyContent:'center',
+  },
+  deja:{
+    color:'#2D9CDB'
+  }
 });
 
 export default connect(null, { onLogin })(Inscription);

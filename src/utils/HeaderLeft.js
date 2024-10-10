@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import  Icon  from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
 
 
 const HeaderLeft = ({ colors }) => {

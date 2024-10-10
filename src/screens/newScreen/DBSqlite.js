@@ -14,11 +14,11 @@ const createTable = () => {
   });
 };
 
-const insertIncident = (photo, video, audio, latitude, longitude) => {
+const insertIncident = (photo, video, audio, lattitude, longitude) => {
   db.transaction(tx => {
     tx.executeSql(
       'INSERT INTO incidents (photo, video, audio, latitude, longitude) VALUES (?, ?, ?, ?, ?)',
-      [photo, video, audio, latitude, longitude],
+      [photo, video, audio, lattitude, longitude],
       () => console.log('Incident added successfully'),
       error => console.log('Error occurred while adding the incident', error)
     );

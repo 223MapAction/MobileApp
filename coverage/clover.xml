@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727488392490" clover="3.2.0">
-  <project timestamp="1727488392491" name="All files">
+<coverage generated="1727694513823" clover="3.2.0">
+  <project timestamp="1727694513823" name="All files">
     <metrics statements="825" coveredstatements="0" conditionals="277" coveredconditionals="0" methods="269" coveredmethods="0" elements="1371" coveredelements="0" complexity="0" loc="825" ncloc="825" packages="18" files="66" classes="66"/>
-    <package name="MobileApp">
+    <package name="MapActionApp">
       <metrics statements="17" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="App.js" path="F:\code\MapAction\MobileApp\MobileApp\App.js">
+      <file name="App.js" path="/Users/mapaction/Kaicedra/MapActionApp/App.js">
         <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -18,31 +18,31 @@
         <line num="35" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
       </file>
-      <file name="drizzle.config.js" path="F:\code\MapAction\MobileApp\MobileApp\drizzle.config.js">
+      <file name="drizzle.config.js" path="/Users/mapaction/Kaicedra/MapActionApp/drizzle.config.js">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
       </file>
-      <file name="metro.config.js" path="F:\code\MapAction\MobileApp\MobileApp\metro.config.js">
+      <file name="metro.config.js" path="/Users/mapaction/Kaicedra/MapActionApp/metro.config.js">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
       </file>
-      <file name="react-native.config.js" path="F:\code\MapAction\MobileApp\MobileApp\react-native.config.js">
+      <file name="react-native.config.js" path="/Users/mapaction/Kaicedra/MapActionApp/react-native.config.js">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.drizzle">
+    <package name="MapActionApp.drizzle">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="migrations.js" path="F:\code\MapAction\MobileApp\MobileApp\drizzle\migrations.js">
+      <file name="migrations.js" path="/Users/mapaction/Kaicedra/MapActionApp/drizzle/migrations.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
-    <package name="MobileApp.src">
+    <package name="MapActionApp.src">
       <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="MainApp.js" path="F:\code\MapAction\MobileApp\MobileApp\src\MainApp.js">
+      <file name="MainApp.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/MainApp.js">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -51,9 +51,9 @@
         <line num="41" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.api">
+    <package name="MapActionApp.src.api">
       <metrics statements="220" coveredstatements="0" conditionals="75" coveredconditionals="0" methods="63" coveredmethods="0"/>
-      <file name="auth.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\auth.js">
+      <file name="auth.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/auth.js">
         <metrics statements="41" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -97,7 +97,7 @@
         <line num="82" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
       </file>
-      <file name="challenge.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\challenge.js">
+      <file name="challenge.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/challenge.js">
         <metrics statements="39" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -139,13 +139,13 @@
         <line num="73" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
       </file>
-      <file name="communaute.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\communaute.js">
+      <file name="communaute.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/communaute.js">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
       </file>
-      <file name="http.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\http.js">
+      <file name="http.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/http.js">
         <metrics statements="58" coveredstatements="0" conditionals="41" coveredconditionals="0" methods="15" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -206,7 +206,7 @@
         <line num="121" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
       </file>
-      <file name="incident.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\incident.js">
+      <file name="incident.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/incident.js">
         <metrics statements="37" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -246,7 +246,7 @@
         <line num="80" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
       </file>
-      <file name="message.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\message.js">
+      <file name="message.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/message.js">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -254,7 +254,7 @@
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
       </file>
-      <file name="user.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\user.js">
+      <file name="user.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/user.js">
         <metrics statements="20" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -277,7 +277,7 @@
         <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
       </file>
-      <file name="userStorage.js" path="F:\code\MapAction\MobileApp\MobileApp\src\api\userStorage.js">
+      <file name="userStorage.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/api/userStorage.js">
         <metrics statements="17" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
@@ -298,9 +298,9 @@
         <line num="42" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.components">
+    <package name="MapActionApp.src.components">
       <metrics statements="68" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="32" coveredmethods="0"/>
-      <file name="DrawerContent.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\DrawerContent.jsx">
+      <file name="DrawerContent.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/DrawerContent.jsx">
         <metrics statements="21" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -324,7 +324,7 @@
         <line num="213" count="0" type="stmt"/>
         <line num="251" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
-      <file name="DrawerNavigation.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\DrawerNavigation.jsx">
+      <file name="DrawerNavigation.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/DrawerNavigation.jsx">
         <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -334,14 +334,14 @@
         <line num="27" count="0" type="stmt"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
-      <file name="ProfilStackNavigation.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\ProfilStackNavigation.jsx">
+      <file name="ProfilStackNavigation.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/ProfilStackNavigation.jsx">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
       </file>
-      <file name="StackNavigation.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\StackNavigation.jsx">
+      <file name="StackNavigation.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/StackNavigation.jsx">
         <metrics statements="22" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
@@ -366,12 +366,12 @@
         <line num="113" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
       </file>
-      <file name="TabBar.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\TabBar.jsx">
+      <file name="TabBar.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/TabBar.jsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="TabNavigation.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\components\TabNavigation.jsx">
+      <file name="TabNavigation.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/components/TabNavigation.jsx">
         <metrics statements="12" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
@@ -387,9 +387,9 @@
         <line num="97" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.context">
+    <package name="MapActionApp.src.context">
       <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
-      <file name="ReportContext.js" path="F:\code\MapAction\MobileApp\MobileApp\src\context\ReportContext.js">
+      <file name="ReportContext.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/context/ReportContext.js">
         <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -410,14 +410,14 @@
         <line num="39" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.db">
+    <package name="MapActionApp.src.db">
       <metrics statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-      <file name="client.js" path="F:\code\MapAction\MobileApp\MobileApp\src\db\client.js">
+      <file name="client.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/db/client.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="dbOperations.js" path="F:\code\MapAction\MobileApp\MobileApp\src\db\dbOperations.js">
+      <file name="dbOperations.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/db/dbOperations.js">
         <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -436,14 +436,14 @@
         <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
       </file>
-      <file name="schema.ts" path="F:\code\MapAction\MobileApp\MobileApp\src\db\schema.ts">
+      <file name="schema.ts" path="/Users/mapaction/Kaicedra/MapActionApp/src/db/schema.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.pages">
+    <package name="MapActionApp.src.pages">
       <metrics statements="83" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="33" coveredmethods="0"/>
-      <file name="EmailLogin.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\pages\EmailLogin.jsx">
+      <file name="EmailLogin.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/pages/EmailLogin.jsx">
         <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -460,7 +460,7 @@
         <line num="27" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
       </file>
-      <file name="Inscription.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\pages\Inscription.jsx">
+      <file name="Inscription.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/pages/Inscription.jsx">
         <metrics statements="57" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
@@ -520,7 +520,7 @@
         <line num="267" count="0" type="stmt"/>
         <line num="293" count="0" type="stmt"/>
       </file>
-      <file name="Login.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\pages\Login.jsx">
+      <file name="Login.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/pages/Login.jsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -530,46 +530,46 @@
         <line num="37" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
       </file>
-      <file name="PhoneLogin.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\pages\PhoneLogin.jsx">
+      <file name="PhoneLogin.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/pages/PhoneLogin.jsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
       </file>
-      <file name="SocialLogin.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\pages\SocialLogin.jsx">
+      <file name="SocialLogin.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/pages/SocialLogin.jsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.redux">
+    <package name="MapActionApp.src.redux">
       <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="root.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\root.js">
+      <file name="root.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/root.js">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.redux.communautes">
+    <package name="MapActionApp.src.redux.communautes">
       <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
-      <file name="action.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\communautes\action.js">
+      <file name="action.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/communautes/action.js">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
       </file>
-      <file name="constantes.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\communautes\constantes.js">
+      <file name="constantes.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/communautes/constantes.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="participate.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\communautes\participate.js">
+      <file name="participate.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/communautes/participate.js">
         <metrics statements="3" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="5" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.redux.incidents">
+    <package name="MapActionApp.src.redux.incidents">
       <metrics statements="21" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="11" coveredmethods="0"/>
-      <file name="action.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\incidents\action.js">
+      <file name="action.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/incidents/action.js">
         <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
@@ -584,10 +584,10 @@
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
       </file>
-      <file name="constantes.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\incidents\constantes.js">
+      <file name="constantes.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/incidents/constantes.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="incident.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\incidents\incident.js">
+      <file name="incident.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/incidents/incident.js">
         <metrics statements="9" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="3" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="5" count="0" type="stmt"/>
@@ -600,18 +600,18 @@
         <line num="16" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.redux.user">
+    <package name="MapActionApp.src.redux.user">
       <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
-      <file name="action.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\user\action.js">
+      <file name="action.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/user/action.js">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
       </file>
-      <file name="constantes.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\user\constantes.js">
+      <file name="constantes.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/user/constantes.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="user.js" path="F:\code\MapAction\MobileApp\MobileApp\src\redux\user\user.js">
+      <file name="user.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/redux/user/user.js">
         <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="5" count="0" type="stmt"/>
@@ -620,9 +620,9 @@
         <line num="11" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.screens">
+    <package name="MapActionApp.src.screens">
       <metrics statements="38" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="7" coveredmethods="0"/>
-      <file name="CameraScreen.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\CameraScreen.jsx">
+      <file name="CameraScreen.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/CameraScreen.jsx">
         <metrics statements="38" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -663,16 +663,16 @@
         <line num="125" count="0" type="stmt"/>
         <line num="136" count="0" type="stmt"/>
       </file>
-      <file name="HomeScreen.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\HomeScreen.jsx">
+      <file name="HomeScreen.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/HomeScreen.jsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="ProfileScreen.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\ProfileScreen.jsx">
+      <file name="ProfileScreen.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/ProfileScreen.jsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
-    <package name="MobileApp.src.screens.newScreen">
+    <package name="MapActionApp.src.screens.newScreen">
       <metrics statements="189" coveredstatements="0" conditionals="59" coveredconditionals="0" methods="69" coveredmethods="0"/>
-      <file name="Camera.js" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\Camera.js">
+      <file name="Camera.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/Camera.js">
         <metrics statements="21" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -696,7 +696,7 @@
         <line num="43" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
       </file>
-      <file name="DBSqlite.js" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\DBSqlite.js">
+      <file name="DBSqlite.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/DBSqlite.js">
         <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -710,7 +710,7 @@
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
       </file>
-      <file name="Dashboard.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\Dashboard.jsx">
+      <file name="Dashboard.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/Dashboard.jsx">
         <metrics statements="48" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -761,12 +761,12 @@
         <line num="227" count="0" type="stmt"/>
         <line num="311" count="0" type="stmt"/>
       </file>
-      <file name="DataJourney.js" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\DataJourney.js">
+      <file name="DataJourney.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/DataJourney.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
       </file>
-      <file name="Gallery.js" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\Gallery.js">
+      <file name="Gallery.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/Gallery.js">
         <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -785,7 +785,7 @@
         <line num="55" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
       </file>
-      <file name="IncidentForm.js" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\IncidentForm.js">
+      <file name="IncidentForm.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/IncidentForm.js">
         <metrics statements="64" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
@@ -852,7 +852,7 @@
         <line num="136" count="0" type="stmt"/>
         <line num="206" count="0" type="stmt"/>
       </file>
-      <file name="Profil.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\screens\newScreen\Profil.jsx">
+      <file name="Profil.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/screens/newScreen/Profil.jsx">
         <metrics statements="27" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
@@ -883,9 +883,9 @@
         <line num="426" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.shared">
+    <package name="MapActionApp.src.shared">
       <metrics statements="25" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="10" coveredmethods="0"/>
-      <file name="Config.js" path="F:\code\MapAction\MobileApp\MobileApp\src\shared\Config.js">
+      <file name="Config.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/shared/Config.js">
         <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -895,7 +895,7 @@
         <line num="22" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
       </file>
-      <file name="Header.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\shared\Header.jsx">
+      <file name="Header.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/shared/Header.jsx">
         <metrics statements="8" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -906,14 +906,14 @@
         <line num="59" count="0" type="stmt"/>
         <line num="87" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
-      <file name="Icon.js" path="F:\code\MapAction\MobileApp\MobileApp\src\shared\Icon.js">
+      <file name="Icon.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/shared/Icon.js">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
       </file>
-      <file name="Popup.js" path="F:\code\MapAction\MobileApp\MobileApp\src\shared\Popup.js">
+      <file name="Popup.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/shared/Popup.js">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
@@ -923,9 +923,9 @@
         <line num="25" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.slides">
+    <package name="MapActionApp.src.slides">
       <metrics statements="44" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="15" coveredmethods="0"/>
-      <file name="Acceuil.jsx" path="F:\code\MapAction\MobileApp\MobileApp\src\slides\Acceuil.jsx">
+      <file name="Acceuil.jsx" path="/Users/mapaction/Kaicedra/MapActionApp/src/slides/Acceuil.jsx">
         <metrics statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
@@ -943,23 +943,23 @@
         <line num="59" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
       </file>
-      <file name="Slide1.js" path="F:\code\MapAction\MobileApp\MobileApp\src\slides\Slide1.js">
+      <file name="Slide1.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/slides/Slide1.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="Slide2.js" path="F:\code\MapAction\MobileApp\MobileApp\src\slides\Slide2.js">
+      <file name="Slide2.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/slides/Slide2.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
-      <file name="Slide3.js" path="F:\code\MapAction\MobileApp\MobileApp\src\slides\Slide3.js">
+      <file name="Slide3.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/slides/Slide3.js">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
       </file>
-      <file name="Welcome.js" path="F:\code\MapAction\MobileApp\MobileApp\src\slides\Welcome.js">
+      <file name="Welcome.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/slides/Welcome.js">
         <metrics statements="22" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -985,20 +985,20 @@
         <line num="88" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="MobileApp.src.styles">
+    <package name="MapActionApp.src.styles">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="global.js" path="F:\code\MapAction\MobileApp\MobileApp\src\styles\global.js">
+      <file name="global.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/styles/global.js">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
     </package>
-    <package name="MobileApp.src.utils">
+    <package name="MapActionApp.src.utils">
       <metrics statements="64" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="10" coveredmethods="0"/>
-      <file name="Constants.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\Constants.js">
+      <file name="Constants.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/Constants.js">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
-      <file name="HeaderLeft.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\HeaderLeft.js">
+      <file name="HeaderLeft.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/HeaderLeft.js">
         <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
@@ -1008,7 +1008,7 @@
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
-      <file name="Image.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\Image.js">
+      <file name="Image.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/Image.js">
         <metrics statements="12" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -1023,7 +1023,7 @@
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
       </file>
-      <file name="SyncUtils.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\SyncUtils.js">
+      <file name="SyncUtils.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/SyncUtils.js">
         <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -1044,7 +1044,7 @@
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
       </file>
-      <file name="ToastUtils.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\ToastUtils.js">
+      <file name="ToastUtils.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/ToastUtils.js">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -1053,11 +1053,11 @@
         <line num="10" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
       </file>
-      <file name="Validator.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\Validator.js">
+      <file name="Validator.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/Validator.js">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
       </file>
-      <file name="backgroundTask.js" path="F:\code\MapAction\MobileApp\MobileApp\src\utils\backgroundTask.js">
+      <file name="backgroundTask.js" path="/Users/mapaction/Kaicedra/MapActionApp/src/utils/backgroundTask.js">
         <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
