@@ -12,7 +12,7 @@ import {
   Image,
 } from "react-native";
 import Icon from 'react-native-vector-icons/Entypo';
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { register, get_token } from "../api/auth";
 import Validator from "../utils/Validator";
 import Popup from "../shared/Popup";
@@ -253,6 +253,30 @@ class Inscription extends Component {
               <TouchableOpacity style={styles.submitButton} onPress={() => this.submit()}>
                 <Text style={styles.submitButtonText}>Créer un compte</Text>
               </TouchableOpacity>
+              <View style={styles.or}>
+                <View style={styles.tiret} />
+                <Text style={styles.orText}>  Ou s'inscrire avec  </Text>
+                <View style={styles.tiret}/>
+              </View>
+              <View style={styles.socialContainer}>
+                  <View style={styles.google}>
+                      <TouchableOpacity>
+                          <FontAwesome name="google" size={18} color='#fff' />
+                      </TouchableOpacity>
+                  </View>
+                  <View style={styles.google}>
+                      <TouchableOpacity>
+                          <FontAwesome name="facebook" size={18} color='#fff' />
+                      </TouchableOpacity>
+                  </View>
+                  {Platform.OS === "ios" && (
+                      <View style={styles.google}>
+                          <TouchableOpacity>
+                              <FontAwesome name="apple" size={18} color='#fff' />
+                          </TouchableOpacity>
+                      </View>
+                  )}
+              </View>
               <View style={styles.connecte}>
                 <Text style={styles.deja}>Vous avez déjà un compte? </Text>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate("Login")}>
@@ -399,6 +423,39 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  tiret:{
+    backgroundColor:"#2C9CDB",
+    width:89,
+    borderWidth:0,
+    height:2,
+    marginTop:9, 
+  },
+  or:{
+    flexDirection:'row',
+    top:30,
+    justifyContent:"center"
+  },
+  orText:{
+    color:'#858585'
+  },
+  google:{
+    backgroundColor:'#38A0DB',
+    width:100,
+    height:43,
+    padding:10,
+    marginLeft:10,
+    borderRadius:8,
+    alignItems:'center',
+     
+  },
+  socialContainer:{
+    flexDirection:'row',
+    padding:10,
+    top:30,
+    marginBottom:50,
+    justifyContent:"center"
+
   },
   login:{
     color:'#2CDB40',
