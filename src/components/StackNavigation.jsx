@@ -157,12 +157,12 @@ const StackNavigation = () => {
             title: route.params?.incident?.title || "Détail de l'incident",
           })}
         />
-      <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/>
+      {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
-      <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: false }}/>
+      <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/>
       <Stack.Screen name="social_login" component={SocialLogin} options={{ headerShown: false }} />
-      <Stack.Screen name="phone" component={PhoneLogin} options={{ headerShown: false }}/>
-      <Stack.Screen name="email" component={EmailLogin} options={{ headerShown: false }}/>
+      <Stack.Screen name="phone" component={PhoneLogin} options={{ headerShown: true }}/>
+      <Stack.Screen name="Login" component={EmailLogin} options={{ headerShown: true }}/>
       {/* <Stack.Screen
           name="Logout"
           component={Logout}

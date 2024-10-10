@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, FlatList, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, ActivityIndicator, ScrollView } from "react-native";
 import { getImage } from "../api/http";
 import { useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -79,8 +79,8 @@ const ListIncident = () => {
       return item.incidents || staticIncidents;;
     }
     const user_id = route?.params?.user_id || null;
-    if (user_id === null) return staticIncidents;
-    return staticIncidents.filter((i) => i.user_id === user_id);
+    if (user_id === null) return incidents;
+    return incidents.filter((i) => i.user_id === user_id);
   };
 
   if (!region) {
@@ -118,8 +118,8 @@ const ListIncident = () => {
                 <Image
                     resizeMode="cover"
                     style={styles.incidentImage}
-                    source={{ uri: item.photo }}
-                    // source={getImage(item.photo)}
+                    // source={{ uri: item.photo }}
+                    source={getImage(item.photo)}
                 />
                 <View style={styles.incidentInfo}>
                     <Text style={styles.incidentTitle}>{item.title}</Text>
@@ -133,9 +133,7 @@ const ListIncident = () => {
                         </Text>
                     </View>
                 </View>
-                
                 </View>
-                
             </View>
         </TouchableOpacity>
     );
