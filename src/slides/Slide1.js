@@ -26,18 +26,15 @@ export default class Slide1 extends Component {
           }}
           numberOfLines={2}
         >
-          <Text style={{ fontWeight: "bold" }}>Déclarer un incident</Text> en
-          seulement 3 clics.
+          <Text style={{ fontWeight: "bold" }}>Signalez un incident</Text> en
+           3 clics.
         </Text>
         <Text
           style={{ color: "rgba(0,0,0,.7)", textAlign: "center", fontSize: 14 }}
         >
-          Participer efficacement à l’assainissement et la protection de votre
-          environnement en rapportant les incidents tels qu’un dépôt d’ordure
-          sauvage, une canalisation perforée, une route endommagée, etc. grâce à
-          l’application MAP ACTION. Prenez la photo de l’incident, documentez
-          avec une vidéo, un message vocal ou un texte et envoyez aux autorités
-          compétentes !
+          Aidez à protéger l'environnement en rapportant des décharges sauvages, 
+          infrastructures endommagées ou autres incidents via l'application MAP ACTION. 
+          Capturez et envoyez en un clic aux autorités compétentes.
         </Text>
       </View>
     );

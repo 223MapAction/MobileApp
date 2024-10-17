@@ -367,7 +367,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     position: 'absolute',
-    // top: -120,
     right: 90,
     width: 110,
     height: 45,
@@ -377,7 +376,6 @@ const styles = StyleSheet.create({
     top: 150,  
     left: 180,  
     zIndex: 2, 
-    // marginBottom: 20,
   },
   title: {
     fontSize: 40,
@@ -455,7 +453,6 @@ const styles = StyleSheet.create({
     top:30,
     marginBottom:50,
     justifyContent:"center"
-
   },
   login:{
     color:'#2CDB40',
