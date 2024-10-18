@@ -36,7 +36,7 @@ export default function App() {
 
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
+      allowsEditing: false,
       quality: 1,
     });
 

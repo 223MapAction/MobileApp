@@ -70,6 +70,34 @@ export async function list_incident() {
   return finalData;
 }
 
+export async function my_list_incident(userId) { 
+  const res = await http.get("/incident/");
+
+  const { results, ...rest } = res;
+  console.log(rest);
+  const finalData = [];
+  results.map((incident) => {
+    if (incident.user_id) {
+      incident.user = incident.user_id;
+      incident.user_id = incident.user.id;
+
+      if (incident.user_id === userId) {
+        finalData.push(incident);
+      }
+    } else {
+      incident.user = {};
+      if (incident.user_id === userId) {
+        finalData.push(incident);
+      }
+    }
+
+    return incident;
+  });
+
+  return finalData;
+}
+
+
 export async function list_categories() {
   const { results } = await http.get("/category/");
 

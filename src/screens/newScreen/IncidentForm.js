@@ -1,4 +1,3 @@
-import { CameraView } from "expo-camera";
 import React, { useContext, useState, useEffect } from "react";
 import Slider from '@react-native-community/slider'; 
 import {
@@ -38,13 +37,28 @@ export default function IncidentForm() {
 
   useEffect(() => {
     getLocation(); 
-    playSound();
-    return sound
-    ? () => {
-        sound.unloadAsync(); 
-      }
-    : undefined;
+    if (currentReport.audio) {
+      playSound();  
+    }
+    return () => sound ? sound.unloadAsync() : undefined;  
+  }, [currentReport.audio]);
+
+  const requestAllPermissions = async () => {
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+    const { status: audioStatus } = await Audio.requestPermissionsAsync();
+  
+    if (cameraStatus !== 'granted' || locationStatus !== 'granted' || audioStatus !== 'granted') {
+      Alert.alert('Permissions manquantes', 'Toutes les permissions (caméra, localisation, micro) sont requises.');
+      return false;
+    }
+    return true;
+  };
+  
+  useEffect(() => {
+    requestAllPermissions(); 
   }, []);
+  
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
@@ -53,11 +67,12 @@ export default function IncidentForm() {
     );
     setSound(sound);
     sound.setOnPlaybackStatusUpdate((status) => {
-      setIsPlaying(status.isPlaying);
-      setDuration(status.durationMillis || 0);
-      setPosition(status.positionMillis || 0);
+      setIsPlaying(status.isPlaying);  
+      setDuration(status.durationMillis || 0); 
+      setPosition(status.positionMillis || 0);  
     });
   }
+
   const handlePlayPause = async () => {
     if (sound) {
       if (isPlaying) {
@@ -67,6 +82,7 @@ export default function IncidentForm() {
       }
     }
   };
+
   const formatTime = (millis) => {
     const minutes = Math.floor(millis / 60000);
     const seconds = Math.floor((millis % 60000) / 1000);
@@ -74,7 +90,7 @@ export default function IncidentForm() {
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
-    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA"; 
+    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  // Clé API Mapbox
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
   
     try {
@@ -82,7 +98,7 @@ export default function IncidentForm() {
       const data = await response.json();
   
       if (data.features && data.features.length > 0) {
-        const zone = data.features[0].place_name;
+        const zone = data.features[0].place_name;  
         return zone;
       } else {
         return "Zone inconnue";
@@ -92,7 +108,7 @@ export default function IncidentForm() {
       return "Zone inconnue";
     }
   };
-  
+
   const getLocation = async () => {
     setLoadingLocation(true);
     try {
@@ -127,8 +143,6 @@ export default function IncidentForm() {
     setLoadingLocation(false);
   };
 
-  
-  // Handle video recording
   const pickVideo = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
@@ -149,8 +163,6 @@ export default function IncidentForm() {
     }
   };
   
-
-  // Handle audio recording
   const startRecording = async () => {
     try {
       if (permissionResponse.status !== 'granted') {
@@ -185,10 +197,8 @@ export default function IncidentForm() {
     console.log('Recording stopped and stored at', uri);
     setCurrentReport({ ...currentReport, audio: uri });
   };
-  
 
   const submitForm = async () => {
-    
     try {
       if (!currentReport.title || !currentReport.zone || !currentReport.photo) {
         Alert.alert("Erreur", "Veuillez remplir tous les champs obligatoires");
@@ -196,7 +206,7 @@ export default function IncidentForm() {
       }
       const response = await submitReport(currentReport); 
       if (response.status === 200) {
-        setPopupMessage(`Votre currentReport d’incident à ${zone} a été envoyé avec succès. Merci pour votre contribution !`);
+        setPopupMessage(`Votre rapport d’incident à ${zone} a été envoyé avec succès. Merci pour votre contribution !`);
         setIsSuccess(true);
       } else {
         setPopupMessage('Échec de l\'envoi de l\'incident.');
@@ -206,9 +216,8 @@ export default function IncidentForm() {
       setPopupMessage('Une erreur est survenue lors de l\'envoi.');
       setIsSuccess(false);
     } finally {
-      setShowPopup(true); 
+      setShowPopup(true);
     }
-    await submitReport(currentReport);
   };
 
   const handleClosePopup = () => {
@@ -452,7 +461,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",  
     fontSize: 16,
     color:'#858585',
-    lineHeight:'16px'  
+    // lineHeight:'16px'  
   },
   zoneContainer: {
     flexDirection: "row",  
@@ -463,13 +472,13 @@ const styles = StyleSheet.create({
   position:{
     color:'#858585',
     textAlign:'left',
-    lineHeight:'12px',
+    // lineHeight:'12px',
   },
   zone:{
     color:'#2C9CDB',
     fontSize:'20px',
     fontWeight:'bold',
-    lineHeight:'12px',
+    // lineHeight:'12px',
     fontFamily:'poppins'
   },
   sendContainer:{

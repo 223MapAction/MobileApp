@@ -138,8 +138,7 @@ const StackNavigation = () => {
           name="cgu"
           component={Cgu}
           options={{
-            headerShown: true,
-            title: "CGU",
+            headerShown: false
           }}
         />
         <Stack.Screen
