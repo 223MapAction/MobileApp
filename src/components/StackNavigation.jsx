@@ -15,6 +15,11 @@ import SocialLogin from "../pages/SocialLogin";
 import Inscription from "../pages/Inscription";
 import ListeIncident from "../screens/ListeIncident";
 import DataJourney from "../screens/newScreen/DataJourney";
+import Logout from "../pages/Logout";
+import Contact from "../screens/newScreen/Contact";
+import Politique from "../screens/politique";
+import Cgu from "../screens/cgu";
+import IncidentForm from "../screens/newScreen/IncidentForm";
 
 const Stack = createStackNavigator();
 
@@ -119,11 +124,7 @@ const StackNavigation = () => {
         <Stack.Screen
           name="Picture"
           component={CameraComponent}
-          options={{
-            headerShown: true,
-            title: "Signaler un incident",
-            
-          }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ListeIncident"
@@ -135,18 +136,17 @@ const StackNavigation = () => {
         />
         <Stack.Screen
           name="cgu"
-          component={ListeIncident}
+          component={Cgu}
           options={{
-            headerShown: true,
-            title: "CGU",
+            headerShown: false
           }}
         />
         <Stack.Screen
           name="politique"
-          component={ListeIncident}
+          component={Politique}
           options={{
             headerShown: true,
-            title: "Nos Politiques de Confidentialités",
+            title: "Mentions Légales",
           }}
         />
         <Stack.Screen
@@ -157,17 +157,29 @@ const StackNavigation = () => {
             title: route.params?.incident?.title || "Détail de l'incident",
           })}
         />
+        <Stack.Screen
+          name="IncidentForm"
+          component={IncidentForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Contact"
+          component={Contact}
+          options={{
+            title: "Nous contacter",
+          }}
+      />
       {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
       <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/>
       <Stack.Screen name="social_login" component={SocialLogin} options={{ headerShown: false }} />
       <Stack.Screen name="phone" component={PhoneLogin} options={{ headerShown: true }}/>
       <Stack.Screen name="Login" component={EmailLogin} options={{ headerShown: true }}/>
-      {/* <Stack.Screen
+      <Stack.Screen
           name="Logout"
           component={Logout}
           options={{ headerShown: false }}
-      /> */}
+      />
     </Stack.Navigator>
     </NavigationContainer>
   );

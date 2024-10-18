@@ -9,7 +9,7 @@ class Accueil extends Component {
   items = [
     { Content: Slide1, key: "0" },
     { Content: Slide2, key: "1" },
-    { Content: Slide3, key: "2" },
+    // { Content: Slide3, key: "2" },
   ];
   renderItem = ({ item }) => {
     const { Content } = item;
@@ -39,7 +39,7 @@ class Accueil extends Component {
     );
   };
   onDone = () => {
-    this.props.navigation.replace("DrawerNavigation");
+    this.props.navigation.replace("cgu");
   };
   render() {
     return (

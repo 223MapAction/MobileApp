@@ -4,9 +4,11 @@ import moment from 'moment';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Progress from 'react-native-progress';
+import { getImage } from '../../api/http';
 
 const DataJourney = ({ route, navigation }) => {
-    const { incident } = route.params; 
+    const { incident } = route.params;
+    console.log(incident); 
     const getProgressDetails = (state) => {
       switch (state) {
           case 'declared':
@@ -36,7 +38,7 @@ const DataJourney = ({ route, navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-              source={{ uri: incident?.photo }} 
+              source={getImage(incident.photo, true)} 
               style={styles.incidentImage}
             />
             <View style={styles.detailsContainer}>
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
       textAlignVertical: "top",  
       fontSize: 16,
       color:'#858585',
-      lineHeight:'16px'  
+      // lineHeight:'16px'  
     },
 });
 

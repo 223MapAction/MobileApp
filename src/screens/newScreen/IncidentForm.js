@@ -1,322 +1,555 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
+import Slider from '@react-native-community/slider'; 
 import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-  TextInput,
+  ActivityIndicator,
   Alert,
-  ImageBackground,
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Modal
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { create_incident } from "../../api/incident";
-import { Input, Icon } from "react-native-elements";
-import { onAddIncident } from "../../redux/incidents/action";
-import HeaderLeft from "../../utils/HeaderLeft";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
-import { setIncident, setUser } from "../../api/userStorage";
-import { ScrollView } from "react-native-gesture-handler";
-import { read_user } from "../../api/user";
-import { onLogin } from "../../redux/user/action";
+import {Audio, Video} from "expo-av";
+import { ReportContext } from "../../context/ReportContext";
+import { useRoute } from '@react-navigation/native';
 
-const IncidentForm = () => {
+export default function IncidentForm() {
+  const { isSyncing, submitReport } = useContext(ReportContext);
   const route = useRoute();
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const token = useSelector((state) => state.user.token);
-  const user = useSelector((state) => state.user.user);
+  const { report } = route.params;
+  const [currentReport, setCurrentReport] = useState(report);
+  const [loadingLocation, setLoadingLocation] = useState(false);
+  const [recording, setRecording] = useState(null);
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [sound, setSound] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [position, setPosition] = useState(0);
+  const [showPopup, setShowPopup] = useState(false); 
+  const [popupMessage, setPopupMessage] = useState(''); 
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const [zone, setZone] = useState(route?.params?.zone || "");
-  const [title, setTitle] = useState(route?.params?.title || "");
-  const [description, setDescription] = useState(route?.params?.description || "");
-  const [photo, setPhoto] = useState(route.params?.photo || route.params?.image);
-  const [errors, setErrors] = useState({});
-  const [audio, setAudio] = useState(route?.params?.audio || null);
-  const [loading, setLoading] = useState(false);
-  const [video, setVideo] = useState(route?.params?.video || "");
-  const [askCategories, setAskCategories] = useState(false);
-  const [pourcent, setPourcent] = useState(null);
-  const [playStatus, setPlayStatus] = useState({});
-  const [recordVideo, setRecordVideo] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [status, setStatus] = useState({});
-  const [latitude, setLatitude] = useState(0);
-  const [audioProgress] = useState(new Animated.Value(0));
-  const [longitude, setLongitude] = useState(0);
+  useEffect(() => {
+    getLocation(); 
+    if (currentReport.audio) {
+      playSound();  
+    }
+    return () => sound ? sound.unloadAsync() : undefined;  
+  }, [currentReport.audio]);
 
-  const pickVideo = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        quality: 1,
-      });
-      if (!result.canceled) {
-        setVideo(result.assets);
+  const requestAllPermissions = async () => {
+    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+    const { status: audioStatus } = await Audio.requestPermissionsAsync();
+  
+    if (cameraStatus !== 'granted' || locationStatus !== 'granted' || audioStatus !== 'granted') {
+      Alert.alert('Permissions manquantes', 'Toutes les permissions (caméra, localisation, micro) sont requises.');
+      return false;
+    }
+    return true;
+  };
+  
+  useEffect(() => {
+    requestAllPermissions(); 
+  }, []);
+  
+
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      { uri: currentReport.audio },
+      { shouldPlay: false }
+    );
+    setSound(sound);
+    sound.setOnPlaybackStatusUpdate((status) => {
+      setIsPlaying(status.isPlaying);  
+      setDuration(status.durationMillis || 0); 
+      setPosition(status.positionMillis || 0);  
+    });
+  }
+
+  const handlePlayPause = async () => {
+    if (sound) {
+      if (isPlaying) {
+        await sound.pauseAsync();
+      } else {
+        await sound.playAsync();
       }
-    } catch (E) {
-      console.log(E);
     }
   };
 
-  const askAsync = () => {
-    return new Promise((resolve) => {
-      Alert.alert(
-        "",
-        "Vous n'êtes pas connecté voulez-vous continuer ?",
-        [
-          {
-            text: "Se connecter",
-            onPress: () => {
-              navigation.replace("Login", {
-                nextRoute: "IncidentForm",
-                params: { zone, title, description, photo, audio, video },
-              });
-              resolve(false);
-            },
-          },
-          { text: "Oui continuer", onPress: () => resolve(true) },
-        ],
-        { cancelable: false }
-      );
-    });
+  const formatTime = (millis) => {
+    const minutes = Math.floor(millis / 60000);
+    const seconds = Math.floor((millis % 60000) / 1000);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  const create_incident = async (data) => {
-    setLoading(true);
+  const getZoneFromCoordinates = async (latitude, longitude) => {
+    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  // Clé API Mapbox
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
+  
     try {
-      const res = await create_incident(data, uploadProgress);
-      dispatch(onAddIncident({ ...res, user }));
-      setIsModalVisible(true);
-      if (token) {
-        const user = await read_user(user.id);
-        await setUser({ token, user });
-        dispatch(onLogin({ token, user }));
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      if (data.features && data.features.length > 0) {
+        const zone = data.features[0].place_name;  
+        return zone;
+      } else {
+        return "Zone inconnue";
       }
     } catch (error) {
-      console.log("error", error);
-      if (error.message && error.message.includes("Network Error")) {
-        Alert.alert("", "Échec de l'enregistrement de l'incident", [
-          {
-            text: "Réessayer",
-            onPress: () => {
-              setPourcent(null);
-              create_incident(data);
-            },
-          },
-          { text: "Annuler", style: "cancel" },
-        ]);
-      } else {
-        Alert.alert("", `Error: ${error.message}`);
-        setPourcent(null);
-        if (error) {
-          const errors = {};
-          setErrors(errors);
-        }
-      }
+      console.error("Erreur lors de la récupération du nom de la zone:", error);
+      return "Zone inconnue";
     }
-    setLoading(false);
   };
 
-  const uploadProgress = (pourcent) => {
-    setPourcent(pourcent);
+  const getLocation = async () => {
+    setLoadingLocation(true);
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission refusée",
+          "La localisation est nécessaire pour cette fonctionnalité"
+        );
+        setLoadingLocation(false);
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const lattitude = location.coords.latitude.toString();
+      const longitude = location.coords.longitude.toString();
+      const zone = await getZoneFromCoordinates(lattitude, longitude);
+      
+      setCurrentReport({
+        ...currentReport,
+        lattitude,
+        longitude,
+        zone,
+      });
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération de la localisation:",
+        error
+      );
+      Alert.alert("Erreur", "Impossible de récupérer la localisation");
+    }
+    setLoadingLocation(false);
   };
 
-  const renderError = (field) => {
-    const error = errors[field];
-    if (!error) return null;
-    return (
-      <Text style={styles.errorText}>
-        {error}
-      </Text>
+  const pickVideo = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Permission refusée", "La caméra est nécessaire pour enregistrer une vidéo");
+      return;
+    }
+  
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      videoMaxDuration: 60,
+      quality: ImagePicker.VideoQualityType.High,
+    });
+  
+    if (!result.cancelled) {
+      setCurrentReport((currentReport) => ({ ...currentReport, video: result.uri }));
+    } else {
+      console.log("Enregistrement vidéo annulé");
+    }
+  };
+  
+  const startRecording = async () => {
+    try {
+      if (permissionResponse.status !== 'granted') {
+        console.log('Requesting permission..');
+        await requestPermission();
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log('Starting recording..');
+      const { recording } = await Audio.Recording.createAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log('Recording started');
+    } catch (err) {
+      console.error('Failed to start recording', err);
+    }
+  };
+
+  const stopRecording = async () => {
+    console.log('Stopping recording..');
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync(
+      {
+        allowsRecordingIOS: false,
+      }
     );
+    const uri = recording.getURI();
+    console.log('Recording stopped and stored at', uri);
+    setCurrentReport({ ...currentReport, audio: uri });
+  };
+
+  const submitForm = async () => {
+    try {
+      if (!currentReport.title || !currentReport.zone || !currentReport.photo) {
+        Alert.alert("Erreur", "Veuillez remplir tous les champs obligatoires");
+        return;
+      }
+      const response = await submitReport(currentReport); 
+      if (response.status === 200) {
+        setPopupMessage(`Votre rapport d’incident à ${zone} a été envoyé avec succès. Merci pour votre contribution !`);
+        setIsSuccess(true);
+      } else {
+        setPopupMessage('Échec de l\'envoi de l\'incident.');
+        setIsSuccess(false);
+      }
+    } catch (error) {
+      setPopupMessage('Une erreur est survenue lors de l\'envoi.');
+      setIsSuccess(false);
+    } finally {
+      setShowPopup(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <ScrollView>
-          <ImageBackground
-            source={{ uri: photo }}
-            style={styles.imageBackground}
-          >
-            <View style={styles.header}>
-              <HeaderLeft colors="#FFF" />
-              <Text style={styles.headerText}>Ajouter des détails</Text>
+    <View style={styles.container}>
+      
+      <View style={styles.inputGroup}>
+        <Icon name="title" size={24} color="#2C9CDB" />
+        <TextInput
+          style={styles.input}
+          placeholder="Titre de l'incident"
+          onChangeText={(text) => setCurrentReport({ ...currentReport, title: text })}
+          value={currentReport.title}
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Icon name="description" size={24} color="#2C9CDB" />
+        <TextInput
+          style={styles.descriptionInput}
+          placeholder="Description"
+          onChangeText={(text) => setCurrentReport({ ...currentReport, description: text })}
+          value={currentReport.description}
+          multiline={true}  
+          numberOfLines={6} 
+          textAlignVertical="top"
+        />
+      </View>
+
+        {loadingLocation ? (
+         <ActivityIndicator size="large" color="#ff6347" />
+        ) : (
+          <View style={styles.zoneContainer}>
+            <Icon name="place" size={40} color="#38A0DB" />
+            <View style={{flexDirection:'column'}}>
+              <Text style={styles.position}>Votre position actuelle</Text>
+              <Text style={styles.zone}> {currentReport.zone || "Récupération en cours..."}</Text>
             </View>
-            <View style={styles.details}>
-              <View style={styles.zone}>
-                <Icon name="location-dot" color={"#fff"} size={20} />
-                <Text style={styles.zoneText} testID="zone">
-                  {zone}
-                </Text>
-              </View>
-              <View>
-                <Text style={styles.titleText}>
-                  {title}
-                </Text>
+            
+          </View>
+        )}
+        <View style={styles.recordContainer}>
+          {currentReport.photo ? (
+            <Image source={{ uri: currentReport.photo }} style={styles.imagePreview} />
+          ) : null}
+          
+          {currentReport.video ? (
+            <Video
+              source={{ uri: currentReport.video }}
+              rate={1.0}
+              volume={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              shouldPlay
+              isLooping
+              style={styles.videoPreview}
+            />
+          ) : null}
+          
+          {currentReport.audio && (
+            <View style={styles.audioContainer}>
+              <TouchableOpacity onPress={handlePlayPause}>
+                <Icon name={isPlaying ? "pause" : "play-arrow"} size={32} color="#2C9CDB" />
+              </TouchableOpacity>
+
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={duration}
+                minimumTrackTintColor="blue"
+                maximumTrackTintColor="red"
+                value={position}
+                onValueChange={async (value) => {
+                  if (sound) {
+                    await sound.setPositionAsync(value);
+                  }
+                }}
+              />
+              <View style={styles.timeContainer}>
+                <Text>{formatTime(position)}</Text>
+                <Text>{formatTime(duration)}</Text>
               </View>
             </View>
-          </ImageBackground>
-          <View style={styles.section}>
-            <TextInput
-              style={styles.input}
-              placeholder="Titre"
-              value={title}
-              placeholderTextColor="rgba(74, 72, 72, 0.83)"
-              onChangeText={setTitle}
-            />
-          </View>
-          {renderError("title")}
-          {renderError("zone")}
-          <View>
-            <Input
-              inputStyle={styles.descriptionInput}
-              multiline
-              inputContainerStyle={styles.descriptionInputContainer}
-              placeholder="Description"
-              labelStyle={styles.labelStyle}
-              errorMessage={null}
-              onChangeText={setDescription}
-              value={description}
-              placeholderTextColor="#8E8E8E"
-            />
-          </View>
-          {renderError("description")}
-          <View style={styles.submitContainer}>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={styles.submitButton}
-            >
-              {!loading && (
-                <>
-                  <Text style={styles.submitText}>ENVOYER</Text>
-                  <Icon name="send" color={"#fff"} size={30} />
-                </>
-              )}
+          )}
+        </View>
+        
+        <View style={styles.flexibleSpace} />
+        <View style={styles.sendContainer}>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity onPress={pickVideo}>
+              <Icon name="videocam" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+          <View style={styles.iconContainer}>
+            <TouchableOpacity
+              onPress={recording ? stopRecording : startRecording}
+            >
+              <Icon name={recording ? "stop" : "mic"} size={24} color="#fff" />
+            </TouchableOpacity>
+          </View> 
+          {showPopup && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={showPopup}
+              onRequestClose={handleClosePopup}
+            >
+              <View style={styles.popupContainer}>
+                <View style={styles.popupContent}>
+                  <Text style={isSuccess ? styles.successMessage : styles.errorMessage}>
+                    {popupMessage}
+                  </Text>
+                  <TouchableOpacity onPress={handleClosePopup} style={styles.closeButton}>
+                    <Text style={styles.closeButtonText}>Fermer</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+          )}
+          <SubmitButton isSyncing={isSyncing} handleSubmit={submitForm} />
+        </View>
+       
     </View>
+  );
+}
+
+const SubmitButton = ({ isSyncing, handleSubmit }) => {
+  return (
+    <TouchableOpacity style={styles.submittButton} onPress={handleSubmit} disabled={isSyncing}>
+      <Icon name="send" size={24} color="#fff" /> 
+      <Text style={styles.submittButtonText}>
+        {isSyncing ? "Envoi..." : "Envoyer"}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     backgroundColor: "#fff",
-    paddingBottom: 20,
   },
-  imageBackground: {
-    justifyContent: "space-around",
-    height: 300,
-    paddingTop: 5,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerText: {
+  title: {
+    fontSize: 24,
     fontWeight: "bold",
-    fontSize: 18,
-    color: "#FFF",
-    marginLeft: 20,
-  },
-  details: {
-    marginHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "space-around",
-    flex: 1,
-    paddingBottom: 20,
-  },
-  zone: {
-    flexDirection: "row",
-    flex: 1,
-  },
-  zoneText: {
-    fontWeight: "bold",
-    color: "#fff",
-    marginStart: 6,
-  },
-  titleText: {
-    fontSize: 14,
+    marginBottom: 20,
     textAlign: "center",
-    fontWeight: "bold",
-    color: "#fff",
+    color:'#858585'
   },
-  section: {
-    backgroundColor: "#fff",
-    marginTop: 14,
-    height: 60,
+  inputGroup: {
     flexDirection: "row",
-    alignItems: "center",
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: "#2C9CDB",
     borderRadius: 10,
-    shadowColor: "#ccc",
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
-    elevation: 2,
-    shadowOffset: {
-      width: 3,
-      height: 3,
-    },
+    padding: 10,
+    backgroundColor: "#fff",
   },
   input: {
-    marginLeft: 20,
-    width: "100%",
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 16,
+    color:'#858585'
   },
-  descriptionInput: {
-    color: "#8E8E8E",
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    fontSize: 14,
-    height: 140,
-    textAlignVertical: "top",
-  },
-  descriptionInputContainer: {
-    width: "100%",
-    borderBottomWidth: 0,
-    borderRadius: 10,
-    backgroundColor: "#F4F4F4",
-    paddingHorizontal: 10,
-  },
-  labelStyle: {
-    color: "#707070",
-  },
-  submitContainer: {
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 20,
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
     marginBottom: 10,
   },
-  submitButton: {
-    height: 40,
+  zoneText: {
+    fontSize: 14,
+    fontStyle: "italic",
+    marginBottom: 20,
+    color: "#555",
+    marginLeft: 10,
+  },
+  buttonGroup: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+  button: {
+    flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#0F6DBD",
-    paddingHorizontal: 40,
-    borderRadius: 20,
-    shadowColor: "#0F6DBD",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 5,
+    backgroundColor: "#38A0DB",
+    padding: 10,
+    borderRadius: 8,
+    width: "30%",
+    justifyContent: "center",
   },
-  submitText: {
+  buttonText: {
     color: "#fff",
+    marginLeft: 5,
     fontWeight: "bold",
-    marginEnd: 10,
   },
-  errorText: {
-    color: "red",
-    paddingLeft: 20,
+  submitContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  submitButton: {
+    backgroundColor: "#008CBA",
+    padding: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  flexibleSpace: {
+    flex: 1,  
+  },
+  submittButton: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    justifyContent: "center", 
+    backgroundColor: "#2C9CDB", 
+    padding: 5,
+    borderRadius: 8,
+    width: 130,
+    height:40,
+    marginLeft:30
+  },
+  submittButtonText: {
+    color: "#fff", 
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 10, 
+  },
+  descriptionInput: {
+    borderColor: "#ccc",
+    padding: 5, 
+    borderRadius: 5,
+    minHeight: 120,  
+    textAlignVertical: "top",  
+    fontSize: 16,
+    color:'#858585',
+    // lineHeight:'16px'  
+  },
+  zoneContainer: {
+    flexDirection: "row",  
+    alignItems: "center",  
+    marginTop: 10,
+    padding:5
+  },
+  position:{
+    color:'#858585',
+    textAlign:'left',
+    // lineHeight:'12px',
+  },
+  zone:{
+    color:'#2C9CDB',
+    fontSize:'20px',
+    fontWeight:'bold',
+    // lineHeight:'12px',
+    fontFamily:'poppins'
+  },
+  sendContainer:{
+    width:350,
+    height:69,
+    borderRadius:10,
+    backgroundColor:'white',
+    borderColor:'#2C9CDB',
+    borderWidth:0.5,
+    alignItems:'center',
+    padding:15,
+    flexDirection:'row'
+  },
+  iconContainer:{
+    width:42,
+    height:40,
+    backgroundColor:"#2C9CDB",
+    borderRadius:50,
+    marginRight:10,
+    padding:8
+  },
+  recordContainer:{
+    flexDirection:'row',
+    padding:10
+  },
+  audioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  slider: {
+    flex: 1,
+    marginHorizontal: 10,
+    width:200,
+    height:40,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 80,
+  },
+  popupContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  popupContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  successMessage: {
+    color: 'green',
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  errorMessage: {
+    color: 'red',
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: '#2C9CDB',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
-
-export default IncidentForm;
