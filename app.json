@@ -18,6 +18,12 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
+        },
+      ],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.1094350890225-6d469l4tlgojeqgel06okuf6n4fc968k"
         }
       ],
       [
@@ -26,7 +32,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.uwaish.MapActionApp"
+      "bundleIdentifier": "com.uwaish.MapActionApp",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.1094350890225-6d469l4tlgojeqgel06okuf6n4fc968k"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -9,7 +9,11 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { GoogleAuthConfig } from "../utils/AuthConfig";
-import { authorize } from "react-native-app-auth";
+
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 export default function SocialLogin() {
   const [authState, setAuthState] = useState(null);
@@ -20,14 +24,33 @@ export default function SocialLogin() {
     return authState;
   };
 
-  const handleLogin = async () => {
+  const signIn = async () => {
     try {
-      const result = await authorize(GoogleAuthConfig); // This starts the OAuth flow
-      setAuthState(result);
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      if (isSuccessResponse(response)) {
+        setState({ userInfo: response.data });
+      } else {
+        // sign in was cancelled by user
+      }
     } catch (error) {
-      console.error("Failed to log in", error);
+      if (isErrorWithCode(error)) {
+        switch (error.code) {
+          case statusCodes.IN_PROGRESS:
+            // operation (eg. sign in) already in progress
+            break;
+          case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+            // Android only, play services not available or outdated
+            break;
+          default:
+          // some other error happened
+        }
+      } else {
+        // an error that's not related to google sign in occurred
+      }
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.start}>
@@ -45,12 +68,12 @@ export default function SocialLogin() {
       </View>
       <Text style={styles.orText}>Se connecter avec</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <TouchableOpacity style={styles.button} onPress={signIn}>
           <Icon name="google" size={18} style={styles.icon} />
           <Text style={styles.buttonText}>Google</Text>
         </TouchableOpacity>
         {/* TODO  Supprimer cette partie avant production*/}
-        <Text style={{ fontSize: 20 }}>{GoogleAuthConfig.clientId}</Text>
+        <Text style={{ fontSize: 20 }}>key: {GoogleAuthConfig.clientId}</Text>
 
         <Text>Ou</Text>
         <TouchableOpacity style={styles.button} onPress={() => {}}>
