@@ -49,6 +49,9 @@ export default function SocialLogin() {
           <Icon name="google" size={18} style={styles.icon} />
           <Text style={styles.buttonText}>Google</Text>
         </TouchableOpacity>
+        {/* TODO  Supprimer cette partie avant production*/}
+        <Text style={{ fontSize: 20 }}>{GoogleAuthConfig.clientId}</Text>
+
         <Text>Ou</Text>
         <TouchableOpacity style={styles.button} onPress={() => {}}>
           <Icon name="facebook" size={18} style={styles.icon} />
