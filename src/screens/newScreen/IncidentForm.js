@@ -18,6 +18,8 @@ import * as ImagePicker from "expo-image-picker";
 import {Audio, Video} from "expo-av";
 import { ReportContext } from "../../context/ReportContext";
 import { useRoute } from '@react-navigation/native';
+import { getImage } from "../../api/http";
+import { Camera, CameraType } from "expo-camera/legacy";
 
 export default function IncidentForm() {
   const { isSyncing, submitReport } = useContext(ReportContext);
@@ -34,6 +36,11 @@ export default function IncidentForm() {
   const [showPopup, setShowPopup] = useState(false); 
   const [popupMessage, setPopupMessage] = useState(''); 
   const [isSuccess, setIsSuccess] = useState(false);
+  const [cameraRef, setCameraRef] = useState(null); 
+  const [isRecording, setIsRecording] = useState(false); 
+  const [videoUri, setVideoUri] = useState(null); 
+  const [showCamera, setShowCamera] = useState(false);
+  const [type, setType] = useState(CameraType.back);
 
   useEffect(() => {
     getLocation(); 
@@ -58,7 +65,33 @@ export default function IncidentForm() {
   useEffect(() => {
     requestAllPermissions(); 
   }, []);
-  
+  const startVideoRecording = async () => {
+    if (cameraRef) {
+      try {
+        setIsRecording(true);
+        const video = await cameraRef.recordAsync();
+        setVideoUri(video.uri); 
+        setIsRecording(false);
+        setShowCamera(false); 
+        setCurrentReport((currentReport) => ({
+          ...currentReport,
+          video: video.uri, 
+        }));
+        console.log("Vidéo enregistrée à : ", video.uri);
+      } catch (error) {
+        console.error("Erreur lors de l'enregistrement vidéo :", error);
+        setIsRecording(false);
+      }
+    }
+  };
+
+  // Arrêter l'enregistrement vidéo
+  const stopVideoRecording = async () => {
+    if (cameraRef && isRecording) {
+      await cameraRef.stopRecording();
+      setIsRecording(false);
+    }
+  };
 
   async function playSound() {
     const { sound } = await Audio.Sound.createAsync(
@@ -90,13 +123,14 @@ export default function IncidentForm() {
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
+    console.log("Latitude:", latitude, "Longitude:", longitude);
     const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  // Clé API Mapbox
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
   
     try {
       const response = await fetch(url);
       const data = await response.json();
-  
+      console.log(data.features[0].place_name)
       if (data.features && data.features.length > 0) {
         const zone = data.features[0].place_name;  
         return zone;
@@ -153,7 +187,7 @@ export default function IncidentForm() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       videoMaxDuration: 60,
-      quality: ImagePicker.VideoQualityType.High,
+      quality: 1,
     });
   
     if (!result.cancelled) {
@@ -250,7 +284,7 @@ export default function IncidentForm() {
         />
       </View>
 
-        {loadingLocation ? (
+        {/* {loadingLocation ? (
          <ActivityIndicator size="large" color="#ff6347" />
         ) : (
           <View style={styles.zoneContainer}>
@@ -261,10 +295,10 @@ export default function IncidentForm() {
             </View>
             
           </View>
-        )}
+        )} */}
         <View style={styles.recordContainer}>
           {currentReport.photo ? (
-            <Image source={{ uri: currentReport.photo }} style={styles.imagePreview} />
+            <Image source={getImage(currentReport.photo, true)} style={styles.imagePreview} />
           ) : null}
           
           {currentReport.video ? (
@@ -309,11 +343,47 @@ export default function IncidentForm() {
         
         <View style={styles.flexibleSpace} />
         <View style={styles.sendContainer}>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity onPress={pickVideo}>
-              <Icon name="videocam" size={24} color="#fff" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={() => setShowCamera(true)}
+          >
+            <Icon name="videocam" size={24} color="#fff" />
+          </TouchableOpacity>
+
+          {showCamera && (
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={showCamera}
+              onRequestClose={() => setShowCamera(false)}
+            >
+              <Camera
+                style={styles.camera}
+                type={type}
+                ref={(ref) => setCameraRef(ref)}
+              >
+                <View style={styles.cameraControls}>
+                  <TouchableOpacity
+                    style={styles.recordButton}
+                    onPress={isRecording ? stopVideoRecording : startVideoRecording}
+                  >
+                    <Icon
+                      name={isRecording ? "stop" : "videocam"}
+                      size={60}
+                      color={isRecording ? "red" : "white"}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </Camera>
+
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setShowCamera(false)}
+              >
+                <Text style={styles.closeButtonText}>Fermer</Text>
+              </TouchableOpacity>
+            </Modal>
+          )}
           <View style={styles.iconContainer}>
             <TouchableOpacity
               onPress={recording ? stopRecording : startRecording}
@@ -551,5 +621,26 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  camera: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  cameraControls: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  recordButton: {
+    alignSelf: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+  },
+  closeButtonText: {
+    fontSize: 18,
+    color: "#fff",
   },
 });

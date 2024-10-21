@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/map-action.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2d9cdb"
     },
     "plugins": [
       [
