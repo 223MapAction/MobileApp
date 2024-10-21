@@ -9,7 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { connect } from "react-redux";
-import { list_incident } from "../../api/incident";
+import { list_incident, my_list_incident } from "../../api/incident";
 import { onGetIncidents } from "../../redux/incidents/action";
 import { getImage } from "../../api/http";
 import { list_user } from "../../api/user";
@@ -24,7 +24,36 @@ class Dashboard extends Component {
   };
   async componentDidMount() {
     await this.loadData();
+    await this.myLoadData();
   }
+  async myLoadData() {
+    this.setState({ refreshing: true });
+    try {
+      const userId = this.props.token; 
+      if (this.props.incidents.length === 0) {
+        try {
+          const incidents = await my_list_incident(userId); 
+          this.props.onGetIncidents(incidents);
+        } catch (ex) {
+          console.log("Error Incident", ex);
+        }
+      }
+      if (this.props.users.length === 0) {
+        try {
+          const users = await list_user();
+          this.props.onGetUsers(users);
+        } catch (ex) {
+          console.log("Error Incident", ex);
+        }
+      }
+    } catch (ex) {
+      console.error("Erreur lors de la récupération des données", ex);
+    }
+    this.setState({ refreshing: false });
+  }
+
+  
+
   async loadData() {
     this.setState({ refreshing: true });
     try {
@@ -102,7 +131,7 @@ class Dashboard extends Component {
         >
           <View style={styles.text}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("ListIncidents")}
+              onPress={() => this.props.navigation.navigate("ListeIncident")}
               style={{
                 backgroundColor: "#38A3D0",
                 borderRadius: 15,
