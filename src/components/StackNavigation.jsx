@@ -160,7 +160,7 @@ const StackNavigation = () => {
         <Stack.Screen
           name="IncidentForm"
           component={IncidentForm}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="Contact"
