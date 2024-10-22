@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/map-action.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2d9cdb"
     },
     "plugins": [
       [
@@ -20,7 +20,9 @@
           "recordAudioAndroid": true
         }
       ],
-      ["expo-image-picker"]
+      [
+        "expo-image-picker"
+      ]
     ],
     "ios": {
       "supportsTablet": true,
@@ -31,11 +33,20 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["CAMERA"],
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
       "package": "com.uwaish.MapActionApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b8134aaa-beca-4839-a2e8-012517fb01e3"
+      }
     }
   }
 }

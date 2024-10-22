@@ -1,11 +1,28 @@
+
 import React from "react";
 import { render, act } from "@testing-library/react-native";
 import { ReportProvider } from "./ReportContext";
 import * as SyncUtils from "../utils/SyncUtils";
 import * as ToastUtils from "../utils/ToastUtils";
+import NetInfo from '@react-native-community/netinfo';
+
+jest.mock('expo-sqlite/next', () => ({
+  openDatabaseSync: jest.fn(() => ({
+    transaction: jest.fn(),
+    exec: jest.fn(),
+  })),
+}));
+
+jest.mock("@react-native-community/netinfo", () => ({
+  fetch: jest.fn(() => Promise.resolve({ isConnected: true })),
+  addEventListener: jest.fn((callback) => callback({ isConnected: true })),
+}));
 
 jest.mock("../utils/SyncUtils");
 jest.mock("../utils/ToastUtils");
+
+// TestComponent simulé
+const TestComponent = () => null;
 
 describe("ReportContext", () => {
   it("should call submitReport and show success toast when online", async () => {
@@ -20,7 +37,7 @@ describe("ReportContext", () => {
     );
 
     await act(async () => {
-      await submitReport(mockReport);
+      await submitReport(mockReport);  
     });
 
     expect(mockSync).toHaveBeenCalledWith(mockReport, expect.any(Function));
@@ -28,7 +45,6 @@ describe("ReportContext", () => {
   });
 
   it("should call saveReportLocally when offline", async () => {
-    // Mock offline scenario
     NetInfo.fetch = jest.fn().mockResolvedValueOnce({ isConnected: false });
 
     const mockReport = { title: "Offline Report" };
@@ -42,7 +58,7 @@ describe("ReportContext", () => {
     );
 
     await act(async () => {
-      await submitReport(mockReport);
+      await submitReport(mockReport);  // Assurez-vous que submitReport est défini
     });
 
     expect(mockSave).toHaveBeenCalledWith(mockReport);

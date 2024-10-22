@@ -24,10 +24,10 @@ TaskManager.defineTask(BACKGROUND_SYNC_TASK, async () => {
     }
 
     // Return result to indicate whether the task was successful
-    return BackgroundFetch.Result.NewData;
+    return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (error) {
     console.error("Background task failed:", error);
-    return BackgroundFetch.Result.Failed;
+    return BackgroundFetch.BackgroundFetchResult.Failed;
   }
 });
 

@@ -7,6 +7,7 @@ export default class Slide2 extends Component {
     return (
       <View style={{ alignItems: "center" }}>
         <MyImage
+          testID="myImage2"
           resizeMode="contain"
           source={require("../../assets/ill2.gif")}
           style={{
