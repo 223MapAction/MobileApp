@@ -25,6 +25,7 @@
     "expo-av": "^14.0.7",
     "expo-background-fetch": "~12.0.1",
     "expo-camera": "~15.0.16",
+    "expo-dev-client": "~4.0.28",
     "expo-image-picker": "~15.0.7",
     "expo-linear-gradient": "^13.0.2",
     "expo-location": "~17.0.1",
@@ -36,6 +37,7 @@
     "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-app-auth": "^8.0.0",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
@@ -45,13 +47,14 @@
     "react-native-safe-area-context": "4.10.5",
     "react-native-screens": "3.31.1",
     "react-native-sqlite-storage": "^6.0.1",
+    "react-native-svg": "^15.8.0",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.1.0",
     "react-redux": "^9.1.2",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
-    "typescript": "^5.6.2",
+    "typescript": "^5.6.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
@@ -77,7 +80,8 @@
       "!**/babel.config.js",
       "!**/expo-env.d.ts",
       "!**/.expo/**"
-    ]
+    ],
+    "setupFiles": ["./_mocks_/jestSetupFile.js"]
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
