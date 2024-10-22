@@ -14,12 +14,6 @@ import { authorize } from "react-native-app-auth";
 export default function SocialLogin() {
   const [authState, setAuthState] = useState(null);
 
-  const loginWithGoogle = async () => {
-    const authState = await authorize(GoogleAuthConfig);
-    console.log("google auth result: ", authState);
-    return authState;
-  };
-
   const handleLogin = async () => {
     try {
       const result = await authorize(GoogleAuthConfig); // This starts the OAuth flow
