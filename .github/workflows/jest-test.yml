@@ -1,1 +1,36 @@
+name: Jest Tests
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.x' 
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest tests
+        run: npm test -- --coverage 
+
+      - name: Upload coverage report
+        if: success() 
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report
+          path: coverage/ # Modifiez ce chemin si votre rapport de couverture est généré ailleurs
 
