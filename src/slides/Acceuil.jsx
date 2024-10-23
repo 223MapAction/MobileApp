@@ -29,11 +29,9 @@ class Accueil extends Component {
       </View>
     );
   };
-  renderButton = (title) => {
+  renderButton = (title, testID) => {
     return (
-      <View
-        style={styles.ellipse}
-      >
+      <View style={styles.ellipse} testID={testID}>
         <Text style={{ color: "#fff", fontWeight: "bold" }}>{title}</Text>
       </View>
     );
@@ -51,13 +49,13 @@ class Accueil extends Component {
           dotStyle={{ backgroundColor: "#eee" }}
           activeDotStyle={{ backgroundColor: "#2D9CDB" }}
           keyExtractor={(item) => item.key}
-          renderNextButton={() => this.renderButton("SUIVANT")}
-          renderDoneButton={() => this.renderButton("COMMENCER")}
+          renderNextButton={() => this.renderButton("SUIVANT", "nextButton")}
+          renderDoneButton={() => this.renderButton("COMMENCER", "doneButton")}
           onDone={this.onDone}
         />
         <View style={{ marginBottom: 10, alignItems: "center" }}>
           <TouchableOpacity onPress={() => this.props.navigation.push("Login")}>
-            <Text style={{ fontSize: 15, color: "rgba(0,0,0,.5)" }}>
+            <Text style={{ fontSize: 15, color: "rgba(0,0,0,.5)" }} testID="inscrit">
               Déjà inscrit ?{" "}
               <Text style={{ fontWeight: "bold" }}>Se connecter</Text>
             </Text>
