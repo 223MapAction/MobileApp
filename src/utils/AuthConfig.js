@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
-import { authorize } from "react-native-app-auth";
-
+import { authorize, refresh, revoke } from "react-native-app-auth";
+import * as AppleAuthentication from "expo-apple-authentication";
 const GOOGLE_OAUTH_APP_GUID =
   Platform.OS == "android"
     ? "1094350890225-8slhm17l5scns62u21fs771ef6t630e3"
@@ -14,7 +14,14 @@ export const GoogleAuthConfig = {
 };
 
 // Log in to get an authentication token
-export async function loginWithGoogle() {}
+export async function loginWithGoogle() {
+  try {
+    const result = await authorize(GoogleAuthConfig); // This starts the OAuth flow
+    return result;
+  } catch (error) {
+    console.error("Failed to log in", error);
+  }
+}
 
 // Refresh token
 export async function refreshGoogleAuth(authState) {
@@ -28,5 +35,14 @@ export async function refreshGoogleAuth(authState) {
 export async function logoutWithGoogle(authState) {
   await revoke(GoogleAuthConfig, {
     tokenToRevoke: authState.refreshToken,
+  });
+}
+
+export async function LoginWithApple() {
+  return await AppleAuthentication.signInAsync({
+    requestedScopes: [
+      AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+      AppleAuthentication.AppleAuthenticationScope.EMAIL,
+    ],
   });
 }
