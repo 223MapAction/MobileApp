@@ -84,8 +84,11 @@ npx expo run:android
 # or
 npx expo run:ios
 ```
+---
+
 ## 🛠️ Recommended Editor & Settings
 We recommend using **Visual Studio Code** with the following extensions:
 
 - ESLint for real-time code analysis.
 - Prettier for automatic code formatting
+---
