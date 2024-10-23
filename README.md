@@ -92,3 +92,14 @@ We recommend using **Visual Studio Code** with the following extensions:
 - ESLint for real-time code analysis.
 - Prettier for automatic code formatting
 ---
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+--- 
+
+## Contribute to the project
+
+Map Action is an open source project. Fell free to fork the source and contribute with your features. Please follow our [contribution guidelines](CONTRIBUTING.md).
+
