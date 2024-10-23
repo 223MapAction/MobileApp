@@ -1,128 +1,71 @@
-# Contributor Covenant Code of Conduct
+# Contribution Guidelines of Map Action
 
-## Our Pledge
+Welcome to the contribution guidelines for the Map Action project. We're excited that you're considering contributing! These guidelines aim to help you understand how to effectively contribute to our open-source project.
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, religion, or sexual identity
-and orientation.
+## Description
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+Map Action is a technological innovation initiated by the consulting firm Kaicedra Consulting SAS, a malian organisation. We specialize in geolocating issues or areas of interest, mapping, monitoring, and providing databases in the fields of environment, WASH (Water, Sanitation, and Hygiene), and sustainable development. Our actions involve civil society, governments, NGOs, private or semi-private structures, etc.
 
-## Our Standards
+In addition to our geolocation and mapping services, Map Action also integrates advanced artificial intelligence technologies. Our system uses machine learning algorithms to automatically detect the types of incidents, assess their severity, and consider potential solutions. Furthermore, we analyze the potential impacts of these incidents on the environment, thus providing valuable insights for decision-making and crisis management.
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+Our technology-driven and data-centric approach enables us to provide innovative and effective solutions to address the complex challenges faced by our clients. Whether it's natural resource monitoring, disaster management, or sustainable development planning, Map Action is committed to providing cutting-edge tools and analytics to help our partners make a positive impact on our world.
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-* Focusing on what is best not just for us as individuals, but for the
-  overall community
 
-Examples of unacceptable behavior include:
 
-* The use of sexualized language or imagery, and sexual attention or
-  advances of any kind
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or email
-  address, without their explicit permission
-* Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+## Project Objective
 
-## Enforcement Responsibilities
+Map Action aims to revolutionize the way environmental issues and areas of interest are identified, monitored, and addressed through the seamless integration of geolocation technologies, mapping capabilities, and advanced artificial intelligence algorithms. Our primary objectives include:
 
-Community leaders are responsible for clarifying and enforcing our standards of
-acceptable behavior and will take appropriate and fair corrective action in
-response to any behavior that they deem inappropriate, threatening, offensive,
-or harmful.
+1. **Identification and Localization**: 
+Utilize Map Action Mobile (The application Mobile Android & iOS) to accurately identify and localize environmental issues, such as pollution hotspots, natural resource depletion zones, and areas vulnerable to climate change.
 
-Community leaders have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, and will communicate reasons for moderation
-decisions when appropriate.
+2. **Monitoring and Tracking**:
+Implement robust monitoring and tracking mechanisms to continuously monitor changes in environmental conditions and track the progress of ongoing initiatives and interventions.
 
-## Scope
+3. **Risk Assessment and Prediction**:
+Develop advanced artificial intelligence algorithms to assess the severity of environmental incidents, predict potential risks, and propose proactive solutions to mitigate adverse impacts.
 
-This Code of Conduct applies within all community spaces, and also applies when
-an individual is officially representing the community in public spaces.
-Examples of representing our community include using an official e-mail address,
-posting via an official social media account, or acting as an appointed
-representative at an online or offline event.
+4. **Data-driven Decision Making**: 
+Provide decision-makers with actionable insights and data-driven recommendations to facilitate informed decision-making processes and optimize resource allocation for sustainable development.
 
-## Enforcement
+5. **Collaborative Engagement**: 
+Foster collaboration and engagement among stakeholders, including civil society, governments, NGOs, and private entities, to collectively address environmental challenges and promote sustainable development practices.
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-contact@map-action.com.
-All complaints will be reviewed and investigated promptly and fairly.
+Through these objectives, Map Action strives to empower organizations and individuals with the tools and knowledge needed to make meaningful contributions to environmental conservation, disaster management, and sustainable development efforts worldwide.
 
-All community leaders are obligated to respect the privacy and security of the
-reporter of any incident.
 
-## Enforcement Guidelines
 
-Community leaders will follow these Community Impact Guidelines in determining
-the consequences for any action they deem in violation of this Code of Conduct:
+## Contribution Process
 
-### 1. Correction
+1. **Clone the Repository**:
+   - Clone the repository to your local machine using the `git clone` command.
 
-**Community Impact**: Use of inappropriate language or other behavior deemed
-unprofessional or unwelcome in the community.
+2. **Installation and Setup**:
+   - Follow the instructions in the [README](README.md) file to install and set up the development environment.
 
-**Consequence**: A private, written warning from community leaders, providing
-clarity around the nature of the violation and an explanation of why the
-behavior was inappropriate. A public apology may be requested.
+3. **Proposing a Contribution**:
+   - Create a new branch for your contribution using the appropriate naming convention.
+   - Make your changes and ensure you follow the contribution standards outlined below.
+   - Submit a pull request with a clear description of your modifications.
 
-### 2. Warning
 
-**Community Impact**: A violation through a single incident or series
-of actions.
+## Contribution Standards
 
-**Consequence**: A warning with consequences for continued behavior. No
-interaction with the people involved, including unsolicited interaction with
-those enforcing the Code of Conduct, for a specified period of time. This
-includes avoiding interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary or
-permanent ban.
+- Follow the established coding and style conventions in the project.
+- Ensure your code is well-documented.
+- Include tests for any new feature or modification.
+- Adhere to the project's license guidelines.
 
-### 3. Temporary Ban
+## Communication
 
-**Community Impact**: A serious violation of community standards, including
-sustained inappropriate behavior.
+For any questions or feedback, feel free to contact us via [contact@map-action.com].
 
-**Consequence**: A temporary ban from any sort of interaction or public
-communication with the community for a specified period of time. No public or
-private interaction with the people involved, including unsolicited interaction
-with those enforcing the Code of Conduct, is allowed during this period.
-Violating these terms may lead to a permanent ban.
+For more information about our organization, please visit [www.kaicedra-consulting.ml].
 
-### 4. Permanent Ban
+To learn more about the Map Action project, visit our dedicated website at [www.map-action.com].
 
-**Community Impact**: Demonstrating a pattern of violation of community
-standards, including sustained inappropriate behavior,  harassment of an
-individual, or aggression toward or disparagement of classes of individuals.
+## License and Copyright
 
-**Consequence**: A permanent ban from any sort of public interaction within
-the community.
+This project is licensed under the [Licence GNU General Public License 3](LICENSE). By contributing to this project, you agree that your work will be subject to the terms of this license.
 
-## Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 2.0, available at
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
-
-Community Impact Guidelines were inspired by [Mozilla's code of conduct
-enforcement ladder](https://github.com/mozilla/diversity).
-
-[homepage]: https://www.contributor-covenant.org
-
-For answers to common questions about this code of conduct, see the FAQ at
-https://www.contributor-covenant.org/faq. Translations are available at
-https://www.contributor-covenant.org/translations.
+Thank you for your contribution!
