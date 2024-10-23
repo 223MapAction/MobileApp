@@ -101,7 +101,7 @@ export default function EmailLogin() {
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.button} onPress={submit}>
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={submit}>
                             <Text style={styles.buttonText}>Se connecter</Text>
                         </TouchableOpacity>
                         <View style={styles.or}>
