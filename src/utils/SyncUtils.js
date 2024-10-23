@@ -1,44 +1,52 @@
-import { syncReportsToServer } from './SyncUtils';
-import * as api from '../api/incident';
-import * as dbOperations from '../db/dbOperations';
-import Toast from 'react-native-toast-message';
+import Toast from "react-native-toast-message";
+import {
+  getPendingReports,
+  saveReportLocally,
+  updateReportStatus,
+} from "../db/dbOperations";
+import { create_incident } from "../api/incident";
+export const syncReportsToServer = async (
+  report,
+  setIsSyncing,
+  onUploadProgress
+) => {
+  setIsSyncing(true);
 
-jest.mock('react-native-toast-message', () => ({
-  show: jest.fn(),
-}));
+  try {
+    const response = await create_incident(report, onUploadProgress);
 
-jest.spyOn(dbOperations, 'updateReportStatus').mockResolvedValue(true);
+    if (response.ok) {
+      // Update report status to 'synced' in the database
+      await updateReportStatus(report.id);
 
-describe('syncReportsToServer', () => {
-  it('should sync reports to the server successfully', async () => {
-    const mockReport = { id: 1, title: 'Test Report' };
-    const mockSetIsSyncing = jest.fn();
-    jest.spyOn(api, 'create_incident').mockResolvedValue({ ok: true });
+      Toast.show({
+        type: "success",
+        text1: "Rapport synchronisé",
+        text2: `Le rapport "${report.title}" a été synchronisé avec succès.`,
+      });
+    } else {
+      await saveReportLocally(report);
+      Toast.show({
+        type: "error",
+        text1: "Échec de synchronisation",
+        text2: "Impossible de soumettre le rapport en ligne.",
+      });
+    }
+  } catch (error) {
+    console.error("Error submitting report:", error);
+    await saveReportLocally(report);
+  } finally {
+    setIsSyncing(false);
+  }
+};
 
-    await syncReportsToServer(mockReport, mockSetIsSyncing, jest.fn());
-
-    expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
-    expect(Toast.show).toHaveBeenCalledWith({
-      type: 'success',
-      text1: 'Rapport synchronisé',
-      text2: `Le rapport "${mockReport.title}" a été synchronisé avec succès.`,
-    });
-  });
-  it('should handle errors and save report locally', async () => {
-    const mockReport = { id: 1, title: 'Test Report' };
-    const mockSetIsSyncing = jest.fn();
-    jest.spyOn(api, 'create_incident').mockRejectedValue(new Error('Network Error'));
-    jest.spyOn(dbOperations, 'saveReportLocally').mockResolvedValue(true);
-  
-    await syncReportsToServer(mockReport, mockSetIsSyncing, jest.fn());
-  
-    expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
-    expect(dbOperations.saveReportLocally).toHaveBeenCalledWith(mockReport);
-    expect(Toast.show).toHaveBeenCalledWith({
-      type: 'error',
-      text1: 'Échec de synchronisation',
-      text2: 'Impossible de soumettre le rapport en ligne.',
-    });
-  });
-  
-});
+// Fetch pending reports (those with 'pending' status)
+export const fetchPendingReports = async () => {
+  try {
+    const reports = await getPendingReports();
+    return reports;
+  } catch (error) {
+    console.error("Error fetching pending reports:", error);
+    throw error; // Rethrow error for handling elsewhere
+  }
+};

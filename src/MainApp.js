@@ -22,14 +22,14 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="app-container">
       <StatusBar barStyle="light-content" backgroundColor="#2D9CDB" />
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1 }}>
           <Provider store={store}>
             <ReportProvider>
               <StackNavigation />
-              <Toast position="bottom" />
+              <Toast position="bottom" testID="toast"/>
             </ReportProvider>
           </Provider>
         </SafeAreaView>
