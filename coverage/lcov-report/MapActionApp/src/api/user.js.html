@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>2/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>2/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
@@ -131,31 +131,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,9 +179,9 @@ export async function <span class="fstat-no" title="function not covered" >read_
 <span class="cstat-no" title="statement not covered" >  return await http.get("/user/" + id);</span>
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >update_user(</span>id, { avatar, ...data }, token = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
-  let formdata = <span class="cstat-no" title="statement not covered" >new FormData();</span>
-<span class="cstat-no" title="statement not covered" >  if (avatar) {</span>
+export async function update_user(id, { avatar, ...data }, token = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
+  let formdata = new FormData();
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (avatar) {
     let parts = <span class="cstat-no" title="statement not covered" >avatar.split("/");</span>
     let filename = <span class="cstat-no" title="statement not covered" >parts[parts.length - 1];</span>
 <span class="cstat-no" title="statement not covered" >    parts = filename.split(".");</span>
@@ -192,19 +192,19 @@ export async function <span class="fstat-no" title="function not covered" >updat
     });
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  Object.keys(data).map(<span class="fstat-no" title="function not covered" >(k</span>) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    formdata.append(k, data[k]);</span>
+  Object.keys(data).map((k) =&gt; {
+    formdata.append(k, data[k]);
   });
 &nbsp;
-  const options = <span class="cstat-no" title="statement not covered" >{</span>
+  const options = {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   };
-<span class="cstat-no" title="statement not covered" >  if (token) {</span>
-<span class="cstat-no" title="statement not covered" >    options.headers["Authorization"] = `Bearer ${token}`;</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (token) {
+    options.headers["Authorization"] = `Bearer ${token}`;
   }
-<span class="cstat-no" title="statement not covered" >  return http.put("/user/" + id + "/", formdata, options);</span>
+  return http.put("/user/" + id + "/", formdata, options);
 }
 &nbsp;
 export default {
@@ -217,7 +217,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-23T13:26:18.911Z
+                at 2024-10-23T17:07:43.547Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

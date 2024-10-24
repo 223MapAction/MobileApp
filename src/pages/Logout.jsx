@@ -12,8 +12,8 @@ class Logout extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator color="#49DD7B" size="large" />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }} >
+        <ActivityIndicator color="#49DD7B" size="large" testID="activity-indicator"/>
       </View>
     );
   }
