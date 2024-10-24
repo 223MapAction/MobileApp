@@ -56,6 +56,7 @@ const DataJourney = ({ route, navigation }) => {
                 <Text style={styles.detailText}>{moment(incident.created_at).format('L')}</Text>
               </View>
               <Progress.Bar
+                testID="progress-bar"
                 progress={progressDetails.progress}
                 width={340}
                 color={progressDetails.color}

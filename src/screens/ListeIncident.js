@@ -54,7 +54,7 @@ const ListIncident = () => {
     if (title) {
       navigation.setOptions({ title });
     }
-    getLocationAsync();
+    // getLocationAsync();
   }, []);
 
   const getLocationAsync = async () => {
@@ -83,7 +83,7 @@ const ListIncident = () => {
     return incidents.filter((i) => i.user_id === user_id);
   };
 
-  if (!region) {
+  if (!incidents.length) {
     return (
       <View style={styles.container}>
         <ActivityIndicator color="#000" size="large" />

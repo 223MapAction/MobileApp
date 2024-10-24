@@ -240,7 +240,7 @@ export default function IncidentForm() {
       }
       const response = await submitReport(currentReport); 
       if (response.status === 200) {
-        setPopupMessage(`Votre rapport d’incident à ${zone} a été envoyé avec succès. Merci pour votre contribution !`);
+        setPopupMessage(`Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`);
         setIsSuccess(true);
       } else {
         setPopupMessage('Échec de l\'envoi de l\'incident.');
@@ -284,7 +284,7 @@ export default function IncidentForm() {
         />
       </View>
 
-        {/* {loadingLocation ? (
+        {loadingLocation ? (
          <ActivityIndicator size="large" color="#ff6347" />
         ) : (
           <View style={styles.zoneContainer}>
@@ -295,7 +295,7 @@ export default function IncidentForm() {
             </View>
             
           </View>
-        )} */}
+        )}
         <View style={styles.recordContainer}>
           {currentReport.photo ? (
             <Image source={getImage(currentReport.photo, true)} style={styles.imagePreview} />
