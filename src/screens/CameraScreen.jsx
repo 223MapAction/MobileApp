@@ -37,15 +37,15 @@ export default function App() {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
-      quality: 1,
+      quality: 0.5,
     });
 
-    if (result.canceled) {
-      console.log("Prise de photo annulée");
-    } else if (result.assets) {
+    if (!result.canceled && result.assets) {
       const imageUri = result.assets[0].uri;
-      setReport({ ...report, photo: imageUri });
-      navigation.navigate('IncidentForm', { report }); 
+      setReport((prevReport) => ({ ...prevReport, photo: imageUri }));
+      console.log("Image URI capturée:", imageUri);
+
+      navigation.navigate("IncidentForm", { report: { ...report, photo: imageUri } });
     }
   };
 
