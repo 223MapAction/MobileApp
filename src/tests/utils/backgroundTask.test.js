@@ -26,10 +26,9 @@ describe("Background Sync Task", () => {
   let taskFunction;
 
   beforeAll(async () => {
-    // Simuler la définition de la tâche et sauvegarder la fonction de tâche pour les tests
-    await registerBackgroundTask(); // Assurez-vous d'appeler la fonction pour qu'elle définisse la tâche
+    await registerBackgroundTask(); 
     TaskManager.defineTask.mockImplementation((_, taskFn) => {
-      taskFunction = taskFn; // assigner la fonction de tâche à taskFunction
+      taskFunction = taskFn; 
     });
   });
 
@@ -62,7 +61,6 @@ describe("Background Sync Task", () => {
     fetchPendingReports.mockResolvedValue(mockPendingReports);
     syncReportsToServer.mockResolvedValue();
 
-    // Assurez-vous que taskFunction est bien définie avant de l'appeler
     expect(taskFunction).toBeDefined();
 
     const result = await taskFunction();
@@ -76,7 +74,6 @@ describe("Background Sync Task", () => {
     NetInfo.fetch.mockResolvedValue({ isConnected: true });
     fetchPendingReports.mockRejectedValue(new Error("Database error"));
 
-    // Assurez-vous que taskFunction est bien définie avant de l'appeler
     expect(taskFunction).toBeDefined();
 
     const result = await taskFunction();
@@ -87,7 +84,6 @@ describe("Background Sync Task", () => {
   it("ne synchronise pas les rapports si le réseau est déconnecté", async () => {
     NetInfo.fetch.mockResolvedValue({ isConnected: false });
 
-    // Assurez-vous que taskFunction est bien définie avant de l'appeler
     expect(taskFunction).toBeDefined();
 
     const result = await taskFunction();

@@ -74,6 +74,7 @@ class Welcome extends Component {
             }}
           >
             <ActivityIndicator
+              testID="loading-indicator"
               color="#fff"
               size="small"
               style={{ marginBottom: 20 }}

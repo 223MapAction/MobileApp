@@ -1,52 +1,9 @@
-// import { syncReportsToServer } from "./SyncUtils";
-// import * as ToastUtils from "./ToastUtils";
-// import { create_incident } from "../api/incident";
-
-// jest.mock("../api/incident");
-
-// describe("Sync Utils", () => {
-//   it("should sync reports to the server successfully", async () => {
-//     const mockReport = { id: 1, title: "Test Report" };
-//     const mockResponse = { ok: true };
-//     create_incident.mockResolvedValueOnce(mockResponse);
-
-//     const mockSetIsSyncing = jest.fn();
-
-//     await syncReportsToServer(mockReport, mockSetIsSyncing, () => {});
-
-//     expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
-//     expect(ToastUtils.showToast).toHaveBeenCalledWith(
-//       true,
-//       "Rapport synchronisé"
-//     );
-//   });
-
-//   it("should handle failed sync and save report locally", async () => {
-//     const mockReport = { id: 1, title: "Failed Report" };
-//     const mockResponse = { ok: false };
-//     create_incident.mockResolvedValueOnce(mockResponse);
-
-//     const mockSetIsSyncing = jest.fn();
-//     const mockSave = jest.fn().mockResolvedValueOnce(true);
-//     jest.spyOn(SyncUtils, "saveReportLocally").mockImplementation(mockSave);
-
-//     await syncReportsToServer(mockReport, mockSetIsSyncing, () => {});
-
-//     expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
-//     expect(mockSave).toHaveBeenCalledWith(mockReport);
-//     expect(ToastUtils.showToast).toHaveBeenCalledWith(
-//       false,
-//       "Impossible de soumettre le rapport en ligne."
-//     );
-//   });
-// });
 import { syncReportsToServer } from "./SyncUtils";
-import * as ToastUtils from "./ToastUtils";
+import * as Toast from "react-native-toast-message";
 import { create_incident } from "../api/incident";
-import * as SyncUtils from "./SyncUtils"; // Assurez-vous d'importer SyncUtils correctement
+import * as SyncUtils from "./SyncUtils";
 import { openDatabaseSync } from "expo-sqlite/next";
 
-// Mock des modules nécessaires
 jest.mock("expo-sqlite/next", () => ({
   openDatabaseSync: jest.fn(() => ({
     transaction: jest.fn((callback) => callback({
@@ -56,13 +13,13 @@ jest.mock("expo-sqlite/next", () => ({
 }));
 
 jest.mock("../api/incident");
-jest.mock("./ToastUtils", () => ({
-  showToast: jest.fn(),
+jest.mock("react-native-toast-message", () => ({
+  show: jest.fn(),
 }));
 
 describe("Sync Utils", () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Réinitialise les mocks avant chaque test
+    jest.clearAllMocks(); 
   });
 
   it("should sync reports to the server successfully", async () => {
@@ -75,10 +32,11 @@ describe("Sync Utils", () => {
     await syncReportsToServer(mockReport, mockSetIsSyncing, () => {});
 
     expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
-    expect(ToastUtils.showToast).toHaveBeenCalledWith(
-      true,
-      "Rapport synchronisé"
-    );
+    expect(Toast.show).toHaveBeenCalledWith({
+      type: "success",
+      text1: "Rapport synchronisé",
+      text2: `Le rapport "${mockReport.title}" a été synchronisé avec succès.`,
+    });
   });
 
   it("should handle failed sync and save report locally", async () => {
@@ -94,9 +52,10 @@ describe("Sync Utils", () => {
 
     expect(mockSetIsSyncing).toHaveBeenCalledWith(false);
     expect(mockSave).toHaveBeenCalledWith(mockReport);
-    expect(ToastUtils.showToast).toHaveBeenCalledWith(
-      false,
-      "Impossible de soumettre le rapport en ligne."
-    );
+    expect(Toast.show).toHaveBeenCalledWith({
+      type: "error",
+      text1: "Échec de synchronisation",
+      text2: "Impossible de soumettre le rapport en ligne.",
+    });
   });
 });

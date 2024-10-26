@@ -97,7 +97,9 @@ class Dashboard extends Component {
         users.push(i.user);
       }
     });
-    return users.map((user) => {
+    return users
+    .filter((user) => user && user.id)
+    .map((user) => {
       const obj = { ...user };
       obj.incidents = incidents.filter((i) => i.user_id === user.id);
       obj.nbIncidents = obj.incidents.length;

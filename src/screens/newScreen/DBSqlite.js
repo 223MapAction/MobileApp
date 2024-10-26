@@ -3,7 +3,7 @@ import SQLite from 'react-native-sqlite-storage';
 
 const db = SQLite.openDatabase({ name: 'mapAction.db', location: 'default' });
 
-const createTable = () => {
+export const createTable = () => {
   db.transaction(tx => {
     tx.executeSql(
       'CREATE TABLE IF NOT EXISTS incidents (id INTEGER PRIMARY KEY AUTOINCREMENT, photo TEXT, video TEXT, audio TEXT, latitude REAL, longitude REAL)',
@@ -14,7 +14,7 @@ const createTable = () => {
   });
 };
 
-const insertIncident = (photo, video, audio, lattitude, longitude) => {
+export const insertIncident = (photo, video, audio, lattitude, longitude) => {
   db.transaction(tx => {
     tx.executeSql(
       'INSERT INTO incidents (photo, video, audio, latitude, longitude) VALUES (?, ?, ?, ?, ?)',
