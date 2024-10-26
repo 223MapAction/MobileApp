@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>9/11</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>9/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,25 +92,25 @@
 <a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,25 +118,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import SQLite from 'react-native-sqlite-storage';
 &nbsp;
-const db = <span class="cstat-no" title="statement not covered" >SQLite.openDatabase({ name: 'mapAction.db', location: 'default' });</span>
+const db = SQLite.openDatabase({ name: 'mapAction.db', location: 'default' });
 &nbsp;
-const createTable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  db.transaction(<span class="fstat-no" title="function not covered" >tx</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    tx.executeSql(</span>
+export const createTable = () =&gt; {
+  db.transaction(tx =&gt; {
+    tx.executeSql(
       'CREATE TABLE IF NOT EXISTS incidents (id INTEGER PRIMARY KEY AUTOINCREMENT, photo TEXT, video TEXT, audio TEXT, latitude REAL, longitude REAL)',
       [],
-<span class="fstat-no" title="function not covered" >      ()</span> =&gt; <span class="cstat-no" title="statement not covered" >console.log('Table created successfully'),</span>
+      () =&gt; console.log('Table created successfully'),
 <span class="fstat-no" title="function not covered" >      er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >console.log('Error occurred while creating the table', error)</span>
     );
   });
 };
 &nbsp;
-const insertIncident = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>hoto, video, audio, lattitude, longitude) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  db.transaction(<span class="fstat-no" title="function not covered" >tx</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    tx.executeSql(</span>
+export const insertIncident = (photo, video, audio, lattitude, longitude) =&gt; {
+  db.transaction(tx =&gt; {
+    tx.executeSql(
       'INSERT INTO incidents (photo, video, audio, latitude, longitude) VALUES (?, ?, ?, ?, ?)',
       [photo, video, audio, lattitude, longitude],
-<span class="fstat-no" title="function not covered" >      ()</span> =&gt; <span class="cstat-no" title="statement not covered" >console.log('Incident added successfully'),</span>
+      () =&gt; console.log('Incident added successfully'),
 <span class="fstat-no" title="function not covered" >      er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >console.log('Error occurred while adding the incident', error)</span>
     );
   });
@@ -148,7 +148,7 @@ const insertIncident = <span class="cstat-no" title="statement not covered" ><sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-26T13:10:10.785Z
+                at 2024-10-26T17:16:14.481Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

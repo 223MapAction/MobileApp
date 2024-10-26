@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">38.88% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>7/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>2/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">41.17% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>7/17</span>
             </div>
         
             
@@ -113,35 +113,25 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,8 +141,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,18 +163,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 const APP_STORAGE_KEY = "123456544GGGFGGFFFGFGFGFG";
 const USER_STORAGE_KEY = "12345654DBGFHRGGSGSG";
-export async function <span class="fstat-no" title="function not covered" >getUser(</span>) {
-<span class="cstat-no" title="statement not covered" >  return await getData(USER_STORAGE_KEY, { token: null, user: {} });</span>
+export async function getUser() {
+  return await getData(USER_STORAGE_KEY, { token: null, user: {} });
 }
 export async function <span class="fstat-no" title="function not covered" >setUser(</span>user) {
 <span class="cstat-no" title="statement not covered" >  setData(USER_STORAGE_KEY, user);</span>
 }
-export async function <span class="fstat-no" title="function not covered" >getData(</span>key, defaultValue = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const data = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(key);</span>
+export async function getData(key, defaultValue = <span class="branch-0 cbranch-no" title="branch not covered" >null)</span> {
+  try {
+    const data = await AsyncStorage.getItem(key);
 <span class="cstat-no" title="statement not covered" >    if (data) <span class="cstat-no" title="statement not covered" >return JSON.parse(data);</span></span>
   } catch (e) {
-<span class="cstat-no" title="statement not covered" >    return defaultValue;</span>
+    return defaultValue;
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return defaultValue;</span>
@@ -214,7 +214,7 @@ export default storage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-26T13:10:10.785Z
+                at 2024-10-26T17:16:14.481Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

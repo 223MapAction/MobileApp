@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">38.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>5/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">41.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>5/12</span>
             </div>
         
             
@@ -184,8 +184,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -237,13 +237,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,11 +257,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,8 +293,8 @@ import TabBar from "./TabBar";
 import { connect } from "react-redux";
 import ProfilStackNavigation from "./ProfilStackNavigation";
 &nbsp;
-const Tab = <span class="cstat-no" title="statement not covered" >createBottomTabNavigator();</span>
-const Stack = <span class="cstat-no" title="statement not covered" >createStackNavigator();</span>
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 class TabNavigation extends React.Component {
 <span class="fstat-no" title="function not covered" >  re</span>nder() {
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -346,12 +346,12 @@ class TabNavigation extends React.Component {
   }
 }
 &nbsp;
-const mapState = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> user }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+const mapState = <span class="fstat-no" title="function not covered" >({</span> user }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
   token: user.token ? user.token : null,
   user: user.user ? user.user : null,
 });
 &nbsp;
-const CameraStack = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; {</span>
+const CameraStack = <span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; {
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Stack.Navigator&gt;
       &lt;Stack.Screen
@@ -366,7 +366,7 @@ const CameraStack = <span class="cstat-no" title="statement not covered" ><span 
     &lt;/Stack.Navigator&gt;
   );
 };
-const DashboardStack = <span class="cstat-no" title="statement not covered" >connect(</span>
+const DashboardStack = connect(
   mapState,
   null
 )(<span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; {
@@ -397,7 +397,7 @@ export default connect(mapState, null)(TabNavigation);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-26T13:10:10.785Z
+                at 2024-10-26T17:16:14.481Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
