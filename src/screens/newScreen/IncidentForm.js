@@ -20,6 +20,7 @@ import { ReportContext } from "../../context/ReportContext";
 import { useRoute } from '@react-navigation/native';
 import { getImage } from "../../api/http";
 import { Camera, CameraType } from "expo-camera/legacy";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function IncidentForm() {
   const { isSyncing, submitReport } = useContext(ReportContext);
@@ -43,7 +44,16 @@ export default function IncidentForm() {
   const [type, setType] = useState(CameraType.back);
 
   useEffect(() => {
-    getLocation(); 
+    if (report) {
+      setCurrentReport(report);
+      // console.log("Report reçu dans IncidentForm:", report);  
+    }
+  }, [report]);
+
+  useEffect(() => {
+    if (!currentReport.zone) {
+      getLocation(); 
+    }
     if (currentReport.audio) {
       playSound();  
     }
@@ -65,11 +75,15 @@ export default function IncidentForm() {
   useEffect(() => {
     requestAllPermissions(); 
   }, []);
+
   const startVideoRecording = async () => {
     if (cameraRef) {
       try {
         setIsRecording(true);
-        const video = await cameraRef.recordAsync();
+        const video = await cameraRef.recordAsync({
+          quality: Camera.Constants.VideoQuality['480p'], 
+          maxDuration: 10, 
+        });
         setVideoUri(video.uri); 
         setIsRecording(false);
         setShowCamera(false); 
@@ -85,6 +99,7 @@ export default function IncidentForm() {
     }
   };
 
+console.log("La video enregistré", currentReport.video)
   // Arrêter l'enregistrement vidéo
   const stopVideoRecording = async () => {
     if (cameraRef && isRecording) {
@@ -123,22 +138,20 @@ export default function IncidentForm() {
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
-    console.log("Latitude:", latitude, "Longitude:", longitude);
-    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  // Clé API Mapbox
+    // console.log("Latitude:", latitude, "Longitude:", longitude);
+    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
   
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); 
+
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
       const data = await response.json();
-      console.log(data.features[0].place_name)
-      if (data.features && data.features.length > 0) {
-        const zone = data.features[0].place_name;  
-        return zone;
-      } else {
-        return "Zone inconnue";
-      }
+      return data.features?.[0]?.place_name || "Zone inconnue";
     } catch (error) {
-      console.error("Erreur lors de la récupération du nom de la zone:", error);
+      console.error("Erreur lors de la récupération de la zone:", error);
       return "Zone inconnue";
     }
   };
@@ -146,16 +159,6 @@ export default function IncidentForm() {
   const getLocation = async () => {
     setLoadingLocation(true);
     try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission refusée",
-          "La localisation est nécessaire pour cette fonctionnalité"
-        );
-        setLoadingLocation(false);
-        return;
-      }
-
       let location = await Location.getCurrentPositionAsync({});
       const lattitude = location.coords.latitude.toString();
       const longitude = location.coords.longitude.toString();
@@ -238,109 +241,110 @@ export default function IncidentForm() {
         Alert.alert("Erreur", "Veuillez remplir tous les champs obligatoires");
         return;
       }
-      const response = await submitReport(currentReport); 
+      const response = await submitReport(currentReport);
+      console.log("La réponse du serveur", response) 
       if (response.status === 200) {
-        setPopupMessage(`Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`);
-        setIsSuccess(true);
+        Alert.alert(
+          "Succès",
+          `Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`
+        );
       } else {
-        setPopupMessage('Échec de l\'envoi de l\'incident.');
-        setIsSuccess(false);
+        Alert.alert("Échec", "Échec de l'envoi de l'incident.");
       }
     } catch (error) {
-      setPopupMessage('Une erreur est survenue lors de l\'envoi.');
-      setIsSuccess(false);
-    } finally {
-      setShowPopup(true);
-    }
+      console.log("voici l'erreur en question uwaish", error);
+      Alert.alert("Erreur", "Une erreur est survenue lors de l'envoi.");
+    };
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
+  
 
   return (
     <View style={styles.container}>
-      
-      <View style={styles.inputGroup}>
-        <Icon name="title" size={24} color="#2C9CDB" />
-        <TextInput
-          style={styles.input}
-          placeholder="Titre de l'incident"
-          onChangeText={(text) => setCurrentReport({ ...currentReport, title: text })}
-          value={currentReport.title}
-        />
-      </View>
-
-      <View style={styles.inputGroup}>
-        <Icon name="description" size={24} color="#2C9CDB" />
-        <TextInput
-          style={styles.descriptionInput}
-          placeholder="Description"
-          onChangeText={(text) => setCurrentReport({ ...currentReport, description: text })}
-          value={currentReport.description}
-          multiline={true}  
-          numberOfLines={6} 
-          textAlignVertical="top"
-        />
-      </View>
-
-        {loadingLocation ? (
-         <ActivityIndicator size="large" color="#ff6347" />
-        ) : (
-          <View style={styles.zoneContainer}>
-            <Icon name="place" size={40} color="#38A0DB" />
-            <View style={{flexDirection:'column'}}>
-              <Text style={styles.position}>Votre position actuelle</Text>
-              <Text style={styles.zone}> {currentReport.zone || "Récupération en cours..."}</Text>
-            </View>
-            
-          </View>
-        )}
-        <View style={styles.recordContainer}>
-          {currentReport.photo ? (
-            <Image source={getImage(currentReport.photo, true)} style={styles.imagePreview} />
-          ) : null}
-          
-          {currentReport.video ? (
-            <Video
-              source={{ uri: currentReport.video }}
-              rate={1.0}
-              volume={1.0}
-              isMuted={false}
-              resizeMode="cover"
-              shouldPlay
-              isLooping
-              style={styles.videoPreview}
-            />
-          ) : null}
-          
-          {currentReport.audio && (
-            <View style={styles.audioContainer}>
-              <TouchableOpacity onPress={handlePlayPause}>
-                <Icon name={isPlaying ? "pause" : "play-arrow"} size={32} color="#2C9CDB" />
-              </TouchableOpacity>
-
-              <Slider
-                style={styles.slider}
-                minimumValue={0}
-                maximumValue={duration}
-                minimumTrackTintColor="blue"
-                maximumTrackTintColor="red"
-                value={position}
-                onValueChange={async (value) => {
-                  if (sound) {
-                    await sound.setPositionAsync(value);
-                  }
-                }}
-              />
-              <View style={styles.timeContainer}>
-                <Text>{formatTime(position)}</Text>
-                <Text>{formatTime(duration)}</Text>
-              </View>
-            </View>
-          )}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+        <View style={styles.inputGroup}>
+          <Icon name="title" size={24} color="#2C9CDB" />
+          <TextInput
+            style={styles.input}
+            placeholder="Titre de l'incident"
+            onChangeText={(text) => setCurrentReport({ ...currentReport, title: text })}
+            value={currentReport.title}
+          />
         </View>
-        
+
+        <View style={styles.inputGroup}>
+          <Icon name="description" size={24} color="#2C9CDB" />
+          <TextInput
+            style={styles.descriptionInput}
+            placeholder="Description"
+            onChangeText={(text) => setCurrentReport({ ...currentReport, description: text })}
+            value={currentReport.description}
+            multiline={true}  
+            numberOfLines={6} 
+            textAlignVertical="top"
+          />
+        </View>
+
+          {/* {loadingLocation ? (
+          <ActivityIndicator size="large" color="#ff6347" />
+          ) : (
+            <View style={styles.zoneContainer}>
+              <Icon name="place" size={40} color="#38A0DB" />
+              <View style={{flexDirection:'column'}}>
+                <Text style={styles.position}>Votre position actuelle</Text>
+                <Text style={styles.zone}> {currentReport.zone || "Récupération en cours..."}</Text>
+              </View>
+              
+            </View>
+          )} */}
+          <View style={styles.recordContainer}>
+            {currentReport.photo ? (
+              <Image source={{uri:currentReport.photo}} style={styles.imagePreview} />
+            ) : <Text>Photo non disponible</Text>}
+            
+            {currentReport.video ? (
+              <Video
+                source={{ uri: currentReport.video }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover"
+                shouldPlay
+                isLooping
+                style={styles.videoPreview}
+              />
+            ) : null}
+            
+            {currentReport.audio && (
+              <View style={styles.audioContainer}>
+                <TouchableOpacity onPress={handlePlayPause}>
+                  <Icon name={isPlaying ? "pause" : "play-arrow"} size={32} color="#2C9CDB" />
+                </TouchableOpacity>
+
+                <Slider
+                  style={styles.slider}
+                  minimumValue={0}
+                  maximumValue={duration}
+                  minimumTrackTintColor="blue"
+                  maximumTrackTintColor="red"
+                  value={position}
+                  onValueChange={async (value) => {
+                    if (sound) {
+                      await sound.setPositionAsync(value);
+                    }
+                  }}
+                />
+                <View style={styles.timeContainer}>
+                  <Text>{formatTime(position)}</Text>
+                  <Text>{formatTime(duration)}</Text>
+                </View>
+              </View>
+            )}
+          </View>
+        </ScrollView>
         <View style={styles.flexibleSpace} />
         <View style={styles.sendContainer}>
           <TouchableOpacity
@@ -433,6 +437,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   title: {
     fontSize: 24,
@@ -571,8 +580,9 @@ const styles = StyleSheet.create({
     padding:8
   },
   recordContainer:{
-    flexDirection:'row',
-    padding:10
+    flexDirection:'column',
+    paddingBottom:15
+    // padding:10
   },
   audioContainer: {
     flexDirection: 'row',
@@ -643,4 +653,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
   },
+  imagePreview:{
+    width:345,
+    height:240,
+    marginBottom:20
+  },
+  videoPreview:{
+    width:345,
+    height:240
+  }
 });

@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { authorize } from "react-native-app-auth";
+import { authorize, refresh, revoke } from "react-native-app-auth";
 
 const GOOGLE_OAUTH_APP_GUID =
   Platform.OS == "android"
@@ -14,7 +14,9 @@ export const GoogleAuthConfig = {
 };
 
 // Log in to get an authentication token
-export async function loginWithGoogle() {}
+export async function loginWithGoogle() {
+  return await authorize(GoogleAuthConfig);
+}
 
 // Refresh token
 export async function refreshGoogleAuth(authState) {
