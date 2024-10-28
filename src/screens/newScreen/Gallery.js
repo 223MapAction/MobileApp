@@ -58,6 +58,7 @@ export const ImageThumb = ({ source }) => {
   });
   return (
     <Animated.Image
+      testID='image-thumb'
       source={source}
       resizeMode="cover"
       style={{

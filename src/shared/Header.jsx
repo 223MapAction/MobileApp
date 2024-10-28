@@ -61,8 +61,10 @@ const Header = ({ title, navigation, user, leftButton, showImage, style }) => {
             })
           }
           style={{ alignItems: "center" }}
+          testID="avatar-touchable"
         >
           <Avatar
+            testID='default-image'
             size="small"
             rounded
             source={{ uri: ApiUrl + user.avatar }}

@@ -3,7 +3,8 @@ import http from "axios";
 import { Alert } from "react-native";
 import { getUser } from "./userStorage";
 
-export const ApiUrl = "http://139.144.63.238";
+// export const ApiUrl = "http://139.144.63.238";
+export const ApiUrl = "http://20.19.82.202";
 export const ShareUrl = "https://www.actionmap.withvolkeno.com";
 const apiEndPoint = ApiUrl + "/MapApi";
 

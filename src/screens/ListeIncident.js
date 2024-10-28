@@ -86,7 +86,7 @@ const ListIncident = () => {
   if (!incidents.length) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator color="#000" size="large" />
+        <ActivityIndicator color="#000" size="large" testID="loading-indicator"/>
       </View>
     );
   }
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     borderRadius:8,
     padding:10,
     marginBottom:10,
-    marginLeft:60,
+    marginLeft:67,
     flexDirection:'row',
     alignItems:'center',
     paddingHorizontal:35,
