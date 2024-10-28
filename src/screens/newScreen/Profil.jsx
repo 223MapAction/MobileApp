@@ -73,6 +73,7 @@ class Profil extends Component {
       <View style={styles.container}>
         {this.props.token !== null && (
           <ScrollView
+            testID="scrollView"
             contentContainerStyle={{ marginBottom: 40 }}
             refreshControl={
               <RefreshControl

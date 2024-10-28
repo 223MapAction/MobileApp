@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">35.93% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/64</span>
+                <span class='fraction'>23/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">19.51% </span>
+                <span class="strong">26.82% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/41</span>
+                <span class='fraction'>11/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.66% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/15</span>
+                <span class='fraction'>5/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">32.75% </span>
+                <span class="strong">37.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/58</span>
+                <span class='fraction'>22/58</span>
             </div>
         
             
@@ -195,25 +195,27 @@
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -277,15 +279,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -332,7 +334,8 @@
 import { Alert } from "react-native";
 import { getUser } from "./userStorage";
 &nbsp;
-export const ApiUrl = "http://139.144.63.238";
+// export const ApiUrl = "http://139.144.63.238";
+export const ApiUrl = "http://20.19.82.202";
 export const ShareUrl = "https://www.actionmap.withvolkeno.com";
 const apiEndPoint = ApiUrl + "/MapApi";
 &nbsp;
@@ -408,16 +411,16 @@ async function getOptions(options) {
   return options;
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getImage(</span>uri, flag = <span class="branch-0 cbranch-no" title="branch not covered" >false)</span> {
-<span class="cstat-no" title="statement not covered" >  if (uri) {</span>
-<span class="cstat-no" title="statement not covered" >    if (flag !== false) {</span>
+export function getImage(uri, flag = false) {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (uri) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (flag !== false) {
 <span class="cstat-no" title="statement not covered" >      if (uri === "/uploads/avatars/default.png")</span>
 <span class="cstat-no" title="statement not covered" >        return require("../../assets/images/image.jpg");</span>
       else {
 <span class="cstat-no" title="statement not covered" >        return { uri: ApiUrl + uri };</span>
       }
     } else {
-<span class="cstat-no" title="statement not covered" >      return { uri: ApiUrl + uri };</span>
+      return { uri: ApiUrl + uri };
     }
   }
 <span class="cstat-no" title="statement not covered" >  return flag === false</span>
@@ -466,7 +469,7 @@ export default {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-26T17:16:14.481Z
+                at 2024-10-28T16:40:12.732Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

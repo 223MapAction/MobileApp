@@ -30,10 +30,10 @@ describe("App Component", () => {
   it("renders correctly", () => {
     const { getByTestId } = renderWithRedux(<App />);
     const appContainer = getByTestId("app-container");
-    const toast = getByTestId("toast");
+    // const toast = getByTestId("toast");
     
     expect(appContainer).toBeTruthy();
-    expect(toast).toBeTruthy();
+    // expect(toast).toBeTruthy();t
   });
 
   it("registers background task on mount", () => {

@@ -12,6 +12,12 @@ jest.mock("expo-sqlite/next", () => ({
   })),
 }));
 
+jest.mock("../db/dbOperations", () => ({
+  saveReportLocally: jest.fn(),
+  getPendingReports: jest.fn(),
+  updateReportStatus: jest.fn(),
+}));
+
 jest.mock("../api/incident");
 jest.mock("react-native-toast-message", () => ({
   show: jest.fn(),

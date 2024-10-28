@@ -17,7 +17,7 @@ import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import {Audio, Video} from "expo-av";
 import { ReportContext } from "../../context/ReportContext";
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { getImage } from "../../api/http";
 import { Camera, CameraType } from "expo-camera/legacy";
 import { ScrollView } from "react-native-gesture-handler";
@@ -25,6 +25,7 @@ import { ScrollView } from "react-native-gesture-handler";
 export default function IncidentForm() {
   const { isSyncing, submitReport } = useContext(ReportContext);
   const route = useRoute();
+  const navigation = useNavigation();
   const { report } = route.params;
   const [currentReport, setCurrentReport] = useState(report);
   const [loadingLocation, setLoadingLocation] = useState(false);
@@ -109,6 +110,7 @@ console.log("La video enregistré", currentReport.video)
   };
 
   async function playSound() {
+    if (!currentReport.audio) return;
     const { sound } = await Audio.Sound.createAsync(
       { uri: currentReport.audio },
       { shouldPlay: false }
@@ -243,14 +245,17 @@ console.log("La video enregistré", currentReport.video)
       }
       const response = await submitReport(currentReport);
       console.log("La réponse du serveur", response) 
-      if (response.status === 200) {
-        Alert.alert(
-          "Succès",
-          `Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`
-        );
-      } else {
-        Alert.alert("Échec", "Échec de l'envoi de l'incident.");
-      }
+      Alert.alert(
+        "Succès",
+        `Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`,
+        [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("DrawerNavigation")
+          }
+        ]
+      );
+      
     } catch (error) {
       console.log("voici l'erreur en question uwaish", error);
       Alert.alert("Erreur", "Une erreur est survenue lors de l'envoi.");
@@ -288,18 +293,18 @@ console.log("La video enregistré", currentReport.video)
           />
         </View>
 
-          {/* {loadingLocation ? (
+          {loadingLocation ? (
           <ActivityIndicator size="large" color="#ff6347" />
           ) : (
             <View style={styles.zoneContainer}>
               <Icon name="place" size={40} color="#38A0DB" />
               <View style={{flexDirection:'column'}}>
                 <Text style={styles.position}>Votre position actuelle</Text>
-                <Text style={styles.zone}> {currentReport.zone || "Récupération en cours..."}</Text>
+                <Text style={styles.zone}> {currentReport.zone ? currentReport.zone : "Récupération en cours..."}</Text>
               </View>
               
             </View>
-          )} */}
+          )}
           <View style={styles.recordContainer}>
             {currentReport.photo ? (
               <Image source={{uri:currentReport.photo}} style={styles.imagePreview} />
