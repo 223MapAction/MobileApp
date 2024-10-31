@@ -10,29 +10,20 @@ import { View,
     Platform,
  } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { login } from "../api/auth";
+import { login, registerEmail } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 
-export default function PhoneLogin() {
+export default function SignUp() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
     const [emailFocused, setEmailFocused] = useState(false); 
-    const [passwordFocused, setPasswordFocused] = useState(false); 
-    const [otpSent, setOtpSent] = useState(false);
     const navigation = useNavigation();
     const [authState, setAuthState] = useState(null);
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible); 
-    };
-
-    const Schema = Validator.object().shape({
-        email: Validator.string().email().required().label("Email"),
-        password: Validator.string().min(5).required().label("Mot De Passe"),
-    });
+    
+   
     const handleGoogleLogin = async () => {
         try {
           const result = await loginWithGoogle(); 
@@ -58,24 +49,9 @@ export default function PhoneLogin() {
           }
         }
       };
-
-      const handleSendOTP = async () => {
-        setIsLoading(true);
-        try {
-            await axios.post('https://yourapi.com/otpRequest/', { phone });
-            setOtpSent(true);
-            Alert.alert('OTP envoyé !', 'Veuillez vérifier votre téléphone pour l\'OTP.');
-        } catch (error) {
-            console.error(error);
-            Alert.alert('Erreur', 'Impossible d\'envoyer l\'OTP. Veuillez réessayer.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
     const submit = async () => {
         try {
-            await Schema.validate({ email, password });
-            const user = { email, password };
+            const user = { email };
             const response = await login(user);
             if (response.status === 200) {
                 Alert.alert("Connexion réussie", "Vous êtes maintenant connecté.");
@@ -108,8 +84,6 @@ export default function PhoneLogin() {
                     </View>
                     <View style={styles.buttonContainer}>
                         <View style={styles.inputContainer}>
-                            <Icon name="phone" size={18} style={styles.icon} />
-
                             <TextInput
                                 style={[
                                     styles.input,
@@ -117,15 +91,14 @@ export default function PhoneLogin() {
                                 ]}
                                 onChangeText={setEmail}
                                 value={email}
-                                placeholder={emailFocused ? "" : "Numéro de téléphone"} 
+                                placeholder={emailFocused ? "" : "Email"} 
                                 onFocus={() => setEmailFocused(true)}
                                 onBlur={() => setEmailFocused(false)}
-                                keyboardType="numeric"
                             />
-                            
+                            <Icon name="envelope" size={18} style={styles.icon} />
                         </View>
 
-                        <TouchableOpacity style={styles.button} testID="login-button" onPress={() => navigation.navigate("otp")}>
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={() => navigation.navigate("passwordStep")}>
                             <Text style={styles.buttonText}>Suivant</Text>
                         </TouchableOpacity>
                         <View style={styles.or}>
@@ -140,8 +113,8 @@ export default function PhoneLogin() {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.google}>
-                                <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
-                                    <Icon name="envelope" size={18} color='#fff' />
+                                <TouchableOpacity onPress={() => navigation.navigate("phone")}>
+                                    <Icon name="phone" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
                             {Platform.OS === "ios" && (
@@ -186,7 +159,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     button: {
-        backgroundColor: "#2C9CDB",
+        backgroundColor: "#38A0DB",
         width: 320,
         padding: 15,
         borderRadius: 20,
@@ -200,7 +173,7 @@ const styles = StyleSheet.create({
     },
     line: {
         height: 9,
-        backgroundColor: "#2C9CDB",
+        backgroundColor: "#38A0DB",
         width: 100,
     },
     loginview: {
@@ -220,7 +193,7 @@ const styles = StyleSheet.create({
         left: -200,
         width: 360.75,
         height: 290.36,
-        backgroundColor: "#2C9CDB",
+        backgroundColor: "#38A0DB",
         transform: [{ rotate: '54deg' }],
     },
     start: {},
@@ -229,10 +202,10 @@ const styles = StyleSheet.create({
         margin: 12,
         padding: 10,
         borderBottomWidth: 1,
-        borderBottomColor: "#2C9CDB", 
+        borderBottomColor: "#ccc", 
     },
     inputFocused: {
-        borderBottomColor: "#2C9CDB", 
+        borderBottomColor: "#38A0DB", 
     },
     inputContainer: {
         flexDirection: 'row',
@@ -240,8 +213,7 @@ const styles = StyleSheet.create({
         width: 335,
     },
     icon: {
-        marginRight: -15,
-        color:"#2C9CDB",
+        marginRight: 15,
     },
     tiret:{
       backgroundColor:"#2C9CDB",
@@ -258,7 +230,7 @@ const styles = StyleSheet.create({
         color:'#858585'
     },
     google:{
-       backgroundColor:'#2C9CDB',
+       backgroundColor:'#38A0DB',
        width:100,
        height:43,
        padding:10,

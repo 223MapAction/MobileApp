@@ -13,7 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-
+import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
+import * as AppleAuthentication from "expo-apple-authentication";
 export default function EmailLogin() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -21,7 +22,7 @@ export default function EmailLogin() {
     const [emailFocused, setEmailFocused] = useState(false); 
     const [passwordFocused, setPasswordFocused] = useState(false); 
     const navigation = useNavigation();
-
+    const [authState, setAuthState] = useState(null);
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible); 
     };
@@ -30,7 +31,36 @@ export default function EmailLogin() {
         email: Validator.string().email().required().label("Email"),
         password: Validator.string().min(5).required().label("Mot De Passe"),
     });
-
+    const handleGoogleLogin = async () => {
+        try {
+          const result = await loginWithGoogle(); // This starts the OAuth flow
+          setAuthState(result);
+          //TODO
+          //Faire le traitement necessaire pour le user
+        } catch (error) {
+          console.error("Failed to log in", error);
+        }
+    }
+    const handleAppleLogin = async () => {
+        try {
+          // Sign in with Apple
+          const credential = await LoginWithApple();
+          // Handle the returned credential
+          console.log(credential);
+          Alert.alert("Login Successful!", `User ID: ${credential.user}`);
+          // Save the identity token or user information as needed
+          const { identityToken, user, email, fullName } = credential;
+          //TODO: Make request to backend with identity for further processing and auth logic!
+          // You can now use these details in your app or send them to your backend
+        } catch (error) {
+          if (error.code === "ERR_CANCELED") {
+            Alert.alert("Sign in cancelled", "The user canceled the sign-in flow.");
+          } else {
+            Alert.alert("Error", "An error occurred while signing in.");
+            console.error(error);
+          }
+        }
+      };
     const submit = async () => {
         try {
             await Schema.validate({ email, password });
@@ -111,21 +141,27 @@ export default function EmailLogin() {
                         </View>
                         <View style={styles.socialContainer}>
                             <View style={styles.google}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={handleGoogleLogin}>
                                     <Icon name="google" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.google}>
                                 <TouchableOpacity>
-                                    <Icon name="facebook" size={18} color='#fff' />
+                                    <Icon name="phone" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
                             {Platform.OS === "ios" && (
-                                <View style={styles.google}>
-                                    <TouchableOpacity>
-                                        <Icon name="apple" size={18} color='#fff' />
-                                    </TouchableOpacity>
-                                </View>
+                                <AppleAuthentication.AppleAuthenticationButton
+                                buttonType={
+                                    AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+                                }
+                                buttonStyle={
+                                    AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                                }
+                                cornerRadius={5}
+                                style={styles.google}
+                                onPress={handleAppleLogin}
+                                />
                             )}
                         </View>
                         <View style={styles.connecte}>

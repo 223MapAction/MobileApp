@@ -20,6 +20,10 @@ import Contact from "../screens/newScreen/Contact";
 import Politique from "../screens/politique";
 import Cgu from "../screens/cgu";
 import IncidentForm from "../screens/newScreen/IncidentForm";
+import SignUp from "../pages/Signup";
+import VerifyOtp from "../pages/VerifyOtp";
+import PasswordStep from "../pages/Password";
+
 
 const Stack = createStackNavigator();
 
@@ -171,7 +175,10 @@ const StackNavigation = () => {
       />
       {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
-      <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/>
+      {/* <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/> */}
+      <Stack.Screen name="Inscription" component={SignUp} options={{ headerShown: true }}/>
+      <Stack.Screen name="passwordStep" component={PasswordStep} options={{ headerShown: true }}/>
+      <Stack.Screen name="otp" component={VerifyOtp} options={{ headerShown: true }}/>
       <Stack.Screen name="social_login" component={SocialLogin} options={{ headerShown: false }} />
       <Stack.Screen name="phone" component={PhoneLogin} options={{ headerShown: true }}/>
       <Stack.Screen name="Login" component={EmailLogin} options={{ headerShown: true }}/>

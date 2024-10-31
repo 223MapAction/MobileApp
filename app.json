@@ -22,10 +22,12 @@
       ],
       [
         "expo-image-picker"
-      ]
+      ],
+      ["expo-apple-authentication"]
     ],
     "ios": {
       "supportsTablet": true,
+      "usesAppleSignIn": true,
       "bundleIdentifier": "com.uwaish.MapActionApp"
     },
     "android": {

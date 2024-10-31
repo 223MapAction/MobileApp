@@ -61,10 +61,58 @@ export async function login(user) {
   }
 }
 
+export async function registerEmail(email) {
+  try {
+    console.log("Avant l'appel de l'API login"); 
+    const response = await http.post("/registerCitizen/");
+    console.log("Réponse de l'API login:", response); 
+    return response;
+  } catch (error) {
+    console.log("Erreur lors de la connexion:", error); 
+    throw error; 
+  }
+}
+
+export async function otpRequest() {
+  try {
+    const response = await http.post("/otpRequest//");
+    console.log("Réponse de l'API login:", response); 
+    return response;
+  } catch (error) {
+    console.log("Erreur lors de la connexion:", error); 
+    throw error; 
+  }
+}
+
+export async function verifyEmail(token) {
+  try {
+    console.log("Avant l'appel de l'API login"); 
+    const response = await http.post(`/verify-email/<uuid:${token}>/`);
+    console.log("Réponse de l'API login:", response); 
+    return response;
+  } catch (error) {
+    console.log("Erreur lors de la connexion:", error); 
+    throw error; 
+  }
+}
+
+export async function verifyOtp() {
+  try {
+    console.log("Avant l'appel de l'API login"); 
+    const response = await http.post(`/verifyOtp/`);
+    console.log("Réponse de l'API login:", response); 
+    return response;
+  } catch (error) {
+    console.log("Erreur lors de la connexion:", error); 
+    throw error; 
+  }
+}
+
 
 export function verify_token(token) {
   return http.post("/verify-token/", { token });
 }
+
 export function refresh_token(data) {
   return http.post("/token/refresh/", data);
 }
