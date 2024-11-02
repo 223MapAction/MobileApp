@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { View,
     Text,
     StyleSheet,
@@ -15,6 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
+import * as Linking from "expo-linking";
+import http from "../api/http";
 
 export default function SignUp() {
     const [email, setEmail] = React.useState('');
@@ -22,8 +24,31 @@ export default function SignUp() {
     const [emailFocused, setEmailFocused] = useState(false); 
     const navigation = useNavigation();
     const [authState, setAuthState] = useState(null);
+    const [message, setMessage] = useState("");
+
+    const verifyEmail = async (token) => {
+        try {
+          const response = await http.get(`/verify-email/${token}`);
+          Alert.alert("Succès", response.message);
+          navigation.navigate("passwordStep");
+        } catch (error) {
+          Alert.alert("Erreur", "Lien de vérification invalide ou expiré.");
+        }
+    };
+
+    const handleDeepLink = ({ url }) => {
+        const token = url.split("/").pop();
+        verifyEmail(token);
+    };
+
+    useEffect(() => {
+        const subscription = Linking.addEventListener("url", handleDeepLink);
     
-   
+        return () => {
+            subscription?.remove?.();
+        };
+    }, []);
+
     const handleGoogleLogin = async () => {
         try {
           const result = await loginWithGoogle(); 
@@ -49,20 +74,15 @@ export default function SignUp() {
           }
         }
       };
-    const submit = async () => {
+      const handleRegister = async () => {
         try {
-            const user = { email };
-            const response = await login(user);
-            if (response.status === 200) {
-                Alert.alert("Connexion réussie", "Vous êtes maintenant connecté.");
-                navigation.navigate("DrawerNavigation");
-            } else {
-                Alert.alert("Erreur", "Connexion échouée.");
-            }
+          const response = await http.post('/registerCitizen/', { email });
+          setMessage(response.message);
         } catch (error) {
-            Alert.alert("Erreur", error.message || "Une erreur est survenue lors de la connexion.");
+          console.error("Erreur lors de l'inscription :", error);
+          setMessage("Une erreur s'est produite. Veuillez réessayer.");
         }
-    }
+      };
     
     return (
         <View style={styles.container}>
@@ -98,9 +118,11 @@ export default function SignUp() {
                             <Icon name="envelope" size={18} style={styles.icon} />
                         </View>
 
-                        <TouchableOpacity style={styles.button} testID="login-button" onPress={() => navigation.navigate("passwordStep")}>
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={handleRegister}>
                             <Text style={styles.buttonText}>Suivant</Text>
                         </TouchableOpacity>
+                        {message ? <Text style={styles.message}>{message}</Text> : null}
+
                         <View style={styles.or}>
                             <View style={styles.tiret} />
                             <Text style={styles.orText}>  Ou s'inscrire avec  </Text>

@@ -13,38 +13,40 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-
+import http from "../api/http";
 export default function PasswordStep() {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
     const [passwordFocused, setPasswordFocused] = useState(false); 
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false); 
+    const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false); 
+    const [message, setMessage] = useState('');
     const navigation = useNavigation();
+  
+    const handleSetPassword = async () => {
+      try {
+        await http.put('/set-password/', { password });
+        setMessage("Mot de passe créé avec succès !");
+        navigation.navigate("DrawerNavigation")
+      } catch (error) {
+        console.error("Erreur lors de la création du mot de passe :", error);
+        setMessage("Une erreur s'est produite.");
+      }
+    };
 
     const togglePasswordVisibility = () => {
         setIsPasswordVisible(!isPasswordVisible); 
     };
 
+    const toggleConfirmPasswordVisibility = () => {
+        setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+    };
+
     const Schema = Validator.object().shape({
         password: Validator.string().min(5).required().label("Mot De Passe"),
     });
-    
-      
-    const submit = async () => {
-        try {
-            const user = { email, password };
-            const response = await login(user);
-            if (response.status === 200) {
-                Alert.alert("Connexion réussie", "Vous êtes maintenant connecté.");
-                navigation.navigate("DrawerNavigation");
-            } else {
-                Alert.alert("Erreur", "Connexion échouée.");
-            }
-        } catch (error) {
-            Alert.alert("Erreur", error.message || "Une erreur est survenue lors de la connexion.");
-        }
-    }
-    
+
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView
@@ -89,26 +91,27 @@ export default function PasswordStep() {
                             <TextInput
                                 style={[
                                     styles.input,
-                                    passwordFocused ? styles.inputFocused : null
+                                    confirmPasswordFocused ? styles.inputFocused : null
                                 ]}
-                                onChangeText={setPassword}
-                                value={password}
-                                placeholder={passwordFocused ? "" : "Confirmer le mot de passe"}
-                                secureTextEntry={!isPasswordVisible} 
-                                onFocus={() => setPasswordFocused(true)}
-                                onBlur={() => setPasswordFocused(false)}
+                                onChangeText={setConfirmPassword}
+                                value={confirmPassword}
+                                placeholder={confirmPasswordFocused ? "" : "Confirmer le mot de passe"}
+                                secureTextEntry={!isConfirmPasswordVisible} 
+                                onFocus={() => setConfirmPasswordFocused(true)}
+                                onBlur={() => setConfirmPasswordFocused(false)}
                             />
-                            <TouchableOpacity onPress={togglePasswordVisibility}>
+                            <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
                                 <Icon
-                                    name={isPasswordVisible ? "eye" : "eye-slash"} 
+                                    name={isConfirmPasswordVisible ? "eye" : "eye-slash"} 
                                     size={18}
                                     style={styles.icon}
                                 />
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.button} testID="login-button" onPress={() => navigation.navigate("otp")}>
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={handleSetPassword}>
                             <Text style={styles.buttonText}>S'enregistrer</Text>
                         </TouchableOpacity>
+                        {message ? <Text>{message}</Text> : null}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
