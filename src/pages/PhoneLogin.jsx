@@ -15,24 +15,29 @@ import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
-
+import http from "../api/http";
 export default function PhoneLogin() {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
+    const [phone, setPhone] = React.useState('');
     const [emailFocused, setEmailFocused] = useState(false); 
-    const [passwordFocused, setPasswordFocused] = useState(false); 
     const [otpSent, setOtpSent] = useState(false);
     const navigation = useNavigation();
     const [authState, setAuthState] = useState(null);
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible); 
-    };
-
+    
     const Schema = Validator.object().shape({
         email: Validator.string().email().required().label("Email"),
         password: Validator.string().min(5).required().label("Mot De Passe"),
     });
+
+    const handleRegister = async () => {
+        try {
+          const response = await http.post('/otpRequest/', { phone });
+          Alert.alert('OTP envoyé !', 'Veuillez vérifier votre téléphone pour l\'OTP.');
+          navigation.navigate("otp")
+        } catch (error) {
+          console.error("Erreur lors de l'inscription :", error);
+          Alert.alert("Erreur", "Une erreur est survenue.");
+        }
+    };
     const handleGoogleLogin = async () => {
         try {
           const result = await loginWithGoogle(); 
@@ -72,21 +77,7 @@ export default function PhoneLogin() {
             setIsLoading(false);
         }
     };
-    const submit = async () => {
-        try {
-            await Schema.validate({ email, password });
-            const user = { email, password };
-            const response = await login(user);
-            if (response.status === 200) {
-                Alert.alert("Connexion réussie", "Vous êtes maintenant connecté.");
-                navigation.navigate("DrawerNavigation");
-            } else {
-                Alert.alert("Erreur", "Connexion échouée.");
-            }
-        } catch (error) {
-            Alert.alert("Erreur", error.message || "Une erreur est survenue lors de la connexion.");
-        }
-    }
+    
     
     return (
         <View style={styles.container}>
@@ -115,8 +106,8 @@ export default function PhoneLogin() {
                                     styles.input,
                                     emailFocused ? styles.inputFocused : null
                                 ]}
-                                onChangeText={setEmail}
-                                value={email}
+                                onChangeText={setPhone}
+                                value={phone}
                                 placeholder={emailFocused ? "" : "Numéro de téléphone"} 
                                 onFocus={() => setEmailFocused(true)}
                                 onBlur={() => setEmailFocused(false)}
@@ -125,7 +116,7 @@ export default function PhoneLogin() {
                             
                         </View>
 
-                        <TouchableOpacity style={styles.button} testID="login-button" onPress={() => navigation.navigate("otp")}>
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={handleRegister}>
                             <Text style={styles.buttonText}>Suivant</Text>
                         </TouchableOpacity>
                         <View style={styles.or}>

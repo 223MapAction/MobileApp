@@ -90,5 +90,8 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Cette application utilise l'authentification Apple pour permettre la connexion des utilisateurs.</string>
+
 </dict>
 </plist>

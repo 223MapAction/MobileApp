@@ -15,6 +15,8 @@ import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
+import {jwtDecode} from "jwt-decode";
+
 export default function EmailLogin() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -33,14 +35,14 @@ export default function EmailLogin() {
     });
     const handleGoogleLogin = async () => {
         try {
-          const result = await loginWithGoogle(); // This starts the OAuth flow
-          setAuthState(result);
-          //TODO
-          //Faire le traitement necessaire pour le user
+          const userInfo = await loginWithGoogle();
+        //   const decodedToken = jwtDecode(userInfo.idTokenPayload);
+          setAuthState(userInfo); 
+          navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
         }
-    }
+    };
     const handleAppleLogin = async () => {
         try {
           // Sign in with Apple

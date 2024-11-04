@@ -30,7 +30,8 @@ export async function register({ avatar, ...data }) {
         type: "multipart/form-data",
       });
     }
-
+    const generatedPassword = makeid(10); 
+    formdata.append("password", generatedPassword);
     Object.keys(data).map((k) => {
       formdata.append(k, data[k]);
     });

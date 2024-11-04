@@ -10,15 +10,20 @@ import { View,
     Platform,
  } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { login, registerEmail } from "../api/auth";
+import { register, registerEmail } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as Linking from "expo-linking";
+import { onLogin } from "../redux/user/action";
+import { connect } from "react-redux";
+import { update_user } from "../api/user";
 import http from "../api/http";
+import { useDispatch } from 'react-redux';
+import { setUser } from "../api/userStorage";
 
-export default function SignUp() {
+function SignUp() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [emailFocused, setEmailFocused] = useState(false); 
@@ -51,13 +56,13 @@ export default function SignUp() {
 
     const handleGoogleLogin = async () => {
         try {
-          const result = await loginWithGoogle(); 
-          setAuthState(result);
-          
+          const userInfo = await loginWithGoogle();
+          setAuthState(userInfo);
+          navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
         }
-    }
+    };
     const handleAppleLogin = async () => {
         try {
           const credential = await LoginWithApple();
@@ -279,3 +284,4 @@ const styles = StyleSheet.create({
         color:'#2D9CDB'
       }
 });
+export default connect(null, { onLogin })(SignUp);
