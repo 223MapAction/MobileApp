@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import Accueil from "../slides/Acceuil";
 import DrawerNavigation from "./DrawerNavigation";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
 import HeaderLeft from "../utils/HeaderLeft";
 import PhoneLogin from "../pages/PhoneLogin";
 import EmailLogin from "../pages/EmailLogin";
@@ -20,6 +20,8 @@ import Contact from "../screens/newScreen/Contact";
 import Politique from "../screens/politique";
 import Cgu from "../screens/cgu";
 import IncidentForm from "../screens/newScreen/IncidentForm";
+import IncidentListScreen from "../screens/IncidentListScreen";
+import IncidentDetailsScreen from "../screens/IncidentDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -40,11 +42,11 @@ const MyHeader = ({ route, navigation, ...otherProps }) => {
     return null;
   }
   const { options } = otherProps;
-  if (!options || typeof options.headerShown !== 'boolean') {
+  if (!options || typeof options.headerShown !== "boolean") {
     console.error("Erreur dans les options ou headerShown manquant");
     return null;
   }
-  const title = options.title || '';
+  const title = options.title || "";
   if (options.headerShown === false) return null;
   const showImage = [
     "Register",
@@ -99,19 +101,19 @@ const StackNavigation = () => {
   let initialRouteName = "Welcome";
   return (
     <NavigationContainer>
-    <Stack.Navigator
+      <Stack.Navigator
         initialRouteName={initialRouteName}
         screenOptions={screenOptions}
-    >
-      <Stack.Screen
-          name="Welcome"
-          component={(Welcome)}
-          options={{ headerShown: false }}
-      />
+      >
         <Stack.Screen
-            name="Accueil"
-            component={Accueil}
-            options={{ headerShown: false }}
+          name="Welcome"
+          component={Welcome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Accueil"
+          component={Accueil}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DrawerNavigation"
@@ -120,7 +122,7 @@ const StackNavigation = () => {
             headerShown: false,
           }}
         />
-        
+
         <Stack.Screen
           name="Picture"
           component={CameraComponent}
@@ -138,7 +140,7 @@ const StackNavigation = () => {
           name="cgu"
           component={Cgu}
           options={{
-            headerShown: false
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -149,6 +151,12 @@ const StackNavigation = () => {
             title: "Mentions Légales",
           }}
         />
+        <Stack.Screen name="Incidents" component={IncidentListScreen} />
+        <Stack.Screen
+          name="IncidentDetails"
+          component={IncidentDetailsScreen}
+        />
+
         <Stack.Screen
           name="DetailIncident"
           component={DataJourney}
@@ -168,19 +176,35 @@ const StackNavigation = () => {
           options={{
             title: "Nous contacter",
           }}
-      />
-      {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
-      {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
-      <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/>
-      <Stack.Screen name="social_login" component={SocialLogin} options={{ headerShown: false }} />
-      <Stack.Screen name="phone" component={PhoneLogin} options={{ headerShown: true }}/>
-      <Stack.Screen name="Login" component={EmailLogin} options={{ headerShown: true }}/>
-      <Stack.Screen
+        />
+        {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
+        {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
+        <Stack.Screen
+          name="Inscription"
+          component={Inscription}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="social_login"
+          component={SocialLogin}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="phone"
+          component={PhoneLogin}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={EmailLogin}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
           name="Logout"
           component={Logout}
           options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

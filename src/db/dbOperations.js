@@ -65,3 +65,14 @@ export const getPendingReports = async () => {
     throw error; // Rethrow error for handling elsewhere
   }
 };
+
+// Function to get all reports from the local database
+export const getAllReports = async () => {
+  try {
+    const allReports = await db.select().from(reports).all(); // Fetch all records from the reports table
+    return allReports;
+  } catch (error) {
+    console.error("Error fetching all reports:", error);
+    throw error;
+  }
+};

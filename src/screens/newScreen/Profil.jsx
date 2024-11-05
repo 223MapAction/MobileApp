@@ -45,17 +45,15 @@ class Profil extends Component {
     const incidents = incs.filter((i) => i.user_id === user_id);
     const nbre_incidents = incidents.length;
     this.setState({
-    //   badge: getBadge(nbre_incidents),
+      //   badge: getBadge(nbre_incidents),
       nbre_incidents: nbre_incidents,
     });
-   
+
     let points = user?.points || 0;
     this.setState({
       points: points,
       loading: false,
-      photos: [
-        ...incidents.map((i) => i.photo),
-      ],
+      photos: [...incidents.map((i) => i.photo)],
     });
   }
   render() {
@@ -89,8 +87,7 @@ class Profil extends Component {
                   justifyContent: "center",
                   paddingTop: 20,
                 }}
-               >
-                
+              >
                 <View style={{}}>
                   <Text
                     style={{
@@ -136,20 +133,20 @@ class Profil extends Component {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                    //   Share.share(
-                    //     `je suis ${user.first_name} ${
-                    //       user.last_name
-                    //     }\nj'utilise Action map depuis ${moment(
-                    //       user.created_at
-                    //     ).format(
-                    //       "MMMM YYYY"
-                    //     )}\nj'ai signalé ${nbre_incidents} incidents \nJ'ai créé ${nbre_challenges_created} challenges et participé dans ${nbre_challenges} challenges\nmon statut:   ${
-                    //       user.user_type
-                    //     } \nmon badge :  ${
-                    //     //   badge.label
-                    //     }\n${ShareUrl}/api/usermap/${user.id}/`
-                    //   ) 
-                    {}
+                      //   Share.share(
+                      //     `je suis ${user.first_name} ${
+                      //       user.last_name
+                      //     }\nj'utilise Action map depuis ${moment(
+                      //       user.created_at
+                      //     ).format(
+                      //       "MMMM YYYY"
+                      //     )}\nj'ai signalé ${nbre_incidents} incidents \nJ'ai créé ${nbre_challenges_created} challenges et participé dans ${nbre_challenges} challenges\nmon statut:   ${
+                      //       user.user_type
+                      //     } \nmon badge :  ${
+                      //     //   badge.label
+                      //     }\n${ShareUrl}/api/usermap/${user.id}/`
+                      //   )
+                      {}
                     }
                     style={{
                       flexDirection: "row",
@@ -208,8 +205,6 @@ class Profil extends Component {
                       Problèmes
                     </Text>
                   </TouchableOpacity>
-
-                  
                 </View>
 
                 <View
@@ -316,6 +311,11 @@ class Profil extends Component {
             </TouchableOpacity>
           </View>
         )}
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate("Incidents")}
+        >
+          <Text>Voir la liste des incidents Non synchronisés</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -324,6 +324,7 @@ class Profil extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-around",
     paddingStart: 10,
     backgroundColor: "#fff",
     /*  backgroundColor: '#2d9cdb' */
@@ -430,4 +431,4 @@ const mapState = ({ user, incidents, challenges }) => ({
   incidents,
   challenges,
 });
-export default connect(mapState, {  })(Profil);
+export default connect(mapState, {})(Profil);

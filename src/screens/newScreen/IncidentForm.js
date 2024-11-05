@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import Slider from '@react-native-community/slider'; 
+import Slider from "@react-native-community/slider";
 import {
   ActivityIndicator,
   Alert,
@@ -10,14 +10,14 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Modal
+  Modal,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
-import {Audio, Video} from "expo-av";
+import { Audio, Video } from "expo-av";
 import { ReportContext } from "../../context/ReportContext";
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { getImage } from "../../api/http";
 import { Camera, CameraType } from "expo-camera/legacy";
 import { ScrollView } from "react-native-gesture-handler";
@@ -35,46 +35,55 @@ export default function IncidentForm() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
-  const [showPopup, setShowPopup] = useState(false); 
-  const [popupMessage, setPopupMessage] = useState(''); 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  const [cameraRef, setCameraRef] = useState(null); 
-  const [isRecording, setIsRecording] = useState(false); 
-  const [videoUri, setVideoUri] = useState(null); 
+  const [cameraRef, setCameraRef] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [videoUri, setVideoUri] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [type, setType] = useState(CameraType.back);
 
   useEffect(() => {
     if (report) {
       setCurrentReport(report);
-      // console.log("Report reçu dans IncidentForm:", report);  
+      // console.log("Report reçu dans IncidentForm:", report);
     }
   }, [report]);
 
   useEffect(() => {
     if (!currentReport.zone) {
-      getLocation(); 
+      getLocation();
     }
     if (currentReport.audio) {
-      playSound();  
+      playSound();
     }
-    return () => sound ? sound.unloadAsync() : undefined;  
+    return () => (sound ? sound.unloadAsync() : undefined);
   }, [currentReport.audio]);
 
   const requestAllPermissions = async () => {
-    const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
-    const { status: locationStatus } = await Location.requestForegroundPermissionsAsync();
+    const { status: cameraStatus } =
+      await ImagePicker.requestCameraPermissionsAsync();
+    const { status: locationStatus } =
+      await Location.requestForegroundPermissionsAsync();
     const { status: audioStatus } = await Audio.requestPermissionsAsync();
-  
-    if (cameraStatus !== 'granted' || locationStatus !== 'granted' || audioStatus !== 'granted') {
-      Alert.alert('Permissions manquantes', 'Toutes les permissions (caméra, localisation, micro) sont requises.');
+
+    if (
+      cameraStatus !== "granted" ||
+      locationStatus !== "granted" ||
+      audioStatus !== "granted"
+    ) {
+      Alert.alert(
+        "Permissions manquantes",
+        "Toutes les permissions (caméra, localisation, micro) sont requises."
+      );
       return false;
     }
     return true;
   };
-  
+
   useEffect(() => {
-    requestAllPermissions(); 
+    requestAllPermissions();
   }, []);
 
   const startVideoRecording = async () => {
@@ -82,15 +91,15 @@ export default function IncidentForm() {
       try {
         setIsRecording(true);
         const video = await cameraRef.recordAsync({
-          quality: Camera.Constants.VideoQuality['480p'], 
-          maxDuration: 10, 
+          quality: Camera.Constants.VideoQuality["480p"],
+          maxDuration: 10,
         });
-        setVideoUri(video.uri); 
+        setVideoUri(video.uri);
         setIsRecording(false);
-        setShowCamera(false); 
+        setShowCamera(false);
         setCurrentReport((currentReport) => ({
           ...currentReport,
-          video: video.uri, 
+          video: video.uri,
         }));
         console.log("Vidéo enregistrée à : ", video.uri);
       } catch (error) {
@@ -100,7 +109,7 @@ export default function IncidentForm() {
     }
   };
 
-console.log("La video enregistré", currentReport.video)
+  console.log("La video enregistré", currentReport.video);
   // Arrêter l'enregistrement vidéo
   const stopVideoRecording = async () => {
     if (cameraRef && isRecording) {
@@ -117,9 +126,9 @@ console.log("La video enregistré", currentReport.video)
     );
     setSound(sound);
     sound.setOnPlaybackStatusUpdate((status) => {
-      setIsPlaying(status.isPlaying);  
-      setDuration(status.durationMillis || 0); 
-      setPosition(status.positionMillis || 0);  
+      setIsPlaying(status.isPlaying);
+      setDuration(status.durationMillis || 0);
+      setPosition(status.positionMillis || 0);
     });
   }
 
@@ -136,16 +145,17 @@ console.log("La video enregistré", currentReport.video)
   const formatTime = (millis) => {
     const minutes = Math.floor(millis / 60000);
     const seconds = Math.floor((millis % 60000) / 1000);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
     // console.log("Latitude:", latitude, "Longitude:", longitude);
-    const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";  
+    const mapboxToken =
+      "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
-  
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); 
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     try {
       const response = await fetch(url, { signal: controller.signal });
@@ -165,7 +175,7 @@ console.log("La video enregistré", currentReport.video)
       const lattitude = location.coords.latitude.toString();
       const longitude = location.coords.longitude.toString();
       const zone = await getZoneFromCoordinates(lattitude, longitude);
-      
+
       setCurrentReport({
         ...currentReport,
         lattitude,
@@ -184,28 +194,34 @@ console.log("La video enregistré", currentReport.video)
 
   const pickVideo = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert("Permission refusée", "La caméra est nécessaire pour enregistrer une vidéo");
+    if (status !== "granted") {
+      Alert.alert(
+        "Permission refusée",
+        "La caméra est nécessaire pour enregistrer une vidéo"
+      );
       return;
     }
-  
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       videoMaxDuration: 60,
       quality: 1,
     });
-  
+
     if (!result.cancelled) {
-      setCurrentReport((currentReport) => ({ ...currentReport, video: result.uri }));
+      setCurrentReport((currentReport) => ({
+        ...currentReport,
+        video: result.uri,
+      }));
     } else {
       console.log("Enregistrement vidéo annulé");
     }
   };
-  
+
   const startRecording = async () => {
     try {
-      if (permissionResponse.status !== 'granted') {
-        console.log('Requesting permission..');
+      if (permissionResponse.status !== "granted") {
+        console.log("Requesting permission..");
         await requestPermission();
       }
       await Audio.setAudioModeAsync({
@@ -213,69 +229,69 @@ console.log("La video enregistré", currentReport.video)
         playsInSilentModeIOS: true,
       });
 
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY
+      console.log("Starting recording..");
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
       setRecording(recording);
-      console.log('Recording started');
+      console.log("Recording started");
     } catch (err) {
-      console.error('Failed to start recording', err);
+      console.error("Failed to start recording", err);
     }
   };
 
   const stopRecording = async () => {
-    console.log('Stopping recording..');
+    console.log("Stopping recording..");
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync(
-      {
-        allowsRecordingIOS: false,
-      }
-    );
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
     const uri = recording.getURI();
-    console.log('Recording stopped and stored at', uri);
+    console.log("Recording stopped and stored at", uri);
     setCurrentReport({ ...currentReport, audio: uri });
   };
 
   const submitForm = async () => {
     try {
-      if (!currentReport.title || !currentReport.zone || !currentReport.photo) {
+      if (!currentReport.title || !currentReport.photo) {
         Alert.alert("Erreur", "Veuillez remplir tous les champs obligatoires");
         return;
       }
+
       const response = await submitReport(currentReport);
-      console.log("La réponse du serveur", response) 
+      console.log("La réponse du serveur", response);
       Alert.alert(
         "Succès",
         `Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`,
         [
           {
             text: "OK",
-            onPress: () => navigation.navigate("DrawerNavigation")
-          }
+            onPress: () => navigation.navigate("DrawerNavigation"),
+          },
         ]
       );
-      
     } catch (error) {
       console.log("voici l'erreur en question uwaish", error);
       Alert.alert("Erreur", "Une erreur est survenue lors de l'envoi.");
-    };
+    }
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
-  
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>  
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.inputGroup}>
           <Icon name="title" size={24} color="#2C9CDB" />
           <TextInput
             style={styles.input}
             placeholder="Titre de l'incident"
-            onChangeText={(text) => setCurrentReport({ ...currentReport, title: text })}
+            onChangeText={(text) =>
+              setCurrentReport({ ...currentReport, title: text })
+            }
             value={currentReport.title}
           />
         </View>
@@ -285,151 +301,178 @@ console.log("La video enregistré", currentReport.video)
           <TextInput
             style={styles.descriptionInput}
             placeholder="Description"
-            onChangeText={(text) => setCurrentReport({ ...currentReport, description: text })}
+            onChangeText={(text) =>
+              setCurrentReport({ ...currentReport, description: text })
+            }
             value={currentReport.description}
-            multiline={true}  
-            numberOfLines={6} 
+            multiline={true}
+            numberOfLines={6}
             textAlignVertical="top"
           />
         </View>
 
-          {loadingLocation ? (
+        {loadingLocation ? (
           <ActivityIndicator size="large" color="#ff6347" />
+        ) : (
+          <View style={styles.zoneContainer}>
+            <Icon name="place" size={40} color="#38A0DB" />
+            <View style={{ flexDirection: "column" }}>
+              <Text style={styles.position}>Votre position actuelle</Text>
+              <Text style={styles.zone}>
+                {" "}
+                {currentReport.zone
+                  ? currentReport.zone
+                  : "Récupération en cours..."}
+              </Text>
+            </View>
+          </View>
+        )}
+        <View style={styles.recordContainer}>
+          {currentReport.photo ? (
+            <Image
+              source={{ uri: currentReport.photo }}
+              style={styles.imagePreview}
+            />
           ) : (
-            <View style={styles.zoneContainer}>
-              <Icon name="place" size={40} color="#38A0DB" />
-              <View style={{flexDirection:'column'}}>
-                <Text style={styles.position}>Votre position actuelle</Text>
-                <Text style={styles.zone}> {currentReport.zone ? currentReport.zone : "Récupération en cours..."}</Text>
+            <Text>Photo non disponible</Text>
+          )}
+
+          {currentReport.video ? (
+            <Video
+              source={{ uri: currentReport.video }}
+              rate={1.0}
+              volume={1.0}
+              isMuted={false}
+              resizeMode="cover"
+              shouldPlay
+              isLooping
+              style={styles.videoPreview}
+            />
+          ) : null}
+
+          {currentReport.audio && (
+            <View style={styles.audioContainer}>
+              <TouchableOpacity onPress={handlePlayPause}>
+                <Icon
+                  name={isPlaying ? "pause" : "play-arrow"}
+                  size={32}
+                  color="#2C9CDB"
+                />
+              </TouchableOpacity>
+
+              <Slider
+                style={styles.slider}
+                minimumValue={0}
+                maximumValue={duration}
+                minimumTrackTintColor="blue"
+                maximumTrackTintColor="red"
+                value={position}
+                onValueChange={async (value) => {
+                  if (sound) {
+                    await sound.setPositionAsync(value);
+                  }
+                }}
+              />
+              <View style={styles.timeContainer}>
+                <Text>{formatTime(position)}</Text>
+                <Text>{formatTime(duration)}</Text>
               </View>
-              
             </View>
           )}
-          <View style={styles.recordContainer}>
-            {currentReport.photo ? (
-              <Image source={{uri:currentReport.photo}} style={styles.imagePreview} />
-            ) : <Text>Photo non disponible</Text>}
-            
-            {currentReport.video ? (
-              <Video
-                source={{ uri: currentReport.video }}
-                rate={1.0}
-                volume={1.0}
-                isMuted={false}
-                resizeMode="cover"
-                shouldPlay
-                isLooping
-                style={styles.videoPreview}
-              />
-            ) : null}
-            
-            {currentReport.audio && (
-              <View style={styles.audioContainer}>
-                <TouchableOpacity onPress={handlePlayPause}>
-                  <Icon name={isPlaying ? "pause" : "play-arrow"} size={32} color="#2C9CDB" />
-                </TouchableOpacity>
-
-                <Slider
-                  style={styles.slider}
-                  minimumValue={0}
-                  maximumValue={duration}
-                  minimumTrackTintColor="blue"
-                  maximumTrackTintColor="red"
-                  value={position}
-                  onValueChange={async (value) => {
-                    if (sound) {
-                      await sound.setPositionAsync(value);
-                    }
-                  }}
-                />
-                <View style={styles.timeContainer}>
-                  <Text>{formatTime(position)}</Text>
-                  <Text>{formatTime(duration)}</Text>
-                </View>
-              </View>
-            )}
-          </View>
-        </ScrollView>
-        <View style={styles.flexibleSpace} />
-        <View style={styles.sendContainer}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => setShowCamera(true)}
-          >
-            <Icon name="videocam" size={24} color="#fff" />
-          </TouchableOpacity>
-
-          {showCamera && (
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={showCamera}
-              onRequestClose={() => setShowCamera(false)}
-            >
-              <Camera
-                style={styles.camera}
-                type={type}
-                ref={(ref) => setCameraRef(ref)}
-              >
-                <View style={styles.cameraControls}>
-                  <TouchableOpacity
-                    style={styles.recordButton}
-                    onPress={isRecording ? stopVideoRecording : startVideoRecording}
-                  >
-                    <Icon
-                      name={isRecording ? "stop" : "videocam"}
-                      size={60}
-                      color={isRecording ? "red" : "white"}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </Camera>
-
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setShowCamera(false)}
-              >
-                <Text style={styles.closeButtonText}>Fermer</Text>
-              </TouchableOpacity>
-            </Modal>
-          )}
-          <View style={styles.iconContainer}>
-            <TouchableOpacity
-              onPress={recording ? stopRecording : startRecording}
-            >
-              <Icon name={recording ? "stop" : "mic"} size={24} color="#fff" />
-            </TouchableOpacity>
-          </View> 
-          {showPopup && (
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={showPopup}
-              onRequestClose={handleClosePopup}
-            >
-              <View style={styles.popupContainer}>
-                <View style={styles.popupContent}>
-                  <Text style={isSuccess ? styles.successMessage : styles.errorMessage}>
-                    {popupMessage}
-                  </Text>
-                  <TouchableOpacity onPress={handleClosePopup} style={styles.closeButton}>
-                    <Text style={styles.closeButtonText}>Fermer</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-          )}
-          <SubmitButton isSyncing={isSyncing} handleSubmit={submitForm} />
         </View>
-       
+      </ScrollView>
+      <View style={styles.flexibleSpace} />
+      <View style={styles.sendContainer}>
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => setShowCamera(true)}
+        >
+          <Icon name="videocam" size={24} color="#fff" />
+        </TouchableOpacity>
+
+        {showCamera && (
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={showCamera}
+            onRequestClose={() => setShowCamera(false)}
+          >
+            <Camera
+              style={styles.camera}
+              type={type}
+              ref={(ref) => setCameraRef(ref)}
+            >
+              <View style={styles.cameraControls}>
+                <TouchableOpacity
+                  style={styles.recordButton}
+                  onPress={
+                    isRecording ? stopVideoRecording : startVideoRecording
+                  }
+                >
+                  <Icon
+                    name={isRecording ? "stop" : "videocam"}
+                    size={60}
+                    color={isRecording ? "red" : "white"}
+                  />
+                </TouchableOpacity>
+              </View>
+            </Camera>
+
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowCamera(false)}
+            >
+              <Text style={styles.closeButtonText}>Fermer</Text>
+            </TouchableOpacity>
+          </Modal>
+        )}
+        <View style={styles.iconContainer}>
+          <TouchableOpacity
+            onPress={recording ? stopRecording : startRecording}
+          >
+            <Icon name={recording ? "stop" : "mic"} size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        {showPopup && (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showPopup}
+            onRequestClose={handleClosePopup}
+          >
+            <View style={styles.popupContainer}>
+              <View style={styles.popupContent}>
+                <Text
+                  style={
+                    isSuccess ? styles.successMessage : styles.errorMessage
+                  }
+                >
+                  {popupMessage}
+                </Text>
+                <TouchableOpacity
+                  onPress={handleClosePopup}
+                  style={styles.closeButton}
+                >
+                  <Text style={styles.closeButtonText}>Fermer</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
+        <SubmitButton isSyncing={isSyncing} handleSubmit={submitForm} />
+      </View>
     </View>
   );
 }
 
 const SubmitButton = ({ isSyncing, handleSubmit }) => {
   return (
-    <TouchableOpacity style={styles.submittButton} onPress={handleSubmit} disabled={isSyncing}>
-      <Icon name="send" size={24} color="#fff" /> 
+    <TouchableOpacity
+      style={styles.submittButton}
+      onPress={handleSubmit}
+      disabled={isSyncing}
+    >
+      <Icon name="send" size={24} color="#fff" />
       <Text style={styles.submittButtonText}>
         {isSyncing ? "Envoi..." : "Envoyer"}
       </Text>
@@ -453,7 +496,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
-    color:'#858585'
+    color: "#858585",
   },
   inputGroup: {
     flexDirection: "row",
@@ -468,7 +511,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     fontSize: 16,
-    color:'#858585'
+    color: "#858585",
   },
   label: {
     fontSize: 16,
@@ -518,123 +561,123 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   flexibleSpace: {
-    flex: 1,  
+    flex: 1,
   },
   submittButton: {
-    flexDirection: "row", 
-    alignItems: "center", 
-    justifyContent: "center", 
-    backgroundColor: "#2C9CDB", 
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2C9CDB",
     padding: 5,
     borderRadius: 8,
     width: 130,
-    height:40,
-    marginLeft:30
+    height: 40,
+    marginLeft: 30,
   },
   submittButtonText: {
-    color: "#fff", 
+    color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 10, 
+    marginLeft: 10,
   },
   descriptionInput: {
     borderColor: "#ccc",
-    padding: 5, 
+    padding: 5,
     borderRadius: 5,
-    minHeight: 120,  
-    textAlignVertical: "top",  
+    minHeight: 120,
+    textAlignVertical: "top",
     fontSize: 16,
-    color:'#858585',
-    // lineHeight:'16px'  
+    color: "#858585",
+    // lineHeight:'16px'
   },
   zoneContainer: {
-    flexDirection: "row",  
-    alignItems: "center",  
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
-    padding:5
+    padding: 5,
   },
-  position:{
-    color:'#858585',
-    textAlign:'left',
+  position: {
+    color: "#858585",
+    textAlign: "left",
     // lineHeight:'12px',
   },
-  zone:{
-    color:'#2C9CDB',
-    fontSize:'20px',
-    fontWeight:'bold',
+  zone: {
+    color: "#2C9CDB",
+    fontSize: 20,
+    fontWeight: "bold",
     // lineHeight:'12px',
-    fontFamily:'poppins'
+    // fontFamily:'poppins'
   },
-  sendContainer:{
-    width:350,
-    height:69,
-    borderRadius:10,
-    backgroundColor:'white',
-    borderColor:'#2C9CDB',
-    borderWidth:0.5,
-    alignItems:'center',
-    padding:15,
-    flexDirection:'row'
+  sendContainer: {
+    width: 350,
+    height: 69,
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderColor: "#2C9CDB",
+    borderWidth: 0.5,
+    alignItems: "center",
+    padding: 15,
+    flexDirection: "row",
   },
-  iconContainer:{
-    width:42,
-    height:40,
-    backgroundColor:"#2C9CDB",
-    borderRadius:50,
-    marginRight:10,
-    padding:8
+  iconContainer: {
+    width: 42,
+    height: 40,
+    backgroundColor: "#2C9CDB",
+    borderRadius: 50,
+    marginRight: 10,
+    padding: 8,
   },
-  recordContainer:{
-    flexDirection:'column',
-    paddingBottom:15
+  recordContainer: {
+    flexDirection: "column",
+    paddingBottom: 15,
     // padding:10
   },
   audioContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 20,
   },
   slider: {
     flex: 1,
     marginHorizontal: 10,
-    width:200,
-    height:40,
+    width: 200,
+    height: 40,
   },
   timeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 80,
   },
   popupContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   popupContent: {
-    width: '80%',
+    width: "80%",
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   successMessage: {
-    color: 'green',
+    color: "green",
     fontSize: 18,
     marginBottom: 20,
   },
   errorMessage: {
-    color: 'red',
+    color: "red",
     fontSize: 18,
     marginBottom: 20,
   },
   closeButton: {
-    backgroundColor: '#2C9CDB',
+    backgroundColor: "#2C9CDB",
     padding: 10,
     borderRadius: 5,
   },
   closeButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   camera: {
@@ -658,13 +701,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
   },
-  imagePreview:{
-    width:345,
-    height:240,
-    marginBottom:20
+  imagePreview: {
+    width: 345,
+    height: 240,
+    marginBottom: 20,
   },
-  videoPreview:{
-    width:345,
-    height:240
-  }
+  videoPreview: {
+    width: 345,
+    height: 240,
+  },
 });
