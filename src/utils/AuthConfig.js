@@ -1,8 +1,11 @@
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import { authorize, refresh, revoke, prefetchConfiguration } from "react-native-app-auth";
 import * as AppleAuthentication from "expo-apple-authentication";
 import {jwtDecode} from "jwt-decode";
-import { register, get_token } from "../api/auth";
+import { register, get_token, getTokenByEmail } from "../api/auth";
+import { getData, setData } from "../api/userStorage";
+import { read_user } from "../api/user";
+import storage from "../api/userStorage";
 
 const GOOGLE_OAUTH_APP_GUID =
   Platform.OS == "android"
@@ -15,7 +18,7 @@ export const GoogleAuthConfig = {
   scopes: ["openid", "profile", "email"],
 };
 
-export async function loginWithGoogle() {
+export async function registerWithGoogle() {
   try {
     const authState = await authorize(GoogleAuthConfig);
     const idTokenPayload = jwtDecode(authState.idToken);
@@ -36,12 +39,43 @@ export async function loginWithGoogle() {
     console.log("Utilisateur enregistré avec succès :", response);
     
 
-    return userInfo; 
+    return response; 
   } catch (error) {
     console.error("Google login failed", error);
     throw error; 
   }
 }
+
+export async function loginWithGoogle() {
+  try {
+    const authState = await authorize(GoogleAuthConfig);
+    const idTokenPayload = jwtDecode(authState.idToken);
+    
+    const email = idTokenPayload?.email;
+    console.log("Tentative de connexion pour l'email :", email);
+
+    // Récupération du token via getTokenByEmail
+    const data = await getTokenByEmail(email);
+    const token = data.token;
+
+    if (!token) {
+      Alert.alert("Votre compte est introuvable, inscrivez-vous maintenant.");
+      return null;
+    }
+
+    const { user_id } = jwtDecode(token);
+    const user = await read_user(user_id);
+    const avatar = user?.avatar || "/uploads/avatars/default.png"; 
+    await storage.setUser({ token: token, user });
+    console.log("Utilisateur connecté et informations stockées :", { token, user });
+    return { token, user, avatar };
+    
+  } catch (error) {
+    console.error("Échec de la connexion avec Google", error);
+    throw error;
+  }
+}
+
 
 // Refresh token
 export async function refreshGoogleAuth(authState) {
@@ -72,21 +106,39 @@ export async function logoutWithGoogle(authState) {
 
 export async function loginWithApple() {
   if (Platform.OS !== "ios") {
-    console.error("Apple authentication is only available on iOS.");
+    console.error("La connexion avec ios est disponible uniquement sur iOS.");
     return;
   }
 
   try {
-    const appleAuthResult = await AppleAuthentication.signInAsync({
+    const credential = await AppleAuthentication.signInAsync({
       requestedScopes: [
         AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
         AppleAuthentication.AppleAuthenticationScope.EMAIL,
       ],
     });
-    console.log("Apple Auth Result:", appleAuthResult);
-    return appleAuthResult;
+    
+    const token = credential.identityToken;
+    const { email } = jwtDecode(token);
+    
+    const userInfo = {
+      first_name: credential.fullName?.givenName || "empty",
+      last_name: credential.fullName?.familyName || "empty",
+      address: "",
+      email: email || credential.email || "empty@example.com",
+      phone: "",
+      provider: "Apple",
+    };
+    
+    await register(userInfo);
+    setData("apple", credential);
+    
+    console.log("Apple Auth Result:", credential);
+    return credential;
   } catch (error) {
     console.error("Apple login failed", error);
     throw error;
   }
 }
+
+

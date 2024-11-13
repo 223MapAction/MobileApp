@@ -15,11 +15,19 @@
       }
     },
     "preview": {
+      "developmentClient": false,
       "android": {
         "buildType": "apk"
       }
     },
-    "production": {}
+    "production": {
+      "developmentClient": false,
+      "distribution": "store",
+      "ios": {
+          "simulator": false
+      }
+    }
+
   },
   "submit": {
     "production": {}

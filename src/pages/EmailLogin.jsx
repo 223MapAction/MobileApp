@@ -13,11 +13,17 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
+import { loginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
+import { onLogin } from "../redux/user/action";
+import { connect } from "react-redux";
+import { update_user } from "../api/user";
 import {jwtDecode} from "jwt-decode";
+import { useDispatch } from 'react-redux';
+import { setUser } from "../api/userStorage";
 
 export default function EmailLogin() {
+    const dispatch = useDispatch()
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
@@ -35,9 +41,15 @@ export default function EmailLogin() {
     });
     const handleGoogleLogin = async () => {
         try {
-          const userInfo = await loginWithGoogle();
-        //   const decodedToken = jwtDecode(userInfo.idTokenPayload);
-          setAuthState(userInfo); 
+          const response = await loginWithGoogle();
+          console.log("reponse recu",response);
+          
+          let {token, user} = response
+          let accessToken = token
+        //   const res = await update_user(response.user.id, accessToken);
+        //   console.log("User updated",res)
+          await setUser({ token, user });
+          dispatch(onLogin({ token, user}));
           navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
@@ -45,24 +57,20 @@ export default function EmailLogin() {
     };
     const handleAppleLogin = async () => {
         try {
-          // Sign in with Apple
-          const credential = await LoginWithApple();
-          // Handle the returned credential
+          const credential = await loginWithApple();
           console.log(credential);
-          Alert.alert("Login Successful!", `User ID: ${credential.user}`);
-          // Save the identity token or user information as needed
-          const { identityToken, user, email, fullName } = credential;
-          //TODO: Make request to backend with identity for further processing and auth logic!
-          // You can now use these details in your app or send them to your backend
+          Alert.alert("Succès", "Connexion réussie!");
+          navigation.navigate("DrawerNavigation")
         } catch (error) {
           if (error.code === "ERR_CANCELED") {
-            Alert.alert("Sign in cancelled", "The user canceled the sign-in flow.");
+            Alert.alert("Connexion annulée", "Vous avez annulé le processus de connexion.");
           } else {
-            Alert.alert("Error", "An error occurred while signing in.");
+            Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
             console.error(error);
           }
         }
-      };
+    };
+    
     const submit = async () => {
         try {
             await Schema.validate({ email, password });
@@ -148,7 +156,7 @@ export default function EmailLogin() {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.google}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => navigation.navigate("phone")}>
                                     <Icon name="phone" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>

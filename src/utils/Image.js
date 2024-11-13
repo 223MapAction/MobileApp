@@ -8,12 +8,13 @@ export default async function pickImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      quality: 1,
+      quality: 0.5,
     });
 
-    if (!result.cancelled) {
-      console.log("Image sélectionnée :", result.uri);
-      return result;
+    if (!result.canceled && result.assets) {
+      const imageUri = result.assets[0].uri;
+      console.log("Image sélectionnée :", imageUri);
+      return { uri: imageUri };
     }
   } else {
     console.log("Permission refusée.");

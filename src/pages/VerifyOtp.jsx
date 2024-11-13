@@ -1,9 +1,16 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import http from '../api/http';
+import { onLogin } from '../redux/user/action';
+import { useDispatch } from "react-redux";
+import { setUser } from '../api/userStorage';
 
 const VerifyOtp = () => {
-    const [phone, setPhone]  = useState('');
+    const dispatch = useDispatch();
+    const navigation = useNavigation()
+    const route = useRoute();
+    const { phone } = route.params;
     const [otp, setOtp] = useState(['', '', '', '', '', '']); 
     const inputs = useRef([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +33,12 @@ const VerifyOtp = () => {
             return;
         }
         try {
-            const response = await axios.post('https://yourapi.com/verifyOtp/', { phone, otp });
-            const { access, refresh } = response.data;
+            const response = await http.post('/verifyOtp/', { phone, otp: otpCode });
+            console.log('response', response)
+            const { access, refresh, user } = response;
+            dispatch(onLogin({token: access, user}));
+            setUser({token: access, user})
+            navigation.navigate("DrawerNavigation");
             Alert.alert('Succès', 'OTP vérifié avec succès !');
         } catch (error) {
             console.error(error);

@@ -13,7 +13,7 @@ export const reports = sqliteTable("reports", {
   longitude: text("longitude"),
   etat: text("etat"),
   slug: text("slug"),
-  user_id: integer("user_id"),
+  user_id: integer("user_id").default(null),
   category_id: integer("category_id"),
   indicateur_id: integer("indicateur_id"),
   taken_by: integer("taken_by"),
@@ -24,10 +24,4 @@ export const reports = sqliteTable("reports", {
 // Type inference for selecting reports
 export type SelectReport = typeof reports.$inferSelect;
 
-// createdAt: text("created_at")
-//     .default(sql`strftime('%Y-%m-%dT%H:%M:%fZ', 'now')`)
-//     .notNull(),
-//   updatedAt: text("updated_at")
-//     .default(sql`strftime('%Y-%m-%dT%H:%M:%fZ', 'now')`)
-//     .notNull()
-//     .$onUpdate(() => sql`strftime('%Y-%m-%dT%H:%M:%fZ', 'now')`),
+

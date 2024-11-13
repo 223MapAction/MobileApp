@@ -9,18 +9,15 @@ import {
   FlatList,
   RefreshControl,
 } from "react-native";
-// import Historique from "../../utils/Historique";
 import { connect } from "react-redux";
 import moment from "moment";
 import { getImage, ShareUrl } from "../../api/http";
-// import { getBadge } from "../../utils/location";
-// import Share from "../badge/Share";
 import { Icon } from "react-native-elements";
-// import { onGetChallenges } from "../../redux/challenges/action";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { ImageThumb } from "./Gallery";
 class Profil extends Component {
   state = {
+    user: {},
     points: 0,
     nbre_incidents: 0,
     photos: [],
@@ -30,11 +27,18 @@ class Profil extends Component {
     badge: {},
   };
   async componentDidMount() {
-    await this.fetchData(this.props.user);
+    console.log("user information", this.props);
+    
+    if (this.props.user) {
+      await this.fetchData(this.props.user);
+    }
   }
+  
   async UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log("fetching data");
-    await this.fetchData(nextProps.user);
+    if (nextProps.user) {
+      console.log("fetching data");
+      await this.fetchData(nextProps.user);
+    }
   }
   async fetchData(user = null) {
     if (null === user) return;
@@ -45,7 +49,6 @@ class Profil extends Component {
     const incidents = incs.filter((i) => i.user_id === user_id);
     const nbre_incidents = incidents.length;
     this.setState({
-    //   badge: getBadge(nbre_incidents),
       nbre_incidents: nbre_incidents,
     });
    
@@ -68,7 +71,7 @@ class Profil extends Component {
       badge,
     } = this.state;
     const { user } = this.props;
-
+    const userFullName = user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : "Utilisateur inconnu";
     return (
       <View style={styles.container}>
         {this.props.token !== null && (
@@ -92,28 +95,22 @@ class Profil extends Component {
                >
                 
                 <View style={{}}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "600",
-                      color: "#757474",
-                      alignSelf: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {user.first_name} {user.last_name}
+                  <Text style={{ fontSize: 20, fontWeight: "600", color: "#757474", alignSelf: "center", justifyContent: "center" }}>
+                    {userFullName}
                   </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      fontWeight: "300",
-                      color: "#858585",
-                      alignSelf: "center",
-                    }}
-                  >
-                    Inscrit depuis{" "}
-                    {moment(user.date_joined).format("MMMM YYYY")}
-                  </Text>
+                  {user && user.date_joined && (
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        fontWeight: "300",
+                        color: "#858585",
+                        alignSelf: "center",
+                      }}
+                    >
+                      Inscrit depuis{" "}
+                      {moment(user.date_joined).format("MMMM YYYY")}
+                    </Text>
+                  )}
                 </View>
                 <View
                   style={{
@@ -122,7 +119,7 @@ class Profil extends Component {
                 >
                   <TouchableOpacity
                     style={styles.modifier}
-                    onPress={() => this.props.navigation.push("login")}
+                    onPress={() => this.props.navigation.push("Account")}
                   >
                     <Text
                       style={{
@@ -132,41 +129,6 @@ class Profil extends Component {
                       }}
                     >
                       Modifier votre profil
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() =>
-                    //   Share.share(
-                    //     `je suis ${user.first_name} ${
-                    //       user.last_name
-                    //     }\nj'utilise Action map depuis ${moment(
-                    //       user.created_at
-                    //     ).format(
-                    //       "MMMM YYYY"
-                    //     )}\nj'ai signalé ${nbre_incidents} incidents \nJ'ai créé ${nbre_challenges_created} challenges et participé dans ${nbre_challenges} challenges\nmon statut:   ${
-                    //       user.user_type
-                    //     } \nmon badge :  ${
-                    //     //   badge.label
-                    //     }\n${ShareUrl}/api/usermap/${user.id}/`
-                    //   ) 
-                    {}
-                    }
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      ...styles.modifier,
-                    }}
-                  >
-                    <Icon size={20} name="share" color={"#38A3D0"} />
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#38A3D0",
-                        fontWeight: "bold",
-                        marginLeft: 5,
-                      }}
-                    >
-                      Partager mon statut
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -185,101 +147,36 @@ class Profil extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate("ListIncidents", {
-                        user_id: user.id,
-                      })
-                    }
-                  >
-                    <Text style={{ fontSize: 14, color: "#fff" }}>
-                      Vous avez reporté
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 35,
-                        fontWeight: "bold",
-                        color: "#56EC92",
-                      }}
-                    >
-                      {nbre_incidents}
-                    </Text>
-                    <Text style={{ fontSize: 12, color: "#fff" }}>
-                      Problèmes
-                    </Text>
-                  </TouchableOpacity>
-
-                  
-                </View>
-
-                <View
-                  style={{ flex: 1, justifyContent: "center", marginTop: 30 }}
-                >
-                  {/* <Historique
-                    user_id={user.id}
-                    profile
-                    navigation={this.props.navigation}
-                  /> */}
-
-                  <View
-                    style={{
-                      marginVertical: 10,
-                      flexDirection: "row",
-                      marginHorizontal: 20,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "rgba(0, 0, 0, 0.32)",
-                      }}
-                    >
-                      Galerie
-                    </Text>
+                  {user && user.id &&(
                     <TouchableOpacity
                       onPress={() =>
-                        this.props.navigation.push("Gallery", {
-                          photos: this.state.photos,
+                        this.props.navigation.navigate("ListIncidents", {
+                          user_id: user.id,
                         })
                       }
                     >
+                      <Text style={{ fontSize: 14, color: "#fff" }}>
+                        Vous avez reporté
+                      </Text>
                       <Text
                         style={{
-                          fontSize: 14,
-                          color: "#38A3D0",
-                          fontWeight: "500",
+                          fontSize: 35,
+                          fontWeight: "bold",
+                          color: "#56EC92",
                         }}
                       >
-                        Voir tout
+                        {nbre_incidents}
+                      </Text>
+                      <Text style={{ fontSize: 12, color: "#fff" }}>
+                        Problèmes
                       </Text>
                     </TouchableOpacity>
-                  </View>
-
-                  <FlatList
-                    data={this.state.photos.slice(0, 15)}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(_, index) => String(index)}
-                    horizontal={true}
-                    ListEmptyComponent={
-                      <View style={{ margin: 20 }}>
-                        <Text>Galerie vide</Text>
-                      </View>
-                    }
-                    renderItem={({ item }) => (
-                      <TouchableWithoutFeedback
-                        onPress={() =>
-                          this.props.navigation.push("Image", {
-                            source: getImage(item),
-                          })
-                        }
-                      >
-                        <ImageThumb source={getImage(item)} />
-                      </TouchableWithoutFeedback>
-                    )}
-                  />
+                  )}
+                  
+                  
                 </View>
+
+                
               </View>
             </View>
           </ScrollView>

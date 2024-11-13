@@ -8,6 +8,7 @@ import { View,
     Alert,
     KeyboardAvoidingView,
     Platform,
+    Modal, FlatList
  } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from "../api/auth";
@@ -16,23 +17,47 @@ import Validator from "../utils/Validator";
 import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 import http from "../api/http";
+import { Picker } from '@react-native-picker/picker';
+
+const countryCodes = [
+    { code: '+223', name: 'ML' },
+    { code: '+234', name: 'Nigeria' },
+    { code: '+225', name: 'CIV' },
+    { code: '+212', name: 'Maroc' },
+    { code: '+216', name: 'Tunisie' },
+    { code: '+221', name: 'SNG' },
+    { code: '+227', name: 'Niger' },
+    { code: '+226', name: 'BF' },
+];
+
+
+
 export default function PhoneLogin() {
     const [phone, setPhone] = React.useState('');
     const [emailFocused, setEmailFocused] = useState(false); 
     const [otpSent, setOtpSent] = useState(false);
     const navigation = useNavigation();
     const [authState, setAuthState] = useState(null);
-    
+    const [selectedCountryCode, setSelectedCountryCode] = useState('+223');
+    const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]); 
+    const [modalVisible, setModalVisible] = useState(false);
+
     const Schema = Validator.object().shape({
         email: Validator.string().email().required().label("Email"),
         password: Validator.string().min(5).required().label("Mot De Passe"),
     });
 
+    const handleCountrySelect = (country) => {
+        setSelectedCountry(country);
+        setModalVisible(false); 
+    };
+
     const handleRegister = async () => {
         try {
-          const response = await http.post('/otpRequest/', { phone });
+          const fullPhone = `${selectedCountryCode}${phone}`
+          const response = await http.post('/otpRequest/', { phone: fullPhone });
           Alert.alert('OTP envoyé !', 'Veuillez vérifier votre téléphone pour l\'OTP.');
-          navigation.navigate("otp")
+          navigation.navigate("otp",{ phone: fullPhone })
         } catch (error) {
           console.error("Erreur lors de l'inscription :", error);
           Alert.alert("Erreur", "Une erreur est survenue.");
@@ -62,23 +87,8 @@ export default function PhoneLogin() {
             console.error(error);
           }
         }
-      };
-
-      const handleSendOTP = async () => {
-        setIsLoading(true);
-        try {
-            await axios.post('https://yourapi.com/otpRequest/', { phone });
-            setOtpSent(true);
-            Alert.alert('OTP envoyé !', 'Veuillez vérifier votre téléphone pour l\'OTP.');
-        } catch (error) {
-            console.error(error);
-            Alert.alert('Erreur', 'Impossible d\'envoyer l\'OTP. Veuillez réessayer.');
-        } finally {
-            setIsLoading(false);
-        }
     };
-    
-    
+
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView
@@ -99,8 +109,12 @@ export default function PhoneLogin() {
                     </View>
                     <View style={styles.buttonContainer}>
                         <View style={styles.inputContainer}>
-                            <Icon name="phone" size={18} style={styles.icon} />
-
+                            
+                            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.countryCode}>
+                                <Text style={styles.countryCodeText}>{selectedCountry.code}</Text>
+                                <Icon name="chevron-down" size={12} color="#ccc" />
+                            </TouchableOpacity>
+                            {/* <Icon name="phone" size={18} style={styles.icon} /> */}
                             <TextInput
                                 style={[
                                     styles.input,
@@ -155,6 +169,23 @@ export default function PhoneLogin() {
                             <Text style={styles.login}>Se connecter</Text>
                             </TouchableOpacity>
                         </View>
+
+                        <Modal visible={modalVisible} transparent animationType="slide">
+                            <View style={styles.modalContainer}>
+                            <FlatList
+                                data={countryCodes}
+                                keyExtractor={(item) => item.code}
+                                renderItem={({ item }) => (
+                                <TouchableOpacity style={styles.countryItem} onPress={() => handleCountrySelect(item)}>
+                                    <Text style={styles.countryText}>{item.name} ({item.code})</Text>
+                                </TouchableOpacity>
+                                )}
+                            />
+                            <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.modalCloseText}>Fermer</Text>
+                            </TouchableOpacity>
+                            </View>
+                        </Modal>
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -274,5 +305,46 @@ const styles = StyleSheet.create({
       },
       deja:{
         color:'#2D9CDB'
-      }
+      },
+      countryCode: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 2,
+      },
+      countryCodeText: {
+        fontSize: 16,
+        color: '#ccc',
+        marginRight: 5,
+        marginLeft:20
+      },
+      modalContainer: {
+        flex: 1,
+        // backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:450,
+        width:'40%'
+      },
+      countryItem: {
+        backgroundColor: '#fff',
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        width: '80%',
+        alignItems: 'center',
+      },
+      countryText: {
+        fontSize: 16,
+        color: '#333',
+      },
+      modalCloseButton: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: '#2C9CDB',
+        borderRadius: 5,
+      },
+      modalCloseText: {
+        color: '#fff',
+        fontSize: 14,
+      },
 });

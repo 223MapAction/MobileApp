@@ -49,14 +49,14 @@ class DrawerContent extends Component {
                 icon="supervisor-account"
               />
             )} */}
-            
-            <DrawerRoute
-              {...props}
-              title="Mes Incidents Signalés"
-              icon="list-alt"
-              onPress={() => this.navigate("ListeIncident")}
-            />
-            
+            {this.props.token !== null && (
+              <DrawerRoute
+                {...props}
+                title="Mes Incidents Signalés"
+                icon="list-alt"
+                onPress={() => this.navigate("ListeIncident")}
+              />
+            )}
             <DrawerRoute
               {...props}
               title="Nous contacter"

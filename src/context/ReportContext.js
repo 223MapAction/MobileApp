@@ -21,20 +21,43 @@ export const ReportProvider = ({ children }) => {
   }, []);
 
   // Submit the report based on network state
+  // const submitReport = async (report, onUploadProgress) => {
+  //   if (isConnected) {
+  //     // Direct API submission when online
+  //     await syncReportsToServer(report, setIsSyncing, onUploadProgress);
+  //   } else {
+  //     // Save report locally if offline
+  //     const success = await saveReportLocally(report);
+  //     if (success) {
+  //       showToast(false, "Rapport enregistré localement.");
+  //     } else {
+  //       showToast(false, "Erreur lors de l’enregistrement local.");
+  //     }
+  //   }
+  // };
   const submitReport = async (report, onUploadProgress) => {
     if (isConnected) {
-      // Direct API submission when online
-      await syncReportsToServer(report, setIsSyncing, onUploadProgress);
+      // Envoi à l'API en ligne
+      try {
+        await syncReportsToServer(report, setIsSyncing, onUploadProgress);
+        return { success: true }; // Retourne un indicateur de succès
+      } catch (error) {
+        console.log("Erreur lors de la synchronisation:", error);
+        return { success: false, error }; // En cas d'erreur, retourne un indicateur d'échec
+      }
     } else {
-      // Save report locally if offline
+      // Sauvegarde locale en mode hors-ligne
       const success = await saveReportLocally(report);
       if (success) {
         showToast(false, "Rapport enregistré localement.");
+        return { success: true };
       } else {
         showToast(false, "Erreur lors de l’enregistrement local.");
+        return { success: false };
       }
     }
   };
+  
 
   return (
     <ReportContext.Provider value={{ submitReport, isSyncing }}>

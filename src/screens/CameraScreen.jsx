@@ -3,12 +3,13 @@ import {
   View,
   StyleSheet,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { ReportContext } from "../context/ReportContext";
-import IncidentForm from "./newScreen/IncidentForm"; 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import IncidentForm from "./newScreen/IncidentForm";
+
 export default function App() {
   const { isSyncing, submitReport } = useContext(ReportContext);
   const navigation = useNavigation();
@@ -24,7 +25,7 @@ export default function App() {
     etat: "declared",
   });
 
-  const [showForm, setShowForm] = useState(false);
+  const [hasCapturedPhoto, setHasCapturedPhoto] = useState(false);
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -45,19 +46,27 @@ export default function App() {
       setReport((prevReport) => ({ ...prevReport, photo: imageUri }));
       console.log("Image URI capturée:", imageUri);
 
+      setHasCapturedPhoto(true);
       navigation.navigate("IncidentForm", { report: { ...report, photo: imageUri } });
+    }
+    else{
+      navigation.goBack();
     }
   };
 
   useEffect(() => {
-    pickImage(); 
-  }, []); 
+    pickImage();
+  }, []);
 
-  return (
-    <View style={styles.container}>
-        <ActivityIndicator size="large" color="#ff6347" />
-    </View>
+  useFocusEffect(
+    React.useCallback(() => {
+      if (hasCapturedPhoto) {
+        navigation.navigate("DrawerNavigation");
+      }
+    }, [hasCapturedPhoto, navigation])
   );
+
+  return null;
 }
 
 const styles = StyleSheet.create({

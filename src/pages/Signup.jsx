@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { register, registerEmail } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-import { LoginWithApple, loginWithGoogle } from "../utils/AuthConfig";
+import { loginWithApple, loginWithGoogle, registerWithGoogle } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as Linking from "expo-linking";
 import { onLogin } from "../redux/user/action";
@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from "../api/userStorage";
 
 function SignUp() {
+    const dispatch = useDispatch()
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [emailFocused, setEmailFocused] = useState(false); 
@@ -56,8 +57,12 @@ function SignUp() {
 
     const handleGoogleLogin = async () => {
         try {
-          const userInfo = await loginWithGoogle();
-          setAuthState(userInfo);
+          const response = await registerWithGoogle();
+          console.log(response)
+          let {token, user} = response
+          let accessToken = token.access
+          await setUser({ token: accessToken, user });
+          dispatch(onLogin({token: accessToken, user}));
           navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
@@ -65,20 +70,19 @@ function SignUp() {
     };
     const handleAppleLogin = async () => {
         try {
-          const credential = await LoginWithApple();
+          const credential = await loginWithApple();
           console.log(credential);
-          Alert.alert("Login Successful!", `User ID: ${credential.user}`);
-          const { identityToken, user, email, fullName } = credential;
-          
+          Alert.alert("Succès", "Connexion réussie!");
+          navigation.navigate("DrawerNavigation")
         } catch (error) {
           if (error.code === "ERR_CANCELED") {
-            Alert.alert("Sign in cancelled", "The user canceled the sign-in flow.");
+            Alert.alert("Connexion annulée", "Vous avez annulé le processus de connexion.");
           } else {
-            Alert.alert("Error", "An error occurred while signing in.");
+            Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
             console.error(error);
           }
         }
-      };
+    };
       const handleRegister = async () => {
         try {
           const response = await http.post('/registerCitizen/', { email });

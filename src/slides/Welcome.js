@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import Storage, { logout, setUser } from "../api/userStorage";
 import { ActivityIndicator } from "react-native";
 import { verify_token } from "../api/auth";
-import JwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { read_user } from "../api/user";
 import { onGetCommunaute } from "../redux/communautes/action";
 
@@ -24,7 +24,7 @@ class Welcome extends Component {
     if (data.token) {
       try {
         await verify_token(data.token);
-        let { user_id } = JwtDecode(data.token);
+        let { user_id } = jwtDecode(data.token);
 
         const user = await read_user(user_id);
         this.setState({ token: data.token });

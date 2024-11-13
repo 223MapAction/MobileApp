@@ -23,6 +23,7 @@ import IncidentForm from "../screens/newScreen/IncidentForm";
 import SignUp from "../pages/Signup";
 import VerifyOtp from "../pages/VerifyOtp";
 import PasswordStep from "../pages/Password";
+import Account from "../screens/Account";
 
 
 const Stack = createStackNavigator();
@@ -172,7 +173,14 @@ const StackNavigation = () => {
           options={{
             title: "Nous contacter",
           }}
-      />
+        />
+        <Stack.Screen
+          name="Account"
+          component={Account}
+          options={{
+            title: "Modifier mon profile",
+          }}
+        />
       {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
       {/* <Stack.Screen name="Inscription" component={Inscription} options={{ headerShown: true }}/> */}
