@@ -26,7 +26,7 @@ export default function App() {
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Migration error: {error.message}</Text>
+        <Text>Migration erreur: {error.message}</Text>
       </View>
     );
   }
@@ -34,7 +34,7 @@ export default function App() {
   if (!success) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Migration is in progress...</Text>
+        <Text>Migration en cours...</Text>
       </View>
     );
   }

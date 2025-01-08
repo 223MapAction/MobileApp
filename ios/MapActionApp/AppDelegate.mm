@@ -15,7 +15,15 @@
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
-
+- (BOOL) application: (UIApplication *)application
+             openURL: (NSURL *)url
+             options: (NSDictionary<UIApplicationOpenURLOptionsKey, id> *) options
+{
+  if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
+    return YES;
+  }
+return [RCTLinkingManager application:application openURL:url options:options];
+}
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
   return [self bundleURL];
@@ -31,9 +39,9 @@
 }
 
 // Linking API
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
-}
+//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
+//}
 
 // Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {

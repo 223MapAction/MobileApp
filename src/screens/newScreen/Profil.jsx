@@ -4,23 +4,20 @@ import {
   Text,
   StyleSheet,
   Image,
+  Alert,
   TouchableOpacity,
   ScrollView,
   FlatList,
   RefreshControl,
 } from "react-native";
-// import Historique from "../../utils/Historique";
 import { connect } from "react-redux";
 import moment from "moment";
-import { getImage, ShareUrl } from "../../api/http";
-// import { getBadge } from "../../utils/location";
-// import Share from "../badge/Share";
 import { Icon } from "react-native-elements";
-// import { onGetChallenges } from "../../redux/challenges/action";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { ImageThumb } from "./Gallery";
+import http from "../../api/http";
+
 class Profil extends Component {
   state = {
+    user: {},
     points: 0,
     nbre_incidents: 0,
     photos: [],
@@ -30,22 +27,72 @@ class Profil extends Component {
     badge: {},
   };
   async componentDidMount() {
-    await this.fetchData(this.props.user);
+    console.log("user information", this.props);
+    
+    if (this.props.user) {
+      await this.fetchData(this.props.user);
+    }
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.fetchData(this.props.user);
+    }
+  }
+  
   async UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log("fetching data");
-    await this.fetchData(nextProps.user);
+    if (nextProps.user) {
+      console.log("fetching data");
+      await this.fetchData(nextProps.user);
+    }
   }
+  handleDeleteAccount = async () => {
+    console.log('testt', this.props);
+    
+    const { user, token, navigation } = this.props;
+  
+    if (!user || !user.id || !token) {
+      Alert.alert("Erreur", "Impossible de supprimer le compte.");
+      return;
+    }
+  
+    try {
+      const response = await http.delete(`/user/${user.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Statut de la réponse :", response);
+      if (response.status === 204) {
+        Alert.alert(
+          "Compte supprimé",
+          "Votre compte a été supprimé avec succès.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.replace("Login");
+              },
+            },
+          ]
+        );
+      } else {
+        Alert.alert("Erreur", "Une erreur est survenue lors de la suppression.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du compte :", error);
+      Alert.alert("Erreur", "Impossible de contacter le serveur.");
+    }
+  };
+  
   async fetchData(user = null) {
     if (null === user) return;
     const { id: user_id } = user;
     this.setState({ loading: true });
     let { incidents: incs, challenges } = this.props;
-
-    const incidents = incs.filter((i) => i.user_id === user_id);
-    const nbre_incidents = incidents.length;
+    console.log('les props', incs)
+    const nbre_incidents = incs.length;
     this.setState({
-    //   badge: getBadge(nbre_incidents),
       nbre_incidents: nbre_incidents,
     });
    
@@ -54,7 +101,7 @@ class Profil extends Component {
       points: points,
       loading: false,
       photos: [
-        ...incidents.map((i) => i.photo),
+        ...incs.map((i) => i.photo),
       ],
     });
   }
@@ -68,7 +115,7 @@ class Profil extends Component {
       badge,
     } = this.state;
     const { user } = this.props;
-
+    const userFullName = user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : "Utilisateur inconnu";
     return (
       <View style={styles.container}>
         {this.props.token !== null && (
@@ -92,28 +139,22 @@ class Profil extends Component {
                >
                 
                 <View style={{}}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontWeight: "600",
-                      color: "#757474",
-                      alignSelf: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {user.first_name} {user.last_name}
+                  <Text style={{ fontSize: 20, fontWeight: "600", color: "#757474", alignSelf: "center", justifyContent: "center" }}>
+                    {userFullName}
                   </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      fontWeight: "300",
-                      color: "#858585",
-                      alignSelf: "center",
-                    }}
-                  >
-                    Inscrit depuis{" "}
-                    {moment(user.date_joined).format("MMMM YYYY")}
-                  </Text>
+                  {user && user.date_joined && (
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        fontWeight: "300",
+                        color: "#858585",
+                        alignSelf: "center",
+                      }}
+                    >
+                      Inscrit depuis{" "}
+                      {moment(user.date_joined).format("MMMM YYYY")}
+                    </Text>
+                  )}
                 </View>
                 <View
                   style={{
@@ -122,7 +163,7 @@ class Profil extends Component {
                 >
                   <TouchableOpacity
                     style={styles.modifier}
-                    onPress={() => this.props.navigation.push("login")}
+                    onPress={() => this.props.navigation.push("Account")}
                   >
                     <Text
                       style={{
@@ -134,39 +175,26 @@ class Profil extends Component {
                       Modifier votre profil
                     </Text>
                   </TouchableOpacity>
+
                   <TouchableOpacity
-                    onPress={() =>
-                    //   Share.share(
-                    //     `je suis ${user.first_name} ${
-                    //       user.last_name
-                    //     }\nj'utilise Action map depuis ${moment(
-                    //       user.created_at
-                    //     ).format(
-                    //       "MMMM YYYY"
-                    //     )}\nj'ai signalé ${nbre_incidents} incidents \nJ'ai créé ${nbre_challenges_created} challenges et participé dans ${nbre_challenges} challenges\nmon statut:   ${
-                    //       user.user_type
-                    //     } \nmon badge :  ${
-                    //     //   badge.label
-                    //     }\n${ShareUrl}/api/usermap/${user.id}/`
-                    //   ) 
-                    {}
-                    }
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      ...styles.modifier,
+                    style={styles.delete}
+                    onPress={() => {
+                      Alert.alert(
+                        "Confirmer la suppression",
+                        "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+                        [
+                          { text: "Annuler", style: "cancel" },
+                          {
+                            text: "Supprimer",
+                            style: "destructive",
+                            onPress: () => this.handleDeleteAccount(),
+                          },
+                        ]
+                      );
                     }}
                   >
-                    <Icon size={20} name="share" color={"#38A3D0"} />
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: "#38A3D0",
-                        fontWeight: "bold",
-                        marginLeft: 5,
-                      }}
-                    >
-                      Partager mon statut
+                    <Text style={{ fontSize: 12, color: "#FF4C4C", fontWeight: "bold" }}>
+                      Supprimer mon compte
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -185,101 +213,36 @@ class Profil extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.props.navigation.navigate("ListIncidents", {
-                        user_id: user.id,
-                      })
-                    }
-                  >
-                    <Text style={{ fontSize: 14, color: "#fff" }}>
-                      Vous avez reporté
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 35,
-                        fontWeight: "bold",
-                        color: "#56EC92",
-                      }}
-                    >
-                      {nbre_incidents}
-                    </Text>
-                    <Text style={{ fontSize: 12, color: "#fff" }}>
-                      Problèmes
-                    </Text>
-                  </TouchableOpacity>
-
-                  
-                </View>
-
-                <View
-                  style={{ flex: 1, justifyContent: "center", marginTop: 30 }}
-                >
-                  {/* <Historique
-                    user_id={user.id}
-                    profile
-                    navigation={this.props.navigation}
-                  /> */}
-
-                  <View
-                    style={{
-                      marginVertical: 10,
-                      flexDirection: "row",
-                      marginHorizontal: 20,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "rgba(0, 0, 0, 0.32)",
-                      }}
-                    >
-                      Galerie
-                    </Text>
+                  {user && user.id &&(
                     <TouchableOpacity
                       onPress={() =>
-                        this.props.navigation.push("Gallery", {
-                          photos: this.state.photos,
+                        this.props.navigation.navigate("ListeIncident", {
+                          user_id: user.id,
                         })
                       }
                     >
+                      <Text style={{ fontSize: 14, color: "#fff" }}>
+                        Vous avez reporté
+                      </Text>
                       <Text
                         style={{
-                          fontSize: 14,
-                          color: "#38A3D0",
-                          fontWeight: "500",
+                          fontSize: 35,
+                          fontWeight: "bold",
+                          color: "#56EC92",
                         }}
                       >
-                        Voir tout
+                        {nbre_incidents}
+                      </Text>
+                      <Text style={{ fontSize: 12, color: "#fff" }}>
+                        Problèmes
                       </Text>
                     </TouchableOpacity>
-                  </View>
-
-                  <FlatList
-                    data={this.state.photos.slice(0, 15)}
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(_, index) => String(index)}
-                    horizontal={true}
-                    ListEmptyComponent={
-                      <View style={{ margin: 20 }}>
-                        <Text>Galerie vide</Text>
-                      </View>
-                    }
-                    renderItem={({ item }) => (
-                      <TouchableWithoutFeedback
-                        onPress={() =>
-                          this.props.navigation.push("Image", {
-                            source: getImage(item),
-                          })
-                        }
-                      >
-                        <ImageThumb source={getImage(item)} />
-                      </TouchableWithoutFeedback>
-                    )}
-                  />
+                  )}
+                  
+                  
                 </View>
+
+                
               </View>
             </View>
           </ScrollView>
@@ -405,6 +368,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modifier: {
+    marginTop: 10,
+    borderRadius: 15,
+    backgroundColor: "#fff",
+    width: 150,
+    height: 38,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 2.5,
+    shadowColor: "#ccc",
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    elevation: 5,
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+  },
+  delete: {
     marginTop: 10,
     borderRadius: 15,
     backgroundColor: "#fff",

@@ -17,19 +17,46 @@ import { onGetUsers } from "../../redux/user/action";
 import Constants from "../../utils/Constants";
 import _ from "lodash";
 import { Avatar } from "react-native-elements";
+import { jwtDecode } from "jwt-decode";
 
 class Dashboard extends Component {
   state = {
     refreshing: false,
   };
-  async componentDidMount() {
-    await this.loadData();
-    await this.myLoadData();
+  componentDidMount() {
+    // if (this.props.token) {
+      this.loadData();
+    // }
+    // this.intervalId = setInterval(() => {
+    //   if (this.props.token) {
+    //     this.myLoadData();
+    //   }
+    // }, 30000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.token !== this.props.token && this.props.token) {
+      this.props.onGetIncidents([]);
+      this.loadData();
+    }
   }
   async myLoadData() {
     this.setState({ refreshing: true });
     try {
-      const userId = this.props.token; 
+      const token = this.props.token;
+      console.log('le token', token)
+      if (!token || typeof token !== "string") {
+        console.log("Token invalide ou manquant :", token);
+        return;
+      }
+      
+      
+      const decodedToken = jwtDecode(token); 
+      const userId = decodedToken.user_id; 
+      console.log("ID utilisateur décodé:", userId);
+      
       if (this.props.incidents.length === 0) {
         try {
           const incidents = await my_list_incident(userId); 
@@ -52,28 +79,39 @@ class Dashboard extends Component {
     this.setState({ refreshing: false });
   }
 
-  
+  async fetchAllData() {
+    if (this.props.incidents.length === 0) {
+      try {
+        const incidents = await list_incident();
+        this.props.onGetIncidents(incidents);
+      } catch (ex) {
+        console.log("Error Incident", ex);
+      }
+    }
+    if (this.props.users.length === 0) {
+      try {
+        const users = await list_user();
+        this.props.onGetUsers(users);
+      } catch (ex) {
+        console.log("Error User", ex);
+      }
+    }
+  }
 
   async loadData() {
     this.setState({ refreshing: true });
+  
     try {
-      if (this.props.incidents.length === 0) {
-        try {
-          const incidents = await list_incident();
-          this.props.onGetIncidents(incidents);
-        } catch (ex) {
-          console.log("Error Incident", ex);
-        }
+      if (this.props.token) {
+        await this.myLoadData();
+      } else {
+        this.props.onGetIncidents([])
+        await this.fetchAllData();
       }
-      if (this.props.users.length === 0) {
-        try {
-          const users = await list_user();
-          this.props.onGetUsers(users);
-        } catch (ex) {
-          console.log("Error Incident", ex);
-        }
-      }
-    } catch (ex) {}
+    } catch (ex) {
+      console.error("Erreur lors de la récupération des données", ex);
+    }
+  
     this.setState({ refreshing: false });
   }
   getUsers = () => {
@@ -91,21 +129,20 @@ class Dashboard extends Component {
     let users = [];
     const incidents = this.props.incidents;
     incidents.map((i) => {
-      if (
-        users.findIndex((user) => user.id === i.user_id && i.user_id) === -1
-      ) {
+      if (users.findIndex((user) => user && user.id === i.user_id && i.user_id) === -1) {
         users.push(i.user);
       }
     });
     return users
-    .filter((user) => user && user.id)
-    .map((user) => {
-      const obj = { ...user };
-      obj.incidents = incidents.filter((i) => i.user_id === user.id);
-      obj.nbIncidents = obj.incidents.length;
-      return obj;
-    });
+      .filter((user) => user && user.id)
+      .map((user) => {
+        const obj = { ...user };
+        obj.incidents = incidents.filter((i) => i.user_id === user.id);
+        obj.nbIncidents = obj.incidents.length;
+        return obj;
+      });
   };
+  
   getNumberIncidentsResolved() {
     return this.props.incidents.filter(
       (i) => i.etat === Constants.incidents.state.resolved
@@ -133,7 +170,13 @@ class Dashboard extends Component {
         >
           <View style={styles.text}>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("ListeIncident")}
+              onPress={() => {
+                if (this.props.token) {
+                  this.props.navigation.navigate("ListeIncident");
+                } else {
+                  alert("Veuillez vous connecter pour voir la liste des incidents que vous avez reporté.");
+                }
+              }}
               style={{
                 backgroundColor: "#38A3D0",
                 borderRadius: 15,
@@ -174,80 +217,6 @@ class Dashboard extends Component {
               </View>
             </TouchableOpacity>
 
-            <View style={{ flex: 1, justifyContent: "center", marginTop: 30 }}>
-              {this.props.token !== null && (
-                <View>
-                  <View
-                    style={{
-                      marginTop: 20,
-                      flexDirection: "row",
-                      marginHorizontal: 20,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "bold",
-                        color: "rgba(0, 0, 0, 0.32)",
-                      }}
-                    >
-                      Communauté
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.props.navigation.navigate("Communaute")
-                      }
-                    >
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: "#38A3D0",
-                          fontWeight: "500",
-                        }}
-                      >
-                        Voir tout
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <FlatList
-                    data={usersData}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal={true}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                      <View
-                        style={{
-                          height: 150,
-                          marginVertical: 15,
-                          marginHorizontal: 10,
-                        }}
-                      >
-                        <Avatar
-                          rounded
-                          size={70}
-                          source={getImage(item.avatar, "f")}
-                        />
-                        <Text
-                          numberOfLines={2}
-                          style={{
-                            fontSize: 12,
-                            width: 70,
-                            textAlign: "center",
-                            marginTop: 5,
-                          }}
-                        >
-                          {item.first_name} {item.last_name}
-                        </Text>
-                      </View>
-                    )}
-                  />
-                </View>
-              )}
-
-              
-            </View>
           </View>
         </ScrollView>
       </View>

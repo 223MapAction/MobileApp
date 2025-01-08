@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, StyleSheet, View, Image, Button, TouchableOpacity, TextInput } from 'react-native';
+import { Text, StyleSheet, View, Image, Button, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import moment from 'moment';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Progress from 'react-native-progress';
 import { getImage } from '../../api/http';
-
+const { width } = Dimensions.get('window');
 const DataJourney = ({ route, navigation }) => {
     const { incident } = route.params;
     console.log(incident); 
@@ -38,7 +38,7 @@ const DataJourney = ({ route, navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-              source={getImage(incident.photo, true)} 
+              source={getImage(incident.photo, true) || {uri: incident.photo}} 
               style={styles.incidentImage}
             />
             <View style={styles.detailsContainer}>
@@ -58,7 +58,7 @@ const DataJourney = ({ route, navigation }) => {
               <Progress.Bar
                 testID="progress-bar"
                 progress={progressDetails.progress}
-                width={340}
+                width={width * 0.85}
                 color={progressDetails.color}
                 unfilledColor="#ADD8E6" 
                 borderWidth={0}

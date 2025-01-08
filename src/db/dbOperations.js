@@ -1,17 +1,26 @@
 import * as SQLite from "expo-sqlite";
 import { db } from "./client";
 import { reports } from "./schema";
+import { saveFileWithUniqueName } from "../utils/fileUtils";
 
 // Save the report locally in SQLite
 export const saveReportLocally = async (report) => {
+  // Save media files to local storage and get paths
+  const videoPath = report.video
+    ? await saveFileWithUniqueName(report.video, "video")
+    : null;
+  const audioPath = report.audio
+    ? await saveFileWithUniqueName(report.audio, "audio")
+    : null;
+
   try {
     await db.insert(reports).values({
       title: report.title,
       zone: report.zone,
       description: report.description,
       photo: report.photo,
-      video: report.video,
-      audio: report.audio,
+      video: videoPath, // Sav  e path instead of binary data
+      audio: audioPath,
       latitude: report.latitude,
       longitude: report.longitude,
       etat: report.etat,
@@ -54,5 +63,16 @@ export const getPendingReports = async () => {
   } catch (error) {
     console.error("Error fetching pending reports:", error);
     throw error; // Rethrow error for handling elsewhere
+  }
+};
+
+// Function to get all reports from the local database
+export const getAllReports = async () => {
+  try {
+    const allReports = await db.select().from(reports).all(); // Fetch all records from the reports table
+    return allReports;
+  } catch (error) {
+    console.error("Error fetching all reports:", error);
+    throw error;
   }
 };

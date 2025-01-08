@@ -1,10 +1,12 @@
 // 
 import constants from "./constantes";
 
-export function onLogin(user) {
-  return { type: constants.LOGIN, user };
+export function onLogin(payload) {
+  return {
+    type: constants.LOGIN,
+    payload,
+  };
 }
-
 export function onGetUsers(users) {
   return { type: constants.LIST, users };
 }

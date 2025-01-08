@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { View,
     Text,
     StyleSheet,
@@ -10,68 +10,89 @@ import { View,
     Platform,
  } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { login } from "../api/auth";
+import { register, registerEmail } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-import { loginWithApple, loginWithGoogle, onFinishLogin, onFinishRegistration } from "../utils/AuthConfig";
+import { loginWithApple, registerWithGoogle, onFinishLogin, onFinishRegistration } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
+import * as Linking from "expo-linking";
 import { onLogin } from "../redux/user/action";
 import { connect } from "react-redux";
 import { update_user } from "../api/user";
-import {jwtDecode} from "jwt-decode";
+import http from "../api/http";
 import { useDispatch } from 'react-redux';
 import { setUser } from "../api/userStorage";
 
-export default function EmailLogin() {
+function SignUp() {
     const dispatch = useDispatch()
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
     const [emailFocused, setEmailFocused] = useState(false); 
-    const [passwordFocused, setPasswordFocused] = useState(false); 
     const navigation = useNavigation();
     const [authState, setAuthState] = useState(null);
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible); 
+    const [message, setMessage] = useState("");
+
+    const verifyEmail = async (token) => {
+        try {
+          const response = await http.get(`/verify-email/${token}`);
+          Alert.alert("Succès", response.message);
+          navigation.navigate("passwordStep");
+        } catch (error) {
+          Alert.alert("Erreur", "Lien de vérification invalide ou expiré.");
+        }
     };
 
-    const Schema = Validator.object().shape({
-        email: Validator.string().email().required().label("Email"),
-        password: Validator.string().min(5).required().label("Mot De Passe"),
-    });
+    const handleDeepLink = ({ url }) => {
+        const token = url.split("/").pop();
+        verifyEmail(token);
+    };
+
+    useEffect(() => {
+        const subscription = Linking.addEventListener("url", handleDeepLink);
+    
+        return () => {
+            subscription?.remove?.();
+        };
+    }, []);
+
     const handleGoogleLogin = async () => {
         try {
-          const response = await loginWithGoogle();
-          console.log("reponse recu",response);
-          
+          const response = await registerWithGoogle();
+          console.log(response)
           let {token, user} = response
-          let accessToken = token
-          const res = await update_user(response.user.id, accessToken);
-          console.log("User updated",res)
-          await setUser({ token, user:res });
-          dispatch(onLogin({ token, user:res}));
+          let accessToken = token.access
+          await setUser({ token: accessToken, user });
+          dispatch(onLogin({token: accessToken, user}));
           navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
         }
     };
-    
-    
-    const submit = async () => {
+    const handleAppleLogin = async () => {
         try {
-            await Schema.validate({ email, password });
-            const user = { email, password };
-            const response = await login(user);
-            if (response.status === 200) {
-                Alert.alert("Connexion réussie", "Vous êtes maintenant connecté.");
-                navigation.navigate("DrawerNavigation");
-            } else {
-                Alert.alert("Erreur", "Connexion échouée.");
-            }
+          const credential = await loginWithApple();
+          console.log(credential);
+          Alert.alert("Succès", "Connexion réussie!");
+          navigation.navigate("DrawerNavigation")
         } catch (error) {
-            Alert.alert("Erreur", error.message || "Une erreur est survenue lors de la connexion.");
+          if (error.code === "ERR_CANCELED") {
+            Alert.alert("Connexion annulée", "Vous avez annulé le processus de connexion.");
+          } else {
+            Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
+            console.error(error);
+          }
         }
-    }
+    };
+      
+    const handleRegister = async () => {
+      try {
+        const response = await http.post('/registerCitizen/', { email });
+        setMessage(response.message);
+      } catch (error) {
+        console.error("Erreur lors de l'inscription :", error);
+        setMessage("Une erreur s'est produite. Veuillez réessayer.");
+      }
+    };
     
     return (
         <View style={styles.container}>
@@ -88,7 +109,7 @@ export default function EmailLogin() {
                         <View style={styles.rectangle}></View>
                     </View>
                     <View style={styles.loginview}>
-                        <Text style={styles.title}>Se connecter</Text>
+                        <Text style={styles.title}>S'inscrire</Text>
                         <View style={styles.line}></View>
                     </View>
                     <View style={styles.buttonContainer}>
@@ -106,37 +127,19 @@ export default function EmailLogin() {
                             />
                             <Icon name="envelope" size={18} style={styles.icon} />
                         </View>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                style={[
-                                    styles.input,
-                                    passwordFocused ? styles.inputFocused : null
-                                ]}
-                                onChangeText={setPassword}
-                                value={password}
-                                placeholder={passwordFocused ? "" : "Mot de passe"}
-                                secureTextEntry={!isPasswordVisible} 
-                                onFocus={() => setPasswordFocused(true)}
-                                onBlur={() => setPasswordFocused(false)}
-                            />
-                            <TouchableOpacity onPress={togglePasswordVisibility}>
-                                <Icon
-                                    name={isPasswordVisible ? "eye" : "eye-slash"} 
-                                    size={18}
-                                    style={styles.icon}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.button} testID="login-button" onPress={submit}>
-                            <Text style={styles.buttonText}>Se connecter</Text>
+
+                        <TouchableOpacity style={styles.button} testID="login-button" onPress={handleRegister}>
+                            <Text style={styles.buttonText}>Suivant</Text>
                         </TouchableOpacity>
+                        {message ? <Text style={styles.message}>{message}</Text> : null}
+
                         <View style={styles.or}>
                             <View style={styles.tiret} />
-                            <Text style={styles.orText}>  Ou se connecter avec  </Text>
+                            <Text style={styles.orText}>  Ou s'inscrire avec  </Text>
                             <View style={styles.tiret}/>
                         </View>
                         <View style={styles.socialContainer}>
-                            <View>
+                            <View >
                                 <TouchableOpacity onPress={handleGoogleLogin} style={styles.google}>
                                     <Icon name="google" size={18} color='#fff' />
                                 </TouchableOpacity>
@@ -161,9 +164,9 @@ export default function EmailLogin() {
                             )}
                         </View>
                         <View style={styles.connecte}>
-                            <Text style={styles.deja}>Vous n'avez pas de compte? </Text>
-                            <TouchableOpacity onPress={() => navigation.navigate("Inscription")}>
-                            <Text style={styles.login}>S'inscrire</Text>
+                            <Text style={styles.deja}>Vous avez déjà un compte? </Text>
+                            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                            <Text style={styles.login}>Se connecter</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -193,7 +196,8 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 20,
         alignItems: "center",
-        marginVertical: 10,
+        marginVertical: 15,
+        marginTop:30
     },
     buttonText: {
         color: "white",
@@ -285,3 +289,4 @@ const styles = StyleSheet.create({
         color:'#2D9CDB'
       }
 });
+export default connect(null, { onLogin })(SignUp);
