@@ -76,6 +76,7 @@ class Account extends Component {
       data.is_active = true;
       console.log("user", this.props)
       const res = await update_user(this.props.user.id, data);
+      console.log("user modifié",res)
       Alert.alert("", "données modifiées");
       this.props.onLogin({
         user: { ...this.props.user, ...res },

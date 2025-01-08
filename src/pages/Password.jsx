@@ -14,6 +14,7 @@ import { login } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
 import http from "../api/http";
+
 export default function PasswordStep() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

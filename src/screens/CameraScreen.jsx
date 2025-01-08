@@ -31,7 +31,10 @@ export default function App() {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      Alert.alert("Permission refusée", "Vous devez accorder l'accès à la caméra pour utiliser cette fonctionnalité.");
+      Alert.alert(
+        "Accès à la caméra requis",
+        "Map Action nécessite l'accès à votre caméra pour capturer des images des incidents et les inclure dans les rapports soumis aux autorités. Veuillez autoriser l'accès dans les paramètres."
+      );
       return;
     }
 

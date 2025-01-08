@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { register, registerEmail } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-import { loginWithApple, loginWithGoogle, registerWithGoogle } from "../utils/AuthConfig";
+import { loginWithApple, registerWithGoogle, onFinishLogin, onFinishRegistration } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as Linking from "expo-linking";
 import { onLogin } from "../redux/user/action";
@@ -83,15 +83,16 @@ function SignUp() {
           }
         }
     };
-      const handleRegister = async () => {
-        try {
-          const response = await http.post('/registerCitizen/', { email });
-          setMessage(response.message);
-        } catch (error) {
-          console.error("Erreur lors de l'inscription :", error);
-          setMessage("Une erreur s'est produite. Veuillez réessayer.");
-        }
-      };
+      
+    const handleRegister = async () => {
+      try {
+        const response = await http.post('/registerCitizen/', { email });
+        setMessage(response.message);
+      } catch (error) {
+        console.error("Erreur lors de l'inscription :", error);
+        setMessage("Une erreur s'est produite. Veuillez réessayer.");
+      }
+    };
     
     return (
         <View style={styles.container}>
@@ -138,27 +139,27 @@ function SignUp() {
                             <View style={styles.tiret}/>
                         </View>
                         <View style={styles.socialContainer}>
-                            <View style={styles.google}>
-                                <TouchableOpacity onPress={handleGoogleLogin}>
+                            <View >
+                                <TouchableOpacity onPress={handleGoogleLogin} style={styles.google}>
                                     <Icon name="google" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.google}>
-                                <TouchableOpacity onPress={() => navigation.navigate("phone")}>
+                            <View >
+                                <TouchableOpacity onPress={() => navigation.navigate("phone")} style={styles.google}>
                                     <Icon name="phone" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
                             {Platform.OS === "ios" && (
                                 <AppleAuthentication.AppleAuthenticationButton
-                                buttonType={
-                                    AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-                                }
-                                buttonStyle={
-                                    AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-                                }
-                                cornerRadius={5}
-                                style={styles.google}
-                                onPress={handleAppleLogin}
+                                    buttonType={
+                                        AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+                                    }
+                                    buttonStyle={
+                                        AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                                    }
+                                    cornerRadius={5}
+                                    style={styles.google}
+                                    onPress={() => loginWithApple( dispatch, navigation, async (userInfo) => {})}
                                 />
                             )}
                         </View>

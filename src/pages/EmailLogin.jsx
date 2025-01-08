@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { login } from "../api/auth";
 import { useNavigation } from '@react-navigation/native';
 import Validator from "../utils/Validator";
-import { loginWithApple, loginWithGoogle } from "../utils/AuthConfig";
+import { loginWithApple, loginWithGoogle, onFinishLogin, onFinishRegistration } from "../utils/AuthConfig";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { onLogin } from "../redux/user/action";
 import { connect } from "react-redux";
@@ -46,30 +46,16 @@ export default function EmailLogin() {
           
           let {token, user} = response
           let accessToken = token
-        //   const res = await update_user(response.user.id, accessToken);
-        //   console.log("User updated",res)
-          await setUser({ token, user });
-          dispatch(onLogin({ token, user}));
+          const res = await update_user(response.user.id, accessToken);
+          console.log("User updated",res)
+          await setUser({ token, user:res });
+          dispatch(onLogin({ token, user:res}));
           navigation.navigate("DrawerNavigation");
         } catch (error) {
           console.error("Failed to log in", error);
         }
     };
-    const handleAppleLogin = async () => {
-        try {
-          const credential = await loginWithApple();
-          console.log(credential);
-          Alert.alert("Succès", "Connexion réussie!");
-          navigation.navigate("DrawerNavigation")
-        } catch (error) {
-          if (error.code === "ERR_CANCELED") {
-            Alert.alert("Connexion annulée", "Vous avez annulé le processus de connexion.");
-          } else {
-            Alert.alert("Erreur", "Une erreur est survenue lors de la connexion.");
-            console.error(error);
-          }
-        }
-    };
+    
     
     const submit = async () => {
         try {
@@ -150,27 +136,27 @@ export default function EmailLogin() {
                             <View style={styles.tiret}/>
                         </View>
                         <View style={styles.socialContainer}>
-                            <View style={styles.google}>
-                                <TouchableOpacity onPress={handleGoogleLogin}>
+                            <View>
+                                <TouchableOpacity onPress={handleGoogleLogin} style={styles.google}>
                                     <Icon name="google" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.google}>
-                                <TouchableOpacity onPress={() => navigation.navigate("phone")}>
+                            <View >
+                                <TouchableOpacity onPress={() => navigation.navigate("phone")} style={styles.google}>
                                     <Icon name="phone" size={18} color='#fff' />
                                 </TouchableOpacity>
                             </View>
                             {Platform.OS === "ios" && (
                                 <AppleAuthentication.AppleAuthenticationButton
-                                buttonType={
-                                    AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-                                }
-                                buttonStyle={
-                                    AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-                                }
-                                cornerRadius={5}
-                                style={styles.google}
-                                onPress={handleAppleLogin}
+                                    buttonType={
+                                        AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+                                    }
+                                    buttonStyle={
+                                        AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                                    }
+                                    cornerRadius={5}
+                                    style={styles.google}
+                                    onPress={() => loginWithApple( dispatch, navigation, async (userInfo) => {})}
                                 />
                             )}
                         </View>

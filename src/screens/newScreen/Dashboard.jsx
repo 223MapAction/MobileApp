@@ -27,17 +27,18 @@ class Dashboard extends Component {
     // if (this.props.token) {
       this.loadData();
     // }
-    this.intervalId = setInterval(() => {
-      if (this.props.token) {
-        this.myLoadData();
-      }
-    }, 30000);
+    // this.intervalId = setInterval(() => {
+    //   if (this.props.token) {
+    //     this.myLoadData();
+    //   }
+    // }, 30000);
   }
   componentWillUnmount() {
     clearInterval(this.intervalId);
   }
   componentDidUpdate(prevProps) {
     if (prevProps.token !== this.props.token && this.props.token) {
+      this.props.onGetIncidents([]);
       this.loadData();
     }
   }
@@ -104,6 +105,7 @@ class Dashboard extends Component {
       if (this.props.token) {
         await this.myLoadData();
       } else {
+        this.props.onGetIncidents([])
         await this.fetchAllData();
       }
     } catch (ex) {

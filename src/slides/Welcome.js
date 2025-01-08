@@ -13,13 +13,14 @@ import { ActivityIndicator } from "react-native";
 import { verify_token } from "../api/auth";
 import {jwtDecode} from "jwt-decode";
 import { read_user } from "../api/user";
-import { onGetCommunaute } from "../redux/communautes/action";
 
 class Welcome extends Component {
   state = { loading: true, token: null };
 
   async componentDidMount() {
     const data = await Storage.getUser();
+    console.log("les données", data);
+    
     let ok = false;
     if (data.token) {
       try {
@@ -29,16 +30,14 @@ class Welcome extends Component {
         const user = await read_user(user_id);
         this.setState({ token: data.token });
         this.props.onLogin({ token: data.token, user });
-        setUser({ token: data.token, user });
+        await setUser({ token: data.token, user });
         ok = true;
       } catch (ex) {
         await logout();
         console.log(ex);
       }
     }
-    // list_communaute().then((lists) => {
-    //   this.props.onGetCommunaute(lists);
-    // });
+    
     this.setState({ loading: false });
     if (ok) {
       this.props.navigation.replace("DrawerNavigation");
@@ -97,4 +96,4 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-export default connect(null, { onLogin, onGetCommunaute })(Welcome);
+export default connect(null, { onLogin })(Welcome);

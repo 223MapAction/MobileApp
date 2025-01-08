@@ -107,12 +107,14 @@ export const syncReportsToServer = async (
   onUploadProgress
 ) => {
   setIsSyncing(true);
-
+  
   try {
+    console.log(`Synchronisation du rapport "${report.title}" en tâche de fond.`);
     const response = await create_incident(report, onUploadProgress);
 
-    if (response.ok) {
+    if (response) {
       // Update report status to 'synced' in the database
+      console.log("Rapport synchronisé:", report.title);
       await updateReportStatus(report.id);
 
       Toast.show({
@@ -121,6 +123,7 @@ export const syncReportsToServer = async (
         text2: `Le rapport "${report.title}" a été synchronisé avec succès.`,
       });
     } else {
+      console.log("Échec de l'API, sauvegarde locale:", report.title);
       await saveReportLocally(report);
       Toast.show({
         type: "error",
@@ -129,6 +132,7 @@ export const syncReportsToServer = async (
       });
     }
   } catch (error) {
+    console.error("Erreur lors de la synchronisation:", report.title, error);
     console.error("Error submitting report:", error);
     await saveReportLocally(report);
   } finally {

@@ -19,22 +19,6 @@ export const ReportProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
-
-  // Submit the report based on network state
-  // const submitReport = async (report, onUploadProgress) => {
-  //   if (isConnected) {
-  //     // Direct API submission when online
-  //     await syncReportsToServer(report, setIsSyncing, onUploadProgress);
-  //   } else {
-  //     // Save report locally if offline
-  //     const success = await saveReportLocally(report);
-  //     if (success) {
-  //       showToast(false, "Rapport enregistré localement.");
-  //     } else {
-  //       showToast(false, "Erreur lors de l’enregistrement local.");
-  //     }
-  //   }
-  // };
   const submitReport = async (report, onUploadProgress) => {
     if (isConnected) {
       // Envoi à l'API en ligne

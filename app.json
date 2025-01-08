@@ -32,7 +32,7 @@
       "supportsTablet": true,
       "usesAppleSignIn": true,
       "bundleIdentifier": "com.uwaish.MapActionAppv2",
-      "buildNumber": "2",
+      "buildNumber": "6",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
@@ -40,11 +40,23 @@
               "com.googleusercontent.apps.1094350890225-6d469l4tlgojeqgel06okuf6n4fc968k"
             ]
           }
-        ]
+        ],
+        "NSCameraUsageDescription": "Map Action utilise la caméra pour permettre aux utilisateurs de capturer des photos d'incidents sur le terrain. Par exemple, vous pouvez prendre une photo d'un accident pour le signaler rapidement aux autorités locales, facilitant ainsi une intervention efficace.",
+        
+        "NSMicrophoneUsageDescription": "Map Action utilise le microphone pour enregistrer des descriptions audio des incidents sur le terrain. Par exemple, vous pouvez enregistrer un message vocal décrivant une situation d'urgence, qui sera joint au rapport envoyé aux autorités.",
+        
+        "NSPhotoLibraryUsageDescription": "Map Action accède à votre bibliothèque de photos pour joindre des images existantes aux rapports d'incidents. Par exemple, vous pouvez ajouter une photo d'un accident prise auparavant pour enrichir le rapport envoyé aux autorités.",
+        
+        "NSLocationWhenInUseUsageDescription": "Map Action utilise votre localisation pour géolocaliser précisément les incidents signalés et aider les autorités à intervenir rapidement. Par exemple, en cas d'accident de la route, votre position exacte est envoyée aux services de secours pour accélérer leur arrivée."
       }
+
     },
     "android": {
       "icon": "./assets/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"

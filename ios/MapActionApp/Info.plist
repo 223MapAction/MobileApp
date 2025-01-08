@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>7</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -49,17 +49,23 @@
       </dict>
     </dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your camera</string>
+	<string>Map Action utilise la caméra pour capturer des photos d'incidents signalés sur le terrain, comme des accidents ou des dégâts environnementaux, afin de faciliter la réponse des autorités.</string>
+
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Map Action utilise votre localisation pour géolocaliser précisément les incidents signalés et aider les autorités à intervenir rapidement, comme lors d'un accident de la route.</string>
+
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Map Action utilise votre localisation pour suivre les incidents en temps réel et améliorer la précision des rapports d'incidents sur le terrain.</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your location</string>
+	<string>Map Action utilise votre localisation pour situer précisément les incidents signalés et améliorer l'efficacité de l'intervention des services de secours.</string>
+
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your microphone</string>
+	<string>Map Action utilise le microphone pour enregistrer des descriptions audio des incidents sur le terrain, permettant aux utilisateurs de fournir des détails vocaux sur les situations d'urgence.</string>
+
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to access your photos</string>
+	<string>Map Action accède à votre photothèque pour joindre des photos existantes aux rapports d'incidents, comme des images prises lors d'un accident, afin de compléter le rapport.</string>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

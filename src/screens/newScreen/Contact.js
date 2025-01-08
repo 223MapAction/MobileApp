@@ -21,7 +21,7 @@ const Contact = ({ token, user }) => {
   const submit = async () => {
     if (loading) return;
 
-    const data = { email, objet, message, mail_me: mailMe };
+    const data = { email, objet, message};
     try {
       await Schema.validate(data, { abortEarly: false });
       setErrors({});
@@ -70,7 +70,7 @@ const Contact = ({ token, user }) => {
         {renderInput("Objet", objet, setObjet, errors.objet)}
         {!token && renderInput("Email", email, setEmail, errors.email)}
         {renderTextArea("Message", message, setMessage, errors.message)}
-        {renderCheckbox("Recevoir une copie du mail", mailMe, setMailMe)}
+        {/* {renderCheckbox("Recevoir une copie du mail", mailMe, setMailMe)} */}
         <DoneButton onPress={submit} loading={loading} />
       </ScrollView>
     </View>

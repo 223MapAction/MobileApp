@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Image,
+  Alert,
   TouchableOpacity,
   ScrollView,
   FlatList,
@@ -11,10 +12,9 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import moment from "moment";
-import { getImage, ShareUrl } from "../../api/http";
 import { Icon } from "react-native-elements";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { ImageThumb } from "./Gallery";
+import http from "../../api/http";
+
 class Profil extends Component {
   state = {
     user: {},
@@ -33,6 +33,11 @@ class Profil extends Component {
       await this.fetchData(this.props.user);
     }
   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user) {
+      this.fetchData(this.props.user);
+    }
+  }
   
   async UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.user) {
@@ -40,14 +45,53 @@ class Profil extends Component {
       await this.fetchData(nextProps.user);
     }
   }
+  handleDeleteAccount = async () => {
+    console.log('testt', this.props);
+    
+    const { user, token, navigation } = this.props;
+  
+    if (!user || !user.id || !token) {
+      Alert.alert("Erreur", "Impossible de supprimer le compte.");
+      return;
+    }
+  
+    try {
+      const response = await http.delete(`/user/${user.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Statut de la réponse :", response);
+      if (response.status === 204) {
+        Alert.alert(
+          "Compte supprimé",
+          "Votre compte a été supprimé avec succès.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.replace("Login");
+              },
+            },
+          ]
+        );
+      } else {
+        Alert.alert("Erreur", "Une erreur est survenue lors de la suppression.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du compte :", error);
+      Alert.alert("Erreur", "Impossible de contacter le serveur.");
+    }
+  };
+  
   async fetchData(user = null) {
     if (null === user) return;
     const { id: user_id } = user;
     this.setState({ loading: true });
     let { incidents: incs, challenges } = this.props;
-
-    const incidents = incs.filter((i) => i.user_id === user_id);
-    const nbre_incidents = incidents.length;
+    console.log('les props', incs)
+    const nbre_incidents = incs.length;
     this.setState({
       nbre_incidents: nbre_incidents,
     });
@@ -57,7 +101,7 @@ class Profil extends Component {
       points: points,
       loading: false,
       photos: [
-        ...incidents.map((i) => i.photo),
+        ...incs.map((i) => i.photo),
       ],
     });
   }
@@ -131,6 +175,28 @@ class Profil extends Component {
                       Modifier votre profil
                     </Text>
                   </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.delete}
+                    onPress={() => {
+                      Alert.alert(
+                        "Confirmer la suppression",
+                        "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+                        [
+                          { text: "Annuler", style: "cancel" },
+                          {
+                            text: "Supprimer",
+                            style: "destructive",
+                            onPress: () => this.handleDeleteAccount(),
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Text style={{ fontSize: 12, color: "#FF4C4C", fontWeight: "bold" }}>
+                      Supprimer mon compte
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -150,7 +216,7 @@ class Profil extends Component {
                   {user && user.id &&(
                     <TouchableOpacity
                       onPress={() =>
-                        this.props.navigation.navigate("ListIncidents", {
+                        this.props.navigation.navigate("ListeIncident", {
                           user_id: user.id,
                         })
                       }
@@ -302,6 +368,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modifier: {
+    marginTop: 10,
+    borderRadius: 15,
+    backgroundColor: "#fff",
+    width: 150,
+    height: 38,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 2.5,
+    shadowColor: "#ccc",
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    elevation: 5,
+    shadowOffset: {
+      width: 3,
+      height: 3,
+    },
+  },
+  delete: {
     marginTop: 10,
     borderRadius: 15,
     backgroundColor: "#fff",

@@ -64,7 +64,8 @@ async function put(url, data, options = {}) {
 }
 async function deleteItem(url, options = {}) {
   const opt = await getOptions(options);
-  return axios.delete(getUrl(url), opt).then((res) => res.data);
+  // return axios.delete(getUrl(url), opt).then((res) => res.data);
+  return axios.delete(getUrl(url), opt);
 }
 async function getOptions(options) {
   if (!options.headers) options.headers = {};
@@ -82,6 +83,9 @@ async function getOptions(options) {
 
 export function getImage(uri, flag = false) {
   if (uri) {
+    if (uri.startsWith('file://')) {
+      return { uri };
+    }
     if (flag !== false) {
       if (uri === "/uploads/avatars/default.png")
         return require("../../assets/images/image.jpg");

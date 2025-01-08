@@ -33,9 +33,12 @@ export default class Slide1 extends Component {
         <Text
           style={{ color: "rgba(0,0,0,.7)", textAlign: "center", fontSize: 14 }}
         >
-          Aidez à protéger l'environnement en rapportant des décharges sauvages, 
+          {/* Aidez à protéger l'environnement en rapportant des décharges sauvages, 
           infrastructures endommagées ou autres incidents via l'application MAP ACTION. 
-          Capturez et envoyez en un clic aux autorités compétentes.
+          Capturez et envoyez en un clic aux autorités compétentes. */}
+          Aidez à protéger l'environnement en signalant des décharges sauvages, déforestations, 
+          pollutions de l'eau ou autres incidents via l'application MAP ACTION. 
+          Capturez et envoyez facilement aux autorités compétentes.
         </Text>
       </View>
     );

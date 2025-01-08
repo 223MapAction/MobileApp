@@ -114,8 +114,8 @@ android {
         applicationId 'com.uwaish.MapActionApp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName '1.0.0'
+        versionCode 2
+        versionName '1.0.1'
         manifestPlaceholders = [
             appAuthRedirectScheme: 'com.googleusercontent.apps.1094350890225-8slhm17l5scns62u21fs771ef6t630e3'
         ]

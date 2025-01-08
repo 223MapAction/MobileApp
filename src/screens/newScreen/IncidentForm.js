@@ -21,10 +21,13 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { getImage } from "../../api/http";
 import { Camera, CameraType } from "expo-camera/legacy";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { onAddIncident } from "../../redux/incidents/action";
 
 export default function IncidentForm() {
+  const dispatch = useDispatch()
   const user_id = useSelector(state => state.user.user.id);
+  const userC = useSelector(state => state.user.user)
   // console.log('user id', user_id)
   const { isSyncing, submitReport } = useContext(ReportContext);
   const route = useRoute();
@@ -150,7 +153,7 @@ export default function IncidentForm() {
       
       const data = await response.json();
       console.log(" reponse location:", data);
-      return data.features?.[0]?.place_name || "Zone inconnue";
+      return data.features?.[0]?.text || "Zone inconnue";
     } catch (error) {
       console.error("Erreur lors de la récupération de la zone:", error);
       return "Zone inconnue";
@@ -259,7 +262,7 @@ export default function IncidentForm() {
   
       if (response && response.success) {
         console.log("Réponse du serveur:", response);
-  
+        dispatch(onAddIncident({ ...currentReport, user: userC }));
         Alert.alert(
           "Succès",
           `Votre rapport d’incident à ${currentReport.zone} a été envoyé avec succès. Merci pour votre contribution !`,
@@ -267,7 +270,7 @@ export default function IncidentForm() {
             {
               text: "OK",
               onPress: () => navigation.replace("DetailIncident", {
-                incident: currentReport, 
+                incident: { ...currentReport, photo: currentReport.photo }, 
               }),
             },
           ]
