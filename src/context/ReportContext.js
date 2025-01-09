@@ -22,10 +22,12 @@ export const ReportProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(async () => {
-    if (isConnected) await synchronizeOfflineData();
+  useEffect(() => {
+    const syncData = async () => {
+      if (isConnected) await synchronizeOfflineData();
+    };
 
-    return () => {};
+    syncData();
   }, [isConnected]);
 
   const submitReport = async (report, onUploadProgress) => {
@@ -52,21 +54,22 @@ export const ReportProvider = ({ children }) => {
   };
 
   const synchronizeOfflineData = async () => {
-    // Fetch pending reports from SQLite
-    const pendingReports = await fetchPendingReports();
-
-    if (pendingReports.length > 0) {
-      // Sync pending reports
-      for (const report of pendingReports) {
-        await syncReportsToServer(report, () => {});
+    try {
+      const pendingReports = await fetchPendingReports();
+      if (pendingReports.length > 0) {
+        for (const report of pendingReports) {
+          await syncReportsToServer(report, () => {});
+        }
+        console.log("Background sync complete");
+      } else {
+        Toast.show({
+          type: "info",
+          text1: "synchronisation",
+          text2: "0 rapport a synchronise",
+        });
       }
-      console.log("Background sync complete");
-    } else {
-      Toast.show({
-        type: "info",
-        text1: "synchronisation",
-        text2: "0 rapport a synchronise",
-      });
+    } catch (error) {
+      console.error("Error during synchronization:", error);
     }
   };
 
