@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
 import NetInfo from "@react-native-community/netinfo";
+import Toast from "react-native-toast-message";
+
 import { showToast } from "../utils/ToastUtils";
-import { syncReportsToServer } from "../utils/SyncUtils";
+import { fetchPendingReports, syncReportsToServer } from "../utils/SyncUtils";
 import { saveReportLocally } from "../db/dbOperations";
 
 export const ReportContext = createContext();
@@ -19,6 +21,13 @@ export const ReportProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(async () => {
+    if (isConnected) await synchronizeOfflineData();
+
+    return () => {};
+  }, [isConnected]);
+
   const submitReport = async (report, onUploadProgress) => {
     if (isConnected) {
       // Envoi à l'API en ligne
@@ -41,7 +50,25 @@ export const ReportProvider = ({ children }) => {
       }
     }
   };
-  
+
+  const synchronizeOfflineData = async () => {
+    // Fetch pending reports from SQLite
+    const pendingReports = await fetchPendingReports();
+
+    if (pendingReports.length > 0) {
+      // Sync pending reports
+      for (const report of pendingReports) {
+        await syncReportsToServer(report, () => {});
+      }
+      console.log("Background sync complete");
+    } else {
+      Toast.show({
+        type: "info",
+        text1: "synchronisation",
+        text2: "0 rapport a synchronise",
+      });
+    }
+  };
 
   return (
     <ReportContext.Provider value={{ submitReport, isSyncing }}>
