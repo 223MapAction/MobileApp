@@ -101,6 +101,7 @@ import {
   updateReportStatus,
 } from "../db/dbOperations";
 import { create_incident } from "../api/incident";
+
 export const syncReportsToServer = async (
   report,
   setIsSyncing,
