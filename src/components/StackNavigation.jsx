@@ -3,7 +3,8 @@ import CameraComponent from "../screens/CameraScreen";
 import Header from "../shared/Header";
 import { Animated, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, {useEffect} from "react";
+import { Linking } from 'react-native';
 import Accueil from "../slides/Acceuil";
 import DrawerNavigation from "./DrawerNavigation";
 import { NavigationContainer } from '@react-navigation/native';
@@ -24,6 +25,7 @@ import SignUp from "../pages/Signup";
 import VerifyOtp from "../pages/VerifyOtp";
 import PasswordStep from "../pages/Password";
 import Account from "../screens/Account";
+import useDeepLinking from "../../Deeplinking";
 
 
 const Stack = createStackNavigator();
@@ -101,6 +103,29 @@ const screenOptions = {
 };
 
 const StackNavigation = () => {
+  useEffect(() => {
+    const handleDeepLink = (event) => {
+      const url = event.url;
+      const parsedUrl = Linking.parse(url);
+
+      if (parsedUrl.path === 'verify-email') {
+        const token = parsedUrl.path.split('/')[1];
+        navigationRef.current?.navigate('passwordStep', { token });
+      }
+    };
+
+    // Écouter les événements de deep linking
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+
+    // Gérer l'URL initiale (si l'application a été ouverte à partir d'un lien)
+    Linking.getInitialURL().then((url) => {
+      if (url) handleDeepLink({ url });
+    });
+
+    return () => {
+      subscription.remove(); // Nettoyage
+    };
+  }, []);
   let initialRouteName = "Welcome";
   return (
     <NavigationContainer>

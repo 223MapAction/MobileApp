@@ -11,7 +11,7 @@ const useDeepLinking = () => {
       const parsedUrl = Linking.parse(url);
 
       if (parsedUrl.path === 'verify-email') {
-        const token = parsedUrl.queryParams.token;
+        const token = parsedUrl.path.split('/')[1];
         navigation.navigate('passwordStep', { token });
       }
     };

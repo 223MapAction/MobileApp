@@ -17,6 +17,7 @@ import { initDB } from "./db/dbOperations";
 const store = createStore(rootReducer, applyMiddleware(thunk, logger));
 
 export default function App() {
+  
   useEffect(() => {
     registerBackgroundTask(); // Register background sync task
   }, []);
