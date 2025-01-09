@@ -23,13 +23,11 @@ export const ReportProvider = ({ children }) => {
   }, []);
 
   useEffect(async () => {
-    if(isConnected) await synchronizeOfflineData()
-  
-    return () => {
-      
-    }
-  }, [isConnected])
-  
+    if (isConnected) await synchronizeOfflineData();
+
+    return () => {};
+  }, [isConnected]);
+
   const submitReport = async (report, onUploadProgress) => {
     if (isConnected) {
       // Envoi à l'API en ligne
