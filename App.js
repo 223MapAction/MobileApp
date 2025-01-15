@@ -22,7 +22,7 @@ export default function App() {
   // The error and !success clauses can be removed or at least logged
   // to the backedn for better trackeing before going to prod
   if (error) {
-    console.log(error);
+    console.log('error en migration',error);
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

@@ -39,7 +39,7 @@ jest.mock('react-native-sqlite-storage', () => ({
   
       const txInstance = dbInstance.transaction.mock.calls[0][0];
       expect(txInstance.executeSql).toHaveBeenCalledWith(
-        'CREATE TABLE IF NOT EXISTS incidents (id INTEGER PRIMARY KEY AUTOINCREMENT, photo TEXT, video TEXT, audio TEXT, latitude REAL, longitude REAL)',
+        'CREATE TABLE IF NOT EXISTS incidents (id INTEGER PRIMARY KEY AUTOINCREMENT, photo TEXT, video TEXT, audio TEXT, lattitude REAL, longitude REAL)',
         [],
         expect.any(Function),
         expect.any(Function),
@@ -50,11 +50,11 @@ jest.mock('react-native-sqlite-storage', () => ({
       const photo = 'photo_url';
       const video = 'video_url';
       const audio = 'audio_url';
-      const latitude = 12.3456;
+      const lattitude = 12.3456;
       const longitude = 65.4321;
   
       act(() => {
-        insertIncident(photo, video, audio, latitude, longitude);
+        insertIncident(photo, video, audio, lattitude, longitude);
       });
   
       expect(SQLite.openDatabase).toHaveBeenCalledTimes(1);
@@ -64,8 +64,8 @@ jest.mock('react-native-sqlite-storage', () => ({
   
       const txInstance = dbInstance.transaction.mock.calls[0][0];
       expect(txInstance.executeSql).toHaveBeenCalledWith(
-        'INSERT INTO incidents (photo, video, audio, latitude, longitude) VALUES (?, ?, ?, ?, ?)',
-        [photo, video, audio, latitude, longitude],
+        'INSERT INTO incidents (photo, video, audio, lattitude, longitude) VALUES (?, ?, ?, ?, ?)',
+        [photo, video, audio, lattitude, longitude],
         expect.any(Function),
         expect.any(Function),
       );

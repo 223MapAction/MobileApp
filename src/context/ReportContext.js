@@ -22,11 +22,14 @@ export const ReportProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // useEffect(async () => {
-  //   if (isConnected) await synchronizeOfflineData();
+  useEffect(() => {
+    const syncData = async () => {
 
-  //   return () => {};
-  // }, [isConnected]);
+      if (isConnected) await synchronizeOfflineData();
+    };
+
+    syncData();
+  }, [isConnected]);
 
   const submitReport = async (report, onUploadProgress) => {
     if (isConnected) {
@@ -51,24 +54,32 @@ export const ReportProvider = ({ children }) => {
     }
   };
 
-  // const synchronizeOfflineData = async () => {
-  //   // Fetch pending reports from SQLite
-  //   const pendingReports = await fetchPendingReports();
-
-  //   if (pendingReports.length > 0) {
-  //     // Sync pending reports
-  //     for (const report of pendingReports) {
-  //       await syncReportsToServer(report, () => {});
-  //     }
-  //     console.log("Background sync complete");
-  //   } else {
-  //     Toast.show({
-  //       type: "info",
-  //       text1: "synchronisation",
-  //       text2: "0 rapport a synchronise",
-  //     });
-  //   }
-  // };
+  const synchronizeOfflineData = async () => {
+    console.log("Debut sync");
+    
+    try {
+      const pendingReports = await fetchPendingReports();
+      console.log("pendings reports", pendingReports);
+      
+      
+      if (pendingReports.length > 0) {
+        for (const report of pendingReports) {
+          const {category_ids, category_id, taken_by, indicateur_id,zone,user_id,...reportToSync}=report
+          zone? reportToSync.zone=zone:reportToSync.zone="zone inconnue"
+          await syncReportsToServer(reportToSync, () => {});
+        }
+        console.log("Background sync complete");
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "synchronisation",
+          text2: "0 rapport a synchronise",
+        });
+      }
+    } catch (error) {
+      console.error("Error during synchronization:", error);
+    }
+  };
 
   return (
     <ReportContext.Provider value={{ submitReport, isSyncing }}>

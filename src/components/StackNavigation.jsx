@@ -25,7 +25,7 @@ import SignUp from "../pages/Signup";
 import VerifyOtp from "../pages/VerifyOtp";
 import PasswordStep from "../pages/Password";
 import Account from "../screens/Account";
-import useDeepLinking from "../../Deeplinking";
+import UrlParse from 'url-parse';
 
 
 const Stack = createStackNavigator();
@@ -106,7 +106,12 @@ const StackNavigation = () => {
   useEffect(() => {
     const handleDeepLink = (event) => {
       const url = event.url;
-      const parsedUrl = Linking.parse(url);
+      console.log('Deep link received:', url); 
+      const parsedUrl = new UrlParse(event.url, true); // true enables query string parsing
+
+      const { pathname, query } = parsedUrl;
+
+      console.log('Parsed URL:', pathname, query);
 
       if (parsedUrl.path === 'verify-email') {
         const token = parsedUrl.path.split('/')[1];
