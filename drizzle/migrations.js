@@ -2,7 +2,6 @@
 
 import journal from './meta/_journal.json';
 import m0000 from './0000_ambiguous_shiva.sql';
-// import m0001 from './0001_wooden_starbolt.sql';
 
   export default {
     journal,
