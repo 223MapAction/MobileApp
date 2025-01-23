@@ -101,16 +101,16 @@ import {
   updateReportStatus,
 } from "../db/dbOperations";
 import { create_incident } from "../api/incident";
+
 export const syncReportsToServer = async (
   report,
-  setIsSyncing,
-  onUploadProgress
+  setIsSyncing
 ) => {
   setIsSyncing(true);
-  
+
   try {
     console.log(`Synchronisation du rapport "${report.title}" en tâche de fond.`);
-    const response = await create_incident(report, onUploadProgress);
+    const response = await create_incident(report);
 
     if (response) {
       // Update report status to 'synced' in the database
@@ -143,7 +143,11 @@ export const syncReportsToServer = async (
 // Fetch pending reports (those with 'pending' status)
 export const fetchPendingReports = async () => {
   try {
+    console.log('fetching pending data: ');
+
     const reports = await getPendingReports();
+    console.log('fetched  data: ', reports);
+
     return reports;
   } catch (error) {
     console.error("Error fetching pending reports:", error);

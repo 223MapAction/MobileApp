@@ -23,6 +23,7 @@ class Accueil extends Component {
               width: 125,
               height: 50,
             }}
+            testID="logo-image"
           />
         </View>
         <Content />
@@ -41,7 +42,7 @@ class Accueil extends Component {
   };
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#FFF" }}>
+      <View style={{ flex: 1, backgroundColor: "#FFF" }} testID="accueil-container">
         <AppIntroSlider
           renderItem={this.renderItem}
           data={this.items}

@@ -28,7 +28,6 @@ export default function IncidentForm() {
   const dispatch = useDispatch()
   const user_id = useSelector(state => state.user.user.id);
   const userC = useSelector(state => state.user.user)
-  // console.log('user id', user_id)
   const { isSyncing, submitReport } = useContext(ReportContext);
   const route = useRoute();
   const navigation = useNavigation();
@@ -98,7 +97,6 @@ export default function IncidentForm() {
           ...currentReport,
           video: video.uri,
         }));
-        console.log("Vidéo enregistrée à : ", video.uri);
       } catch (error) {
         console.error("Erreur lors de l'enregistrement vidéo :", error);
         setIsRecording(false);
@@ -144,7 +142,6 @@ export default function IncidentForm() {
   };
 
   const getZoneFromCoordinates = async (latitude, longitude) => {
-    // console.log("Latitude:", latitude, "Longitude:", longitude);
     const mapboxToken = "sk.eyJ1IjoiYTc1NDJzIiwiYSI6ImNtMXFlY3UzYzBjZ2wya3NiNXYwb2tkeXMifQ.CMP-g6skERWuRRR6jeHMkA";
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${mapboxToken}`;
 
@@ -164,24 +161,22 @@ export default function IncidentForm() {
     setLoadingLocation(true);
     try {
       let location = await Location.getCurrentPositionAsync({});
-      // console.log("loation: ", location);
 
-      const lattitude = location.coords.latitude.toString();
+      const latitude = location.coords.latitude.toString();
       const longitude = location.coords.longitude.toString();
-      const zone = await getZoneFromCoordinates(lattitude, longitude);
-      // console.log("zone: ",zone);
+      const zone = await getZoneFromCoordinates(latitude, longitude);
       
       setZone(zone)
       console.log("currentReport with user_id: ", {
         ...currentReport,
-        lattitude,
+        latitude,
         longitude,
         zone,
         ...(user_id && { user_id })
      });     
       setCurrentReport({
         ...currentReport,
-        lattitude,
+        latitude,
         longitude,
         zone,
         ...(user_id && { user_id })
@@ -227,18 +222,15 @@ export default function IncidentForm() {
         playsInSilentModeIOS: true,
       });
 
-      console.log('Starting recording..');
       const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
       setRecording(recording);
-      console.log('Recording started');
     } catch (err) {
       console.error('Failed to start recording', err);
     }
   };
 
   const stopRecording = async () => {
-    console.log('Stopping recording..');
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     await Audio.setAudioModeAsync(
@@ -247,7 +239,6 @@ export default function IncidentForm() {
       }
     );
     const uri = recording.getURI();
-    console.log('Recording stopped and stored at', uri);
     setCurrentReport({ ...currentReport, audio: uri });
   };
 
@@ -261,7 +252,6 @@ export default function IncidentForm() {
       const response = await submitReport(currentReport);
   
       if (response && response.success) {
-        console.log("Réponse du serveur:", response);
         dispatch(onAddIncident({ ...currentReport, user: userC }));
         Alert.alert(
           "Succès",

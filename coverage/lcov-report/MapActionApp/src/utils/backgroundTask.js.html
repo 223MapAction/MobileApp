@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -119,40 +119,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as TaskManager from "expo-task-manager";
@@ -164,27 +164,27 @@ import { fetchPendingReports, syncReportsToServer } from "../utils/SyncUtils";
 const BACKGROUND_SYNC_TASK = "mapaction-background-sync-task";
 &nbsp;
 // Register the background task
-TaskManager.defineTask(BACKGROUND_SYNC_TASK, <span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const netInfo = <span class="cstat-no" title="statement not covered" >await NetInfo.fetch();</span>
-<span class="cstat-no" title="statement not covered" >    if (netInfo.isConnected) {</span>
+TaskManager.defineTask(BACKGROUND_SYNC_TASK, async () =&gt; {
+  try {
+    const netInfo = await NetInfo.fetch();
+    if (netInfo.isConnected) {
       // Fetch pending reports from SQLite
-      const pendingReports = <span class="cstat-no" title="statement not covered" >await fetchPendingReports();</span>
+      const pendingReports = await fetchPendingReports();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (pendingReports.length &gt; 0) {</span>
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (pendingReports.length &gt; 0) {
         // Sync pending reports
-<span class="cstat-no" title="statement not covered" >        for (const report of pendingReports) {</span>
-<span class="cstat-no" title="statement not covered" >          await syncReportsToServer(report, <span class="fstat-no" title="function not covered" >()</span> =&gt; {});</span>
+        for (const report of pendingReports) {
+          await syncReportsToServer(report, <span class="fstat-no" title="function not covered" >()</span> =&gt; {});
         }
-<span class="cstat-no" title="statement not covered" >        console.log("Background sync complete");</span>
+        console.log("Background sync complete");
       }
     }
 &nbsp;
     // Return result to indicate whether the task was successful
-<span class="cstat-no" title="statement not covered" >    return BackgroundFetch.BackgroundFetchResult.NewData;</span>
+    return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.error("Background task failed:", error);</span>
-<span class="cstat-no" title="statement not covered" >    return BackgroundFetch.BackgroundFetchResult.Failed;</span>
+    console.error("Background task failed:", error);
+    return BackgroundFetch.BackgroundFetchResult.Failed;
   }
 });
 &nbsp;
@@ -192,13 +192,13 @@ TaskManager.defineTask(BACKGROUND_SYNC_TASK, <span class="fstat-no" title="funct
 export const registerBackgroundTask = async () =&gt; {
   try {
     await BackgroundFetch.registerTaskAsync(BACKGROUND_SYNC_TASK, {
-      minimumInterval: 60 * 15, // Run every 15 minutes
+      minimumInterval: 30, // Run every 15 minutes
       stopOnTerminate: true, // Continue after app is closed
       startOnBoot: true, // Start on device boot
     });
     console.log("Background sync task registered");
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.error("Failed to register background task:", error);</span>
+    console.error("Failed to register background task:", error);
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -208,7 +208,7 @@ export const registerBackgroundTask = async () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-28T16:40:12.732Z
+                at 2025-01-23T10:42:20.669Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

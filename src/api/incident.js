@@ -48,7 +48,7 @@ import http from "./http"; // Assurez-vous que 'http' est bien configuré pour r
 
 export async function create_incident(
   { photo, audio, video, ...data },
-  onUploadProgress
+  // onUploadProgress
 ) {
   let formdata = new FormData();
   
@@ -89,7 +89,7 @@ export async function create_incident(
   });
 
   try {
-    const response = await http.upload(formdata, "/incident/", onUploadProgress);
+    const response = await http.upload(formdata, "/incident/");
     console.log("Voyons voir de pres", response);
     
     // Assurez-vous que la réponse contient un objet JSON avec un statut

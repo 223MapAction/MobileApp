@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,30 +108,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -142,31 +142,31 @@ const Drawer = createDrawerNavigator();
 import { connect } from "react-redux";
 &nbsp;
 class DrawerNavigation extends React.Component {
-<span class="fstat-no" title="function not covered" >  re</span>nder() {
-    let initialRouteName = <span class="cstat-no" title="statement not covered" >"TabNavigation";</span>
-    const { navigation } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+  render() {
+    let initialRouteName = "TabNavigation";
+    const { navigation } = this.props;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
+    return (
       &lt;Drawer.Navigator
         initialRouteName={initialRouteName}
         drawerType="front"
         activeTintColor="transparent"
         contentContainerStyle={{ flex: 1 }}
-        drawerContent={<span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; (
-<span class="cstat-no" title="statement not covered" >          &lt;DrawerContent stackNavigation={navigation} {...props} /&gt;</span>
+        drawerContent={(props) =&gt; (
+          &lt;DrawerContent stackNavigation={navigation} {...props} /&gt;
         )}
       &gt;
         &lt;Drawer.Screen name="TabNavigation" options={{
                                             headerShown: false, 
                                             }}&gt;
-          {<span class="fstat-no" title="function not covered" >(p</span>rops) =&gt; <span class="cstat-no" title="statement not covered" >&lt;TabNavigation {...props} /&gt;}</span>
+          {(props) =&gt; &lt;TabNavigation {...props} /&gt;}
         &lt;/Drawer.Screen&gt;
       &lt;/Drawer.Navigator&gt;
     );
   }
 }
 &nbsp;
-const mapState = <span class="fstat-no" title="function not covered" >({</span> user }) =&gt; (<span class="cstat-no" title="statement not covered" >{ token: user.token ? user.token : null })</span>;
+const mapState = ({ user }) =&gt; ({ token: user.token ? user.token : null });
 export default connect(mapState, null)(DrawerNavigation);
 &nbsp;</pre></td></tr></table></pre>
 
@@ -175,7 +175,7 @@ export default connect(mapState, null)(DrawerNavigation);
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-28T16:40:12.732Z
+                at 2025-01-23T10:42:20.669Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

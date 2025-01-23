@@ -101,14 +101,14 @@ export function getImage(uri, flag = false) {
     : require("../../assets/images/image.jpg");
 }
 
-function upload(data, route, onUploadProgress) {
+function upload(data, route) {
   const config = {
-    onUploadProgress: function (progressEvent) {
-      let percentCompleted = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total
-      );
-      onUploadProgress(percentCompleted);
-    },
+    // onUploadProgress: function (progressEvent) {
+    //   let percentCompleted = Math.round(
+    //     (progressEvent.loaded * 100) / progressEvent.total
+    //   );
+    //   onUploadProgress(percentCompleted);
+    // },
     headers: {
       "Content-Type": "multipart/form-data",
     },

@@ -9,9 +9,9 @@ const { width } = Dimensions.get('window');
 
 export default function Politique() {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="politique-container">
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <Markdown style={markdownStyles}>
+        <Markdown style={markdownStyles} testID="politique-markdown">
           {PolitiqueText}
         </Markdown>
       </ScrollView>

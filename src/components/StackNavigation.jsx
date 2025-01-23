@@ -3,7 +3,8 @@ import CameraComponent from "../screens/CameraScreen";
 import Header from "../shared/Header";
 import { Animated, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, {useEffect} from "react";
+import { Linking } from 'react-native';
 import Accueil from "../slides/Acceuil";
 import DrawerNavigation from "./DrawerNavigation";
 import { NavigationContainer } from '@react-navigation/native';
@@ -24,6 +25,7 @@ import SignUp from "../pages/Signup";
 import VerifyOtp from "../pages/VerifyOtp";
 import PasswordStep from "../pages/Password";
 import Account from "../screens/Account";
+import UrlParse from 'url-parse';
 
 
 const Stack = createStackNavigator();
@@ -60,6 +62,7 @@ const MyHeader = ({ route, navigation, ...otherProps }) => {
 
   return (
     <Header
+      testID={`header-${route.name.toLowerCase()}`}
       navigation={navigation}
       style={options.headerStyle}
       showImage={showImage}
@@ -101,22 +104,53 @@ const screenOptions = {
 };
 
 const StackNavigation = () => {
+  useEffect(() => {
+    const handleDeepLink = (event) => {
+      const url = event.url;
+      console.log('Deep link received:', url); 
+      const parsedUrl = new UrlParse(event.url, true); // true enables query string parsing
+
+      const { pathname, query } = parsedUrl;
+
+      console.log('Parsed URL:', pathname, query);
+
+      if (parsedUrl.path === 'verify-email') {
+        const token = parsedUrl.path.split('/')[1];
+        navigationRef.current?.navigate('passwordStep', { token });
+      }
+    };
+
+    // Écouter les événements de deep linking
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+
+    // Gérer l'URL initiale (si l'application a été ouverte à partir d'un lien)
+    Linking.getInitialURL().then((url) => {
+      if (url) handleDeepLink({ url });
+    });
+
+    return () => {
+      subscription.remove(); // Nettoyage
+    };
+  }, []);
   let initialRouteName = "Welcome";
   return (
-    <NavigationContainer>
+    <NavigationContainer testID="navigation-container">
     <Stack.Navigator
+        testID="stack-navigator"
         initialRouteName={initialRouteName}
         screenOptions={screenOptions}
     >
       <Stack.Screen
           name="Welcome"
           component={(Welcome)}
-          options={{ headerShown: false }}
+          options={{ headerShown: false }} 
+          testID="welcome-screen"
       />
         <Stack.Screen
             name="Accueil"
             component={Accueil}
             options={{ headerShown: false }}
+            testID="accueil-screen"
         />
         <Stack.Screen
           name="DrawerNavigation"
@@ -124,12 +158,14 @@ const StackNavigation = () => {
           options={{
             headerShown: false,
           }}
+          testID="drawer-navigation-screen"
         />
         
         <Stack.Screen
           name="Picture"
           component={CameraComponent}
           options={{ headerShown: false }}
+          testID="picture-screen"
         />
         <Stack.Screen
           name="ListeIncident"
@@ -138,6 +174,7 @@ const StackNavigation = () => {
             headerShown: true,
             title: "Mes incidents signalés",
           }}
+          testID="liste-incident-screen"
         />
         <Stack.Screen
           name="cgu"
@@ -145,6 +182,7 @@ const StackNavigation = () => {
           options={{
             headerShown: false
           }}
+          testID="cgu-screen"
         />
         <Stack.Screen
           name="politique"
@@ -153,6 +191,7 @@ const StackNavigation = () => {
             headerShown: true,
             title: "Mentions Légales",
           }}
+          testID="politique-screen"
         />
         <Stack.Screen
           name="DetailIncident"
@@ -161,11 +200,13 @@ const StackNavigation = () => {
             headerShown: true,
             title: route.params?.incident?.title || "Détail de l'incident",
           })}
+          testID="detail-incident-screen"
         />
         <Stack.Screen
           name="IncidentForm"
           component={IncidentForm}
           options={{ headerShown: true }}
+          testID="incident-form-screen"
         />
         <Stack.Screen
           name="Contact"
@@ -173,6 +214,7 @@ const StackNavigation = () => {
           options={{
             title: "Nous contacter",
           }}
+          testID="contact-screen"
         />
         <Stack.Screen
           name="Account"
@@ -180,6 +222,7 @@ const StackNavigation = () => {
           options={{
             title: "Modifier mon profile",
           }}
+          testID="account-screen"
         />
       {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}
