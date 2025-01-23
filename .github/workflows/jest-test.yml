@@ -51,8 +51,8 @@ jobs:
 
       - name: Vérification du seuil de couverture
         run: |
-          if [ -f coverage/coverage-summary.json ]; then
-            COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+          if [ -f coverage/coverage-final.json ]; then
+            COVERAGE=$(cat coverage/coverage-final.json | jq -r '.total.lines.pct')
             if (( $(echo "$COVERAGE < 80" | bc -l) )); then
               echo "La couverture de code est inférieure à 80% ($COVERAGE%)"
               exit 1
@@ -61,6 +61,7 @@ jobs:
             echo "Aucun rapport de couverture trouvé, échec de l'étape."
             exit 1
           fi
+
 
 
       - name: Upload des résultats de test
