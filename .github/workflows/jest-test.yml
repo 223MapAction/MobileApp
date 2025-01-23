@@ -51,11 +51,17 @@ jobs:
 
       - name: Vérification du seuil de couverture
         run: |
-          COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "La couverture de code est inférieure à 80% ($COVERAGE%)"
+          if [ -f coverage/coverage-summary.json ]; then
+            COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+            if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+              echo "La couverture de code est inférieure à 80% ($COVERAGE%)"
+              exit 1
+            fi
+          else
+            echo "Aucun rapport de couverture trouvé, échec de l'étape."
             exit 1
           fi
+
 
       - name: Upload des résultats de test
         uses: actions/upload-artifact@v3
@@ -69,6 +75,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: 223MapAction/MobileApp
           file: ./coverage/coverage-final.json
           flags: unittests
           name: codecov-umbrella
