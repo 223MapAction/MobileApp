@@ -8,7 +8,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "migrate-db": "npx drizzle-kit generate",
-    "test": "jest --coverage"
+    "test": "jest --coverage --coverageReporters='text-summary' --coverageReporters='json-summary' --coverageReporters='text' --coverageReporters='lcov'"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
@@ -84,8 +84,13 @@
       "<rootDir>/src/tests"
     ],
     "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "text-summary",
+      "json-summary",
+      "lcov"
+    ],
     "collectCoverageFrom": [
-      
       "**/*.{ts,tsx,js,jsx}",
       "!**/coverage/**",
       "!**/node_modules/**",
