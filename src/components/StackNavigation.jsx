@@ -62,6 +62,7 @@ const MyHeader = ({ route, navigation, ...otherProps }) => {
 
   return (
     <Header
+      testID={`header-${route.name.toLowerCase()}`}
       navigation={navigation}
       style={options.headerStyle}
       showImage={showImage}
@@ -133,20 +134,23 @@ const StackNavigation = () => {
   }, []);
   let initialRouteName = "Welcome";
   return (
-    <NavigationContainer>
+    <NavigationContainer testID="navigation-container">
     <Stack.Navigator
+        testID="stack-navigator"
         initialRouteName={initialRouteName}
         screenOptions={screenOptions}
     >
       <Stack.Screen
           name="Welcome"
           component={(Welcome)}
-          options={{ headerShown: false }}
+          options={{ headerShown: false }} 
+          testID="welcome-screen"
       />
         <Stack.Screen
             name="Accueil"
             component={Accueil}
             options={{ headerShown: false }}
+            testID="accueil-screen"
         />
         <Stack.Screen
           name="DrawerNavigation"
@@ -154,12 +158,14 @@ const StackNavigation = () => {
           options={{
             headerShown: false,
           }}
+          testID="drawer-navigation-screen"
         />
         
         <Stack.Screen
           name="Picture"
           component={CameraComponent}
           options={{ headerShown: false }}
+          testID="picture-screen"
         />
         <Stack.Screen
           name="ListeIncident"
@@ -168,6 +174,7 @@ const StackNavigation = () => {
             headerShown: true,
             title: "Mes incidents signalés",
           }}
+          testID="liste-incident-screen"
         />
         <Stack.Screen
           name="cgu"
@@ -175,6 +182,7 @@ const StackNavigation = () => {
           options={{
             headerShown: false
           }}
+          testID="cgu-screen"
         />
         <Stack.Screen
           name="politique"
@@ -183,6 +191,7 @@ const StackNavigation = () => {
             headerShown: true,
             title: "Mentions Légales",
           }}
+          testID="politique-screen"
         />
         <Stack.Screen
           name="DetailIncident"
@@ -191,11 +200,13 @@ const StackNavigation = () => {
             headerShown: true,
             title: route.params?.incident?.title || "Détail de l'incident",
           })}
+          testID="detail-incident-screen"
         />
         <Stack.Screen
           name="IncidentForm"
           component={IncidentForm}
           options={{ headerShown: true }}
+          testID="incident-form-screen"
         />
         <Stack.Screen
           name="Contact"
@@ -203,6 +214,7 @@ const StackNavigation = () => {
           options={{
             title: "Nous contacter",
           }}
+          testID="contact-screen"
         />
         <Stack.Screen
           name="Account"
@@ -210,6 +222,7 @@ const StackNavigation = () => {
           options={{
             title: "Modifier mon profile",
           }}
+          testID="account-screen"
         />
       {/* <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title:'Se connecter' }}/> */}
       {/* <Stack.Screen name="ForgotPassword" component={ForgotPassword} /> */}

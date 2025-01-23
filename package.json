@@ -80,8 +80,12 @@
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?|react-redux|@react-redux)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
     ],
+    "roots": [
+      "<rootDir>/src/tests"
+    ],
     "collectCoverage": true,
     "collectCoverageFrom": [
+      
       "**/*.{ts,tsx,js,jsx}",
       "!**/coverage/**",
       "!**/node_modules/**",

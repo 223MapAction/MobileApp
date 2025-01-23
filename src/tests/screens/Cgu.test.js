@@ -1,97 +1,119 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import Cgu from '../../screens/cgu' 
+import { render, fireEvent, act } from '@testing-library/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
+import Cgu from '../../screens/cgu';
 
-// Mock de la navigation
-const mockNavigate = jest.fn();
-
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: () => ({
-    navigate: mockNavigate,
-  }),
-}));
-
-// Mock de AsyncStorage
+// Mocks
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
-  clear: jest.fn(),
 }));
 
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    navigate: jest.fn(),
+  }),
+}));
+
+jest.mock('react-native-markdown-display', () => 'Markdown');
+jest.mock('../../screens/newScreen/cguText', () => 'Test CGU Content');
+
 describe('Cgu Component', () => {
+  const mockNavigate = jest.fn();
+
   beforeEach(() => {
     jest.clearAllMocks();
-    AsyncStorage.clear.mockClear(); // Réinitialise le mock de clear
-    AsyncStorage.getItem.mockReset(); // Réinitialise les valeurs retournées par getItem
+    console.error = jest.fn();
   });
 
-  it('should show loading indicator initially', () => {
-    const { getByTestId } = render(
-      <NavigationContainer>
-        <Cgu />
-      </NavigationContainer>
-    );
+  describe('useEffect et checkCgu', () => {
+    it('devrait rediriger vers DrawerNavigation si les CGU sont déjà acceptées', async () => {
+      AsyncStorage.getItem.mockResolvedValueOnce('true');
+      
+      await act(async () => {
+        render(<Cgu />);
+      });
 
-    expect(getByTestId('loading-indicator')).toBeTruthy();
-  });
-
-  it('should navigate to DrawerNavigation if CGU accepted', async () => {
-    AsyncStorage.getItem.mockResolvedValueOnce('true'); // Simule que les CGU ont été acceptées
-
-    render(
-      <NavigationContainer>
-        <Cgu />
-      </NavigationContainer>
-    );
-
-    await waitFor(() => {
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith('acceptedCgu');
       expect(mockNavigate).toHaveBeenCalledWith('DrawerNavigation');
     });
-  });
 
-  it('should display the CGU text when not accepted', async () => {
-    AsyncStorage.getItem.mockResolvedValueOnce(null); // Simule que les CGU n'ont pas été acceptées
+    it('devrait afficher le loader pendant la vérification', async () => {
+      AsyncStorage.getItem.mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)));
+      
+      const { getByTestId } = render(<Cgu />);
+      expect(getByTestId('loading-indicator')).toBeTruthy();
+    });
 
-    const { getByText } = render(
-      <NavigationContainer>
-        <Cgu />
-      </NavigationContainer>
-    );
+    it('devrait gérer les erreurs de AsyncStorage', async () => {
+      AsyncStorage.getItem.mockRejectedValueOnce(new Error('Storage Error'));
+      
+      await act(async () => {
+        render(<Cgu />);
+      });
 
-    await waitFor(() => {
-      expect(getByText(/Accepter/i)).toBeTruthy();
-      expect(getByText(/Refuser/i)).toBeTruthy();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
-  it('should save acceptance in AsyncStorage and navigate to DrawerNavigation on accept', async () => {
-    AsyncStorage.getItem.mockResolvedValueOnce(null); // Simule que les CGU n'ont pas été acceptées
+  describe('handleAccept', () => {
+    it('devrait enregistrer l\'acceptation et naviguer', async () => {
+      AsyncStorage.getItem.mockResolvedValueOnce(null);
+      const { getByText } = render(<Cgu />);
 
-    const { getByText } = render(
-      <NavigationContainer>
-        <Cgu />
-      </NavigationContainer>
-    );
+      await act(async () => {
+        fireEvent.press(getByText('Accepter'));
+      });
 
-    fireEvent.press(getByText(/Accepter/i));
-
-    await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('acceptedCgu', 'true');
       expect(mockNavigate).toHaveBeenCalledWith('DrawerNavigation');
     });
+
+    it('devrait gérer les erreurs lors de l\'acceptation', async () => {
+      AsyncStorage.setItem.mockRejectedValueOnce(new Error('Save Error'));
+      const { getByText } = render(<Cgu />);
+
+      await act(async () => {
+        fireEvent.press(getByText('Accepter'));
+      });
+
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 
-  it('should navigate to Welcome on decline', () => {
-    const { getByText } = render(
-      <NavigationContainer>
-        <Cgu />
-      </NavigationContainer>
-    );
+  describe('handleDecline', () => {
+    it('devrait naviguer vers Welcome', () => {
+      const { getByText } = render(<Cgu />);
+      
+      fireEvent.press(getByText('Refuser'));
+      
+      expect(mockNavigate).toHaveBeenCalledWith('Welcome');
+    });
+  });
 
-    fireEvent.press(getByText(/Refuser/i));
+  describe('Rendu du composant', () => {
+    it('devrait rendre le contenu Markdown', async () => {
+      AsyncStorage.getItem.mockResolvedValueOnce(null);
+      
+      const { getByTestId } = await act(async () => {
+        return render(<Cgu />);
+      });
 
-    expect(mockNavigate).toHaveBeenCalledWith('Welcome');
+      expect(getByTestId('cgu-markdown')).toBeTruthy();
+    });
+
+    it('devrait avoir les bons styles', async () => {
+      AsyncStorage.getItem.mockResolvedValueOnce(null);
+      
+      const { getByTestId } = await act(async () => {
+        return render(<Cgu />);
+      });
+
+      const container = getByTestId('cgu-container');
+      expect(container.props.style).toMatchObject({
+        flex: 1,
+        backgroundColor: '#fff'
+      });
+    });
   });
 });

@@ -38,16 +38,16 @@ export default function Cgu() {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={styles.container} testID="cgu-container">
+        <ActivityIndicator size="large" color="#0000ff" testID="loading-indicator" />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="cgu-container">
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <Markdown style={markdownStyles}>
+        <Markdown style={markdownStyles} testID="cgu-markdown">
           {CguText}
         </Markdown>
       </ScrollView>
