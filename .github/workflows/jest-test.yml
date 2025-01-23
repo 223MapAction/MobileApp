@@ -1,7 +1,44 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Jest Tests
+# name: Jest Tests
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "dev" ]
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-22.04
+
+#     strategy:
+#       matrix:
+#         node-version: [20.x]
+#         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+#     steps:
+      
+#       - uses: actions/checkout@v3
+#       - name: Use Node.js ${{ matrix.node-version }}
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: ${{ matrix.node-version }}
+#           cache: 'npm'
+#       - name: Install packages
+#         run: npm install
+#       - name: install dependencie
+#         run: npm ci
+#       - name: run test
+#         run: npm run test || true
+#       - name: Upload coverage to Codecov
+#         uses: codecov/codecov-action@v4
+#         with:
+#           token: ${{ secrets.CODECOV_TOKEN }}
+
+name: Tests Jest & Couverture
 
 on:
   push:
@@ -10,30 +47,76 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
-
+  test:
+    name: Tests et Couverture
     runs-on: ubuntu-22.04
 
     strategy:
       matrix:
         node-version: [20.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+      fail-fast: false
 
     steps:
-      
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Checkout du code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+
+      - name: Configuration de Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-      - name: Install packages
-        run: npm install
-      - name: install dependencie
-        run: npm ci
-      - name: run test
-        run: npm run test || true
-      - name: Upload coverage to Codecov
+
+      - name: Cache des dépendances
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Installation des dépendances
+        run: |
+          npm ci
+          npm install -g jest
+
+      - name: Exécution des tests
+        run: npm test -- --coverage --ci --testLocationInResults --json --outputFile=jest-results.json
+        continue-on-error: true
+
+      - name: Vérification du seuil de couverture
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | jq -r '.total.lines.pct')
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "La couverture de code est inférieure à 80% ($COVERAGE%)"
+            exit 1
+          fi
+
+      - name: Upload des résultats de test
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            jest-results.json
+            coverage/
+
+      - name: Publication sur Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Commentaire sur la PR avec la couverture
+        if: github.event_name == 'pull_request'
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
+
